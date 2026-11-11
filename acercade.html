@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Curiosidades - Tornados, Ciencias y más</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&family=Oswald:wght@500;700&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        storm: {
+                            950: '#060a12',
+                            900: '#0b1120',
+                            800: '#111827',
+                            700: '#1f2937',
+                            accent: '#facc15', // Tono amarillo acento principal
+                            warning: '#f59e0b',
+                            danger: '#ef4444'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Montserrat', 'sans-serif'],
+                        heading: ['Oswald', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .glass-card { background: rgba(255,255,255,.90); border:1px solid rgba(0,0,0,.10); color:#1f2937; backdrop-filter:blur(12px); }
+        .dark .glass-card { background:rgba(17,24,39,.75); border:1px solid rgba(255,255,255,.1); color:#f3f4f6; }
+        .text-justified { text-align:justify; text-justify:inter-word; }
+        html { scroll-padding-top:6rem; }
+        html:not(.dark) body { background:#f3f4f6; color:#1f2937; }
+        html.dark body { background:#0b1120; color:#f3f4f6; }
+        html:not(.dark) main { background:#f3f4f6; border-color:#d1d5db; }
+        html:not(.dark) main .glass-card { background:#fff; border-color:#d1d5db; color:#1f2937; }
+        html:not(.dark) main .text-white, html:not(.dark) footer .text-white { color:#1f2937; }
+        html:not(.dark) main .text-gray-300, html:not(.dark) main .text-gray-400, html:not(.dark) footer .text-gray-400 { color:#4b5563; }
+        html:not(.dark) footer { background:#e5e7eb; border-color:#d1d5db; color:#4b5563; }
+        html:not(.dark) footer h4 { color:#1f2937; }
+        #themeToggleBtn { white-space:nowrap; }
+        html:not(.dark) #themeToggleBtn { background:#e5e7eb; color:#374151; }
+        html.dark #themeToggleBtn { background:#1f2937; color:#facc15; }
+        @media (max-width:767px) { #themeToggleBtn { padding:.45rem .65rem; font-size:.7rem; } }
+    </style>
+</head>
+<body class="bg-gray-100 text-gray-800 dark:bg-storm-900 dark:text-gray-100 font-sans antialiased overflow-x-hidden selection:bg-yellow-400 selection:text-black transition-colors duration-300">
+
+    <!-- NAVBAR -->
+    <nav class="fixed top-0 left-0 w-full z-50 glass-card transition-all duration-300 border-b border-yellow-400/20" id="navbar">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <!-- Logo -->
+                <a href="#" class="flex items-center gap-2 group min-w-0">
+                    <div class="p-2 bg-yellow-400/10 rounded-lg group-hover:bg-yellow-400/20 transition-colors shrink-0">
+                        <i class="fa-solid fa-tornado text-yellow-500 text-xl group-hover:rotate-45 transition-transform duration-500"></i>
+                    </div>
+                    <span class="font-heading text-lg sm:text-xl font-semibold tracking-wider dark:text-white text-gray-900 truncate">
+                        TORNADOS, <span class="text-yellow-500">CIENCIAS Y MÁS</span>
+                    </span>
+                </a>
+
+                <!-- Desktop Nav Links -->
+                <div class="hidden md:flex items-center space-x-1 lg:space-x-4" id="navLinksContainer">
+                    <a href="index.html" class="px-3 py-2 text-sm font-semibold hover:text-yellow-500 transition-colors tracking-wide uppercase">Inicio</a>
+                    <a href="curiosidades.html" class="px-3 py-2 text-sm font-semibold hover:text-yellow-500 transition-colors tracking-wide uppercase">Curiosidades</a>
+                    <a href="tornadosmundo.html" class="px-3 py-2 text-sm font-semibold hover:text-yellow-500 transition-colors tracking-wide uppercase">Tornados por el mundo</a>
+                    <a href="paginainteractiva.html" class="px-3 py-2 text-sm font-semibold hover:text-yellow-500 transition-colors tracking-wide uppercase">Página Interactiva</a>
+                    <a href="#acercade" class="px-3 py-2 text-sm font-semibold text-yellow-500 hover:text-yellow-400 transition-colors tracking-wide uppercase">Acerca de</a>
+                </div>
+
+                <!-- Controles a la derecha (Botón Tema + Menú Móvil) -->
+                <div class="flex items-center gap-3">
+                    <!-- Botón de Modo Oscuro / Claro -->
+                    <button id="themeToggleBtn" aria-label="Cambiar a modo oscuro" title="Cambiar a modo oscuro" class="px-3 py-2 rounded-full bg-gray-200 dark:bg-storm-800 text-gray-700 dark:text-yellow-400 hover:scale-105 transition-transform focus:outline-none flex items-center gap-2 text-xs font-semibold">
+                        <span id="themeIcon" aria-hidden="true">🌙</span>
+                        <span id="themeLabel">Modo oscuro</span>
+                    </button>
+
+                    <!-- Mobile Menu Button -->
+                    <div class="md:hidden">
+                        <button id="mobileMenuBtn" type="button" class="dark:text-gray-300 text-gray-700 hover:text-yellow-500 focus:outline-none p-2 rounded-md">
+                            <i class="fa-solid fa-bars text-2xl" id="menuIcon"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Menu Desplegable -->
+        <div id="mobileMenu" class="hidden md:hidden glass-card border-t border-gray-200 dark:border-gray-800 max-h-[80vh] overflow-y-auto">
+            <div class="px-4 pt-3 pb-6 space-y-2">
+                <a href="index.html" class="mobile-link block px-3 py-2 rounded-md text-base font-medium dark:text-white text-gray-800 hover:bg-storm-800 hover:text-yellow-500">INICIO</a>
+                <a href="curiosidades.html" class="mobile-link block px-3 py-2 rounded-md text-base font-medium dark:text-white text-gray-800 hover:bg-storm-800 hover:text-yellow-500">CURIOSIDADES</a>
+                <a href="tornadosmundo.html" class="mobile-link block px-3 py-2 rounded-md text-base font-medium dark:text-white text-gray-800 hover:bg-storm-800 hover:text-yellow-500">TORNADOS POR EL MUNDO</a>
+                <a href="paginainteractiva.html" class="mobile-link block px-3 py-2 rounded-md text-base font-medium dark:text-white text-gray-800 hover:bg-storm-800 hover:text-yellow-500">PÁGINA INTERACTIVA</a>
+                <a href="#acercade" class="mobile-link block px-3 py-2 rounded-md text-base font-medium dark:text-white text-gray-800 hover:bg-storm-800 hover:text-yellow-500">ACERCA DE</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- CONTENIDO PRINCIPAL (3 SECCIONES + CONTACTO CON ZELFRA) -->
+    <main class="pt-28 pb-20 relative bg-storm-900 border-b border-gray-800">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+
+            <!-- SECCIÓN 1: INTEGRANTES -->
+            <section id="integrantes" class="glass-card p-8 sm:p-12 rounded-3xl space-y-6 border-l-4 border-l-yellow-400 shadow-xl">
+                <div class="flex items-center gap-3 border-b border-gray-200 dark:border-gray-800 pb-4">
+                    <div class="p-3 bg-yellow-400/10 rounded-xl text-yellow-500">
+                        <i class="fa-solid fa-users text-2xl"></i>
+                    </div>
+                    <div>
+                        <span class="text-yellow-500 font-bold uppercase tracking-widest text-xs">Sección 01</span>
+                        <h2 class="font-heading text-3xl sm:text-4xl font-bold dark:text-white text-gray-900">Integrantes</h2>
+                    </div>
+                </div>
+                
+                <p class="text-gray-600 dark:text-gray-300 leading-relaxed">
+                    Nuestro equipo de trabajo e investigación está integrado por:
+                </p>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
+                    <div class="p-4 rounded-xl bg-gray-50 dark:bg-storm-800/60 border border-gray-200 dark:border-gray-700/50 flex items-center gap-3">
+                        <i class="fa-solid fa-user text-yellow-500"></i>
+                        <span class="font-semibold dark:text-white text-gray-800">Garcia Martinez Diego Ramón</span>
+                    </div>
+                    <div class="p-4 rounded-xl bg-gray-50 dark:bg-storm-800/60 border border-gray-200 dark:border-gray-700/50 flex items-center gap-3">
+                        <i class="fa-solid fa-user text-yellow-500"></i>
+                        <span class="font-semibold dark:text-white text-gray-800">Reyes Tovar Alina Celeste</span>
+                    </div>
+                    <div class="p-4 rounded-xl bg-gray-50 dark:bg-storm-800/60 border border-gray-200 dark:border-gray-700/50 flex items-center gap-3">
+                        <i class="fa-solid fa-user text-yellow-500"></i>
+                        <span class="font-semibold dark:text-white text-gray-800">Lara Camacho Jean Carlo</span>
+                    </div>
+                    <div class="p-4 rounded-xl bg-gray-50 dark:bg-storm-800/60 border border-gray-200 dark:border-gray-700/50 flex items-center gap-3">
+                        <i class="fa-solid fa-user text-yellow-500"></i>
+                        <span class="font-semibold dark:text-white text-gray-800">Zarco Marin Mario Sebastián</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECCIÓN 2: MISIÓN -->
+            <section id="mision" class="glass-card p-8 sm:p-12 rounded-3xl space-y-6 border-l-4 border-l-yellow-400 shadow-xl">
+                <div class="flex items-center gap-3 border-b border-gray-200 dark:border-gray-800 pb-4">
+                    <div class="p-3 bg-yellow-400/10 rounded-xl text-yellow-500">
+                        <i class="fa-solid fa-bullseye text-2xl"></i>
+                    </div>
+                    <div>
+                        <span class="text-yellow-500 font-bold uppercase tracking-widest text-xs">Sección 02</span>
+                        <h2 class="font-heading text-3xl sm:text-4xl font-bold dark:text-white text-gray-900">Misión</h2>
+                    </div>
+                </div>
+                
+                <p class="text-gray-600 dark:text-gray-300 leading-relaxed text-justified">
+                    Investigar, documentar y divulgar información clara, accesible y científicamente respaldada acerca de los tornados y los fenómenos atmosféricos extremos, promoviendo la comprensión de las ciencias naturales y la concienciación sobre la prevención de riesgos meteorológicos.
+                </p>
+            </section>
+
+            <!-- SECCIÓN 3: VISIÓN -->
+            <section id="vision" class="glass-card p-8 sm:p-12 rounded-3xl space-y-6 border-l-4 border-l-yellow-400 shadow-xl">
+                <div class="flex items-center gap-3 border-b border-gray-200 dark:border-gray-800 pb-4">
+                    <div class="p-3 bg-yellow-400/10 rounded-xl text-yellow-500">
+                        <i class="fa-solid fa-eye text-2xl"></i>
+                    </div>
+                    <div>
+                        <span class="text-yellow-500 font-bold uppercase tracking-widest text-xs">Sección 03</span>
+                        <h2 class="font-heading text-3xl sm:text-4xl font-bold dark:text-white text-gray-900">Visión</h2>
+                    </div>
+                </div>
+                
+                <p class="text-gray-600 dark:text-gray-300 leading-relaxed text-justified">
+                    Convertirnos en una plataforma educativa de referencia en habla hispana para el aprendizaje interactivo sobre fenómenos severos, inspirando el interés científico en estudiantes y la comunidad general a través del uso de tecnologías web innovadoras.
+                </p>
+            </section>
+
+            <!-- SECCIÓN 4: CONTÁCTANOS -->
+            <section id="contacto" class="glass-card p-8 sm:p-12 rounded-3xl space-y-6 border-l-4 border-l-yellow-400 shadow-xl">
+                <div class="flex items-center gap-3 border-b border-gray-200 dark:border-gray-800 pb-4">
+                    <div class="p-3 bg-yellow-400/10 rounded-xl text-yellow-500">
+                        <i class="fa-solid fa-envelope text-2xl"></i>
+                    </div>
+                    <div>
+                        <span class="text-yellow-500 font-bold uppercase tracking-widest text-xs">Contacto</span>
+                        <h2 class="font-heading text-3xl sm:text-4xl font-bold dark:text-white text-gray-900">Contáctanos</h2>
+                    </div>
+                </div>
+                
+                <p class="text-gray-600 dark:text-gray-300 leading-relaxed">
+                    Si tienes sugerencias, preguntas o comentarios sobre el proyecto, puedes ponerte en contacto con nosotros directamente a nuestro correo oficial:
+                </p>
+
+                <div class="inline-flex items-center gap-3 px-6 py-4 rounded-2xl bg-yellow-400/10 border border-yellow-400/30 text-yellow-500 font-bold text-lg">
+                    <i class="fa-solid fa-paper-plane"></i>
+                    <a href="mailto:zelfrane0@gmail.com" class="hover:underline">zelfrane0@gmail.com</a>
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <!-- FOOTER SIMPLIFICADO DE 4 COLUMNAS (BASADO EN TU IMAGEN DE REFERENCIA) -->
+    <footer class="bg-storm-950 border-t border-gray-800 pt-16 pb-12 text-gray-400 text-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+            
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 border-b border-gray-800 pb-12">
+                <!-- Columna 1: Marca -->
+                <div class="space-y-4">
+                    <div class="flex items-center gap-3">
+                        <div class="p-2 bg-yellow-400/10 rounded-lg">
+                            <i class="fa-solid fa-tornado text-yellow-500 text-xl"></i>
+                        </div>
+                        <span class="font-heading text-2xl font-bold tracking-wider text-white">TORNADOS, <span class="text-yellow-500">CIENCIAS Y MAS</span></span>
+                    </div>
+                    <p class="text-xs text-gray-400 leading-relaxed text-justified">
+                        proyecto creado para la investigacion y la comprension acerca de los tornados y las diferentes ciencias que estos con llevan consigo.
+                    </p>
+                </div>
+
+                <!-- Columna 2: Secciones Principales -->
+                <div>
+                    <h4 class="font-heading text-white text-base font-bold uppercase mb-4 tracking-wider border-l-2 border-yellow-400 pl-3">Secciones Principales</h4>
+                    <ul class="space-y-2 text-xs">
+                        <li><a href="#integrantes" class="hover:text-yellow-400 transition-colors">1. Integrantes</a></li>
+                        <li><a href="#mision" class="hover:text-yellow-400 transition-colors">2. Misión</a></li>
+                        <li><a href="#vision" class="hover:text-yellow-400 transition-colors">3. Visión</a></li>
+                        <li><a href="#contacto" class="hover:text-yellow-400 transition-colors">4. Contáctanos</a></li>
+                    </ul>
+                </div>
+
+                <!-- Columna 3: Información de Contacto -->
+                <div>
+                    <h4 class="font-heading text-white text-base font-bold uppercase mb-4 tracking-wider border-l-2 border-purple-400 pl-3">Contacto Oficial</h4>
+                    <p class="text-xs text-gray-400 leading-relaxed mb-2">
+                        Correo electrónico del equipo:
+                    </p>
+                    <p class="text-xs text-yellow-400 font-semibold">zelfrane0@gmail.com</p>
+                </div>
+
+                <!-- Columna 4: Ranura Abierta para Páginas Futuras -->
+                <div>
+                    <h4 class="font-heading text-white text-base font-bold uppercase mb-4 tracking-wider border-l-2 border-emerald-500 pl-3">Navegación Sitio</h4>
+                    <ul class="space-y-2 text-xs">
+                        <li><a href="#integrantes" class="hover:text-emerald-400 transition-colors">Inicio / Subir</a></li>
+                        <!-- Ranura abierta para incorporar enlaces externos o subpáginas -->
+                        <!-- <li><a href="contacto.html" class="hover:text-emerald-400 transition-colors">Contacto / Créditos</a></li> -->
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Footer Bottom -->
+            <div class="flex flex-col sm:flex-row justify-between items-center text-xs text-gray-500 gap-4">
+                <p>© 2026 Tornados, Ciencias y mas. Todos los derechos reservados.</p>
+            </div>
+
+        </div>
+    </footer>
+
+    <!-- JAVASCRIPT DE CONTROLADORES -->
+    <script>
+        // 1. MODO CLARO Y OSCURO
+        const themeToggleBtn = document.getElementById('themeToggleBtn');
+        const themeIcon = document.getElementById('themeIcon');
+        const themeLabel = document.getElementById('themeLabel');
+        const htmlElement = document.documentElement;
+
+        function applyTheme(isDark) {
+            htmlElement.classList.toggle('dark', isDark);
+            const targetMode = isDark ? 'claro' : 'oscuro';
+            if (themeIcon) themeIcon.textContent = isDark ? '☀️' : '🌙';
+            if (themeLabel) themeLabel.textContent = isDark ? 'Modo claro' : 'Modo oscuro';
+            if (themeToggleBtn) {
+                themeToggleBtn.setAttribute('aria-label', 'Cambiar a modo ' + targetMode);
+                themeToggleBtn.setAttribute('title', 'Cambiar a modo ' + targetMode);
+            }
+        }
+
+        const savedTheme = localStorage.getItem('theme');
+        applyTheme(savedTheme === 'dark');
+        if (themeToggleBtn) {
+            themeToggleBtn.addEventListener('click', () => {
+                const newDarkState = !htmlElement.classList.contains('dark');
+                applyTheme(newDarkState);
+                localStorage.setItem('theme', newDarkState ? 'dark' : 'light');
+            });
+        }
+
+        // 2. MOBILE MENU NAVBAR
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+        const mobileLinks = document.querySelectorAll('.mobile-link');
+
+        if(mobileMenuBtn) {
+            mobileMenuBtn.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+            mobileLinks.forEach(link => {
+                link.addEventListener('click', () => mobileMenu.classList.add('hidden'));
+            });
+        }
+    </script>
+</body>
+</html>

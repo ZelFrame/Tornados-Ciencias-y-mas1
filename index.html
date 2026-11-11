@@ -1,0 +1,1461 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inicio - Tornados, Ciencias y mas</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&family=Oswald:wght@500;700&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        storm: {
+                            950: '#060a12',
+                            900: '#0b1120',
+                            800: '#111827',
+                            700: '#1f2937',
+                            accent: '#38bdf8',
+                            warning: '#f59e0b',
+                            danger: '#ef4444'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Montserrat', 'sans-serif'],
+                        heading: ['Oswald', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+    /* Tarjetas adaptativas para Modo Claro y Oscuro */
+    .glass-card {
+        background: rgba(255, 255, 255, 0.90);
+        border: 1px solid rgba(0, 0, 0, 0.1);
+        color: #1f2937;
+    }
+
+    .dark .glass-card {
+        background: rgba(17, 24, 39, 0.75);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        color: #f3f4f6;
+    }
+
+    /* Adaptación de textos generales */
+    body {
+        background-color: #f3f4f6;
+        color: #1f2937;
+    }
+
+    .dark body {
+        background-color: #0b1120;
+        color: #f3f4f6;
+    }
+
+    html {
+        scroll-padding-top: 6rem;
+    }
+    
+    .carousel-slide {
+        transition: opacity 0.7s ease-in-out;
+    }
+    
+    .text-justified {
+        text-align: justify;
+        text-justify: inter-word;
+    }
+
+    /* Adaptaciones del modo día: conserva los colores de cada capítulo */
+    html:not(.dark) body {
+        background-color: #f3f4f6;
+        color: #1f2937;
+    }
+
+    html:not(.dark) main,
+    html:not(.dark) #explora-titulos {
+        background-color: #f3f4f6;
+        border-color: #d1d5db;
+    }
+
+    html:not(.dark) main .glass-card,
+    html:not(.dark) #explora-titulos .glass-card {
+        background: #ffffff;
+        border-color: #d1d5db;
+        color: #1f2937;
+    }
+
+    /* Solo cambia a negro los textos originalmente blancos.
+       No se modifican los colores propios de los títulos y subtítulos. */
+    html:not(.dark) #investigacion .text-white,
+    html:not(.dark) #pagina-interactiva .text-white,
+    html:not(.dark) #explora-titulos .text-white {
+        color: #1f2937;
+    }
+
+    html:not(.dark) main .text-gray-100,
+    html:not(.dark) main .text-gray-200,
+    html:not(.dark) main .text-gray-300,
+    html:not(.dark) main .text-gray-400,
+    html:not(.dark) #explora-titulos .text-gray-300,
+    html:not(.dark) #explora-titulos .text-gray-400,
+    html:not(.dark) #explora-titulos .text-gray-500 {
+        color: #4b5563;
+    }
+
+    html:not(.dark) main .border-gray-800,
+    html:not(.dark) main .border-gray-700,
+    html:not(.dark) #explora-titulos .border-gray-800 {
+        border-color: #d1d5db;
+    }
+
+    html:not(.dark) main .bg-storm-900,
+    html:not(.dark) main .bg-storm-950,
+    html:not(.dark) main .bg-storm-800,
+    html:not(.dark) main .bg-storm-800\/50,
+    html:not(.dark) #explora-titulos.bg-storm-800 {
+        background-color: #e5e7eb;
+    }
+
+    /* Laboratorio Fujita: paneles y controles legibles en modo día */
+    html:not(.dark) #pagina-interactiva {
+        background-color: #f3f4f6;
+    }
+
+    html:not(.dark) #pagina-interactiva .bg-storm-900,
+    html:not(.dark) #pagina-interactiva .bg-storm-900\/90,
+    html:not(.dark) #pagina-interactiva .bg-gray-700,
+    html:not(.dark) #pagina-interactiva .bg-gray-800,
+    html:not(.dark) #pagina-interactiva [class~="bg-gray-800/80"] {
+        background-color: #e5e7eb;
+    }
+
+    html:not(.dark) #pagina-interactiva .border-gray-700,
+    html:not(.dark) #pagina-interactiva .border-gray-800 {
+        border-color: #cbd5e1;
+    }
+
+    html:not(.dark) #pagina-interactiva .text-gray-300,
+    html:not(.dark) #pagina-interactiva .text-gray-400 {
+        color: #4b5563;
+    }
+
+    /* Tarjetas de referencias generadas por JavaScript */
+    html:not(.dark) #explora-titulos .bg-gray-800\/80,
+    html:not(.dark) #explora-titulos [class~="bg-gray-800/80"] {
+        background-color: #e5e7eb;
+    }
+
+    html:not(.dark) footer {
+        background-color: #e5e7eb;
+        border-color: #d1d5db;
+        color: #4b5563;
+    }
+
+    html:not(.dark) footer h4,
+    html:not(.dark) footer .text-white {
+        color: #1f2937;
+    }
+
+    html:not(.dark) footer .text-gray-400 {
+        color: #4b5563;
+    }
+
+    html:not(.dark) #themeToggleBtn {
+        background-color: #e5e7eb;
+        color: #374151;
+    }
+
+    html.dark #themeToggleBtn {
+        background-color: #1f2937;
+        color: #facc15;
+    }
+</style>
+</head>
+<body class="bg-gray-100 text-gray-800 dark:bg-storm-900 dark:text-gray-100 font-sans antialiased overflow-x-hidden selection:bg-storm-accent selection:text-storm-900 transition-colors duration-300">
+
+    <!-- NAVBAR -->
+    <nav class="fixed top-0 left-0 w-full z-50 glass-card transition-all duration-300" id="navbar">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex items-center justify-between h-20">
+            <!-- Logo -->
+            <a href="#" class="flex items-center gap-2 group min-w-0">
+                <div class="p-2 bg-storm-accent/10 rounded-lg group-hover:bg-storm-accent/20 transition-colors shrink-0">
+                    <i class="fa-solid fa-tornado text-storm-accent text-xl group-hover:rotate-45 transition-transform duration-500"></i>
+                </div>
+                <span class="font-heading text-lg sm:text-xl font-bold tracking-wider dark:text-white text-gray-900 truncate">
+                    TORNADOS, <span class="text-storm-accent">CIENCIAS Y MÁS</span>
+                </span>
+            </a>
+
+            <!-- Desktop Nav Links -->
+            <div class="hidden md:flex items-center space-x-1 lg:space-x-4" id="navLinksContainer">
+                <a href="#index" class="px-3 py-2 text-sm font-semibold text-storm-accent hover:text-storm-accent transition-colors tracking-wide uppercase">Inicio</a>
+                <a href="curiosidades.html" class="px-3 py-2 text-sm font-semibold hover:text-storm-accent transition-colors tracking-wide uppercase">Curiosidades</a>
+                <a href="tornadosmundo.html" class="px-3 py-2 text-sm font-semibold hover:text-storm-accent transition-colors tracking-wide uppercase">Tornados por el mundo</a>
+                <a href="paginainteractiva.html" class="px-3 py-2 text-sm font-semibold hover:text-storm-accent transition-colors tracking-wide uppercase">Página Interactiva</a>
+                <a href="acercade.html" class="px-3 py-2 text-sm font-semibold hover:text-storm-accent transition-colors tracking-wide uppercase">Acerca de</a>
+            </div>
+
+            <!-- Controles a la derecha (Botón Tema + Menú Móvil) -->
+            <div class="flex items-center gap-3">
+                <!-- Botón de Modo Oscuro / Claro -->
+                <button id="themeToggleBtn" aria-label="Cambiar a modo oscuro" title="Cambiar a modo oscuro" class="px-3 py-2 rounded-full bg-gray-200 dark:bg-storm-800 text-gray-700 dark:text-yellow-400 hover:scale-105 transition-transform focus:outline-none flex items-center gap-2 text-xs font-semibold">
+                    <span id="themeIcon" aria-hidden="true">🌙</span>
+                    <span id="themeLabel">Modo oscuro</span>
+                </button>
+
+                <!-- Mobile Menu Button -->
+                <div class="md:hidden">
+                    <button id="mobileMenuBtn" type="button" class="dark:text-gray-300 text-gray-700 hover:text-storm-accent focus:outline-none p-2 rounded-md">
+                        <i class="fa-solid fa-bars text-2xl" id="menuIcon"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile Menu Desplegable -->
+    <div id="mobileMenu" class="hidden md:hidden glass-card border-t border-gray-200 dark:border-gray-800 max-h-[80vh] overflow-y-auto">
+        <div class="px-4 pt-3 pb-6 space-y-2">
+            <a href="#index" class="mobile-link block px-3 py-2 rounded-md text-base font-medium dark:text-white text-gray-800 hover:bg-storm-800 hover:text-storm-accent">INICIO</a>
+            <a href="curiosidades.html" class="mobile-link block px-3 py-2 rounded-md text-base font-medium dark:text-white text-gray-800 hover:bg-storm-800 hover:text-storm-accent">CURIOSIDADES</a>
+            <a href="tornadosmundo.html" class="mobile-link block px-3 py-2 rounded-md text-base font-medium dark:text-white text-gray-800 hover:bg-storm-800 hover:text-storm-accent">TORNADOS POR EL MUNDO</a>
+            <a href="paginainteractiva.html" class="mobile-link block px-3 py-2 rounded-md text-base font-medium dark:text-white text-gray-800 hover:bg-storm-800 hover:text-storm-accent">PÁGINA INTERACTIVA</a>
+            <a href="acercade.html" class="mobile-link block px-3 py-2 rounded-md text-base font-medium dark:text-white text-gray-800 hover:bg-storm-800 hover:text-storm-accent">ACERCA DE</a>
+            <hr class="border-gray-300 dark:border-gray-800 my-2">
+            <span class="block px-3 py-1 text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Investigación</span>
+            <a href="#sec-1" class="mobile-link block px-3 py-2 rounded-md text-sm font-medium dark:text-gray-300 text-gray-700 hover:bg-storm-800 hover:text-storm-accent">1. Definición</a>
+            <a href="#sec-2" class="mobile-link block px-3 py-2 rounded-md text-sm font-medium dark:text-gray-300 text-gray-700 hover:bg-storm-800 hover:text-storm-accent">2. Formación</a>
+            <a href="#sec-3" class="mobile-link block px-3 py-2 rounded-md text-sm font-medium dark:text-gray-300 text-gray-700 hover:bg-storm-800 hover:text-storm-accent">3. Anatomía</a>
+            <a href="#sec-4" class="mobile-link block px-3 py-2 rounded-md text-sm font-medium dark:text-gray-300 text-gray-700 hover:bg-storm-800 hover:text-storm-accent">4. Tipos de Tornados</a>
+            <a href="#sec-5" class="mobile-link block px-3 py-2 rounded-md text-sm font-medium dark:text-gray-300 text-gray-700 hover:bg-storm-800 hover:text-storm-accent">5. Ciclo de Vida</a>
+            <a href="#escala-fujita" class="mobile-link block px-3 py-2 rounded-md text-sm font-medium dark:text-gray-300 text-gray-700 hover:bg-storm-800 hover:text-storm-accent">6. Escala Fujita</a>
+            <a href="#sec-7" class="mobile-link block px-3 py-2 rounded-md text-sm font-medium dark:text-gray-300 text-gray-700 hover:bg-storm-800 hover:text-storm-accent">7. Tormentas Asociadas</a>
+            <a href="#sec-8" class="mobile-link block px-3 py-2 rounded-md text-sm font-medium dark:text-gray-300 text-gray-700 hover:bg-storm-800 hover:text-storm-accent">8. Física Hidrodinámica</a>
+            <a href="#sec-9" class="mobile-link block px-3 py-2 rounded-md text-sm font-medium dark:text-gray-300 text-gray-700 hover:bg-storm-800 hover:text-storm-accent">9. Meteorología</a>
+            <a href="#sec-10" class="mobile-link block px-3 py-2 rounded-md text-sm font-medium dark:text-gray-300 text-gray-700 hover:bg-storm-800 hover:text-storm-accent">10. Fenómenos Relacionados</a>
+            <a href="#sec-11" class="mobile-link block px-3 py-2 rounded-md text-sm font-medium dark:text-gray-300 text-gray-700 hover:bg-storm-800 hover:text-storm-accent">11. Detección y Radar</a>
+            <a href="#sec-12" class="mobile-link block px-3 py-2 rounded-md text-sm font-medium dark:text-gray-300 text-gray-700 hover:bg-storm-800 hover:text-storm-accent">12. Cambio Climático</a>
+        </div>
+    </div>
+</nav>
+
+    <!-- CAROUSEL HERO SECTION (12 SLIDES COMPLETOS) -->
+<section class="relative h-screen min-h-[600px] w-full pt-20 overflow-hidden" id="inicio">
+    
+    <!-- Slide 1 -->
+    <div class="carousel-slide absolute inset-0 w-full h-full opacity-100 transition-opacity duration-700 pointer-events-auto">
+        <div class="absolute inset-0 bg-gradient-to-t from-storm-900 via-storm-900/60 to-transparent z-10"></div>
+        <img src="tornado1.png" 
+             alt="Tornado Formación" 
+             class="w-full h-full object-cover">
+        <div class="absolute inset-0 z-20 flex flex-col justify-center items-center text-center px-4 max-w-5xl mx-auto">
+            <span class="px-4 py-1.5 bg-storm-accent/20 border border-storm-accent/50 text-storm-accent rounded-full text-xs md:text-sm font-bold tracking-widest uppercase mb-4">
+                CAPÍTULO 01
+            </span>
+            <h1 class="font-heading text-4xl sm:text-6xl md:text-7xl font-extrabold tracking-tight text-white uppercase drop-shadow-lg">
+                ¿Qué es un tornado?
+            </h1>
+            <p class="mt-4 text-base sm:text-xl text-gray-300 max-w-2xl font-light">
+                Descubre el poder invisible de la naturaleza y el instante exacto en que la atmósfera toca la tierra.
+            </p>
+            <a href="#sec-1" class="mt-8 px-8 py-4 bg-storm-accent text-storm-900 font-bold rounded-lg shadow-lg shadow-storm-accent/30 hover:bg-white transition-all transform hover:-translate-y-1">
+                Leer investigación <i class="fa-solid fa-book-open ml-2"></i>
+            </a>
+        </div>
+    </div>
+
+    <!-- Slide 2 -->
+    <div class="carousel-slide absolute inset-0 w-full h-full opacity-0 transition-opacity duration-700 pointer-events-none">
+        <div class="absolute inset-0 bg-gradient-to-t from-storm-900 via-storm-900/60 to-transparent z-10"></div>
+        <img src="tornado2.png" 
+             alt="Supercélula en Tormenta" 
+             class="w-full h-full object-cover">
+        <div class="absolute inset-0 z-20 flex flex-col justify-center items-center text-center px-4 max-w-5xl mx-auto">
+            <span class="px-4 py-1.5 bg-purple-500/20 border border-purple-500/50 text-purple-400 rounded-full text-xs md:text-sm font-bold tracking-widest uppercase mb-4">
+                CAPÍTULO 02
+            </span>
+            <h1 class="font-heading text-4xl sm:text-6xl md:text-7xl font-extrabold tracking-tight text-white uppercase drop-shadow-lg">
+                ¿Cómo se forma un tornado?
+            </h1>
+            <p class="mt-4 text-base sm:text-xl text-gray-300 max-w-2xl font-light">
+                El choque invisible entre aire cálido y frío que da vida a una supercélula destructiva.
+            </p>
+            <a href="#sec-2" class="mt-8 px-8 py-4 bg-purple-500 text-white font-bold rounded-lg shadow-lg shadow-purple-500/30 hover:bg-purple-400 transition-all transform hover:-translate-y-1">
+                Leer investigación <i class="fa-solid fa-book-open ml-2"></i>
+            </a>
+        </div>
+    </div>
+
+    <!-- Slide 3 -->
+    <div class="carousel-slide absolute inset-0 w-full h-full opacity-0 transition-opacity duration-700 pointer-events-none">
+        <div class="absolute inset-0 bg-gradient-to-t from-storm-900 via-storm-900/60 to-transparent z-10"></div>
+        <img src="tornado3.png" 
+             alt="Anatomía del Tornado" 
+             class="w-full h-full object-cover">
+        <div class="absolute inset-0 z-20 flex flex-col justify-center items-center text-center px-4 max-w-5xl mx-auto">
+            <span class="px-4 py-1.5 bg-emerald-500/20 border border-emerald-500/50 text-emerald-400 rounded-full text-xs md:text-sm font-bold tracking-widest uppercase mb-4">
+                CAPÍTULO 03
+            </span>
+            <h1 class="font-heading text-4xl sm:text-6xl md:text-7xl font-extrabold tracking-tight text-white uppercase drop-shadow-lg">
+                Anatomía de un tornado
+            </h1>
+            <p class="mt-4 text-base sm:text-xl text-gray-300 max-w-2xl font-light">
+                Adéntrate en el núcleo de baja presión y descubre los terroríficos subvórtices de succión.
+            </p>
+            <a href="#sec-3" class="mt-8 px-8 py-4 bg-emerald-500 text-storm-900 font-bold rounded-lg shadow-lg shadow-emerald-500/30 hover:bg-white transition-all transform hover:-translate-y-1">
+                Leer investigación <i class="fa-solid fa-book-open ml-2"></i>
+            </a>
+        </div>
+    </div>
+
+    <!-- Slide 4 -->
+    <div class="carousel-slide absolute inset-0 w-full h-full opacity-0 transition-opacity duration-700 pointer-events-none">
+        <div class="absolute inset-0 bg-gradient-to-t from-storm-900 via-storm-900/60 to-transparent z-10"></div>
+        <img src="tornado4.png" 
+             alt="Tipos de Tornados" 
+             class="w-full h-full object-cover">
+        <div class="absolute inset-0 z-20 flex flex-col justify-center items-center text-center px-4 max-w-5xl mx-auto">
+            <span class="px-4 py-1.5 bg-amber-500/20 border border-amber-500/50 text-amber-400 rounded-full text-xs md:text-sm font-bold tracking-widest uppercase mb-4">
+                CAPÍTULO 04
+            </span>
+            <h1 class="font-heading text-4xl sm:text-6xl md:text-7xl font-extrabold tracking-tight text-white uppercase drop-shadow-lg">
+                Tipos de tornados
+            </h1>
+            <p class="mt-4 text-base sm:text-xl text-gray-300 max-w-2xl font-light">
+                Desde conos perfectos hasta gigantescos embudos en cuña y amenazantes trombas marinas.
+            </p>
+            <a href="#sec-4" class="mt-8 px-8 py-4 bg-amber-500 text-storm-900 font-bold rounded-lg shadow-lg shadow-amber-500/30 hover:bg-white transition-all transform hover:-translate-y-1">
+                Leer investigación <i class="fa-solid fa-book-open ml-2"></i>
+            </a>
+        </div>
+    </div>
+
+    <!-- Slide 5 -->
+    <div class="carousel-slide absolute inset-0 w-full h-full opacity-0 transition-opacity duration-700 pointer-events-none">
+        <div class="absolute inset-0 bg-gradient-to-t from-storm-900 via-storm-900/60 to-transparent z-10"></div>
+        <img src="tornado5.png" 
+             alt="Ciclo de Vida" 
+             class="w-full h-full object-cover">
+        <div class="absolute inset-0 z-20 flex flex-col justify-center items-center text-center px-4 max-w-5xl mx-auto">
+            <span class="px-4 py-1.5 bg-rose-500/20 border border-rose-500/50 text-rose-400 rounded-full text-xs md:text-sm font-bold tracking-widest uppercase mb-4">
+                CAPÍTULO 05
+            </span>
+            <h1 class="font-heading text-4xl sm:text-6xl md:text-7xl font-extrabold tracking-tight text-white uppercase drop-shadow-lg">
+                Ciclo de vida de un tornado
+            </h1>
+            <p class="mt-4 text-base sm:text-xl text-gray-300 max-w-2xl font-light">
+                El nacimiento, madurez y el estiramiento final en forma de cuerda antes de disiparse.
+            </p>
+            <a href="#sec-5" class="mt-8 px-8 py-4 bg-rose-500 text-white font-bold rounded-lg shadow-lg shadow-rose-500/30 hover:bg-white hover:text-storm-900 transition-all transform hover:-translate-y-1">
+                Leer investigación <i class="fa-solid fa-book-open ml-2"></i>
+            </a>
+        </div>
+    </div>
+
+    <!-- Slide 6 -->
+    <div class="carousel-slide absolute inset-0 w-full h-full opacity-0 transition-opacity duration-700 pointer-events-none">
+        <div class="absolute inset-0 bg-gradient-to-t from-storm-900 via-storm-900/60 to-transparent z-10"></div>
+        <img src="tornado6.png" 
+             alt="Escala Fujita" 
+             class="w-full h-full object-cover">
+        <div class="absolute inset-0 z-20 flex flex-col justify-center items-center text-center px-4 max-w-5xl mx-auto">
+            <span class="px-4 py-1.5 bg-storm-warning/20 border border-storm-warning/50 text-storm-warning rounded-full text-xs md:text-sm font-bold tracking-widest uppercase mb-4">
+                CAPÍTULO 06
+            </span>
+            <h1 class="font-heading text-4xl sm:text-6xl md:text-7xl font-extrabold tracking-tight text-white uppercase drop-shadow-lg">
+                Escala Fujita y Escala Fujita Mejorada (EF)
+            </h1>
+            <p class="mt-4 text-base sm:text-xl text-gray-300 max-w-2xl font-light">
+                Mide la fuerza destructiva y evalúa los daños estructurales con nuestro simulador interactivo.
+            </p>
+            <a href="#escala-fujita" class="mt-8 px-8 py-4 bg-storm-warning text-storm-900 font-bold rounded-lg shadow-lg shadow-storm-warning/30 hover:bg-white transition-all transform hover:-translate-y-1">
+                VER ESCALA FUJITA <i class="fa-solid fa-table ml-2"></i>
+            </a>
+        </div>
+    </div>
+
+    <!-- Slide 7 -->
+    <div class="carousel-slide absolute inset-0 w-full h-full opacity-0 transition-opacity duration-700 pointer-events-none">
+        <div class="absolute inset-0 bg-gradient-to-t from-storm-900 via-storm-900/60 to-transparent z-10"></div>
+        <img src="tornado7.png" 
+             alt="Tormentas Asociadas" 
+             class="w-full h-full object-cover">
+        <div class="absolute inset-0 z-20 flex flex-col justify-center items-center text-center px-4 max-w-5xl mx-auto">
+            <span class="px-4 py-1.5 bg-cyan-500/20 border border-cyan-500/50 text-cyan-400 rounded-full text-xs md:text-sm font-bold tracking-widest uppercase mb-4">
+                CAPÍTULO 07
+            </span>
+            <h1 class="font-heading text-4xl sm:text-6xl md:text-7xl font-extrabold tracking-tight text-white uppercase drop-shadow-lg">
+                Las tormentas que producen tornados
+            </h1>
+            <p class="mt-4 text-base sm:text-xl text-gray-300 max-w-2xl font-light">
+                El papel fundamental de las supercélulas y los complejos convectivos de mesoescala.
+            </p>
+            <a href="#sec-7" class="mt-8 px-8 py-4 bg-cyan-500 text-storm-900 font-bold rounded-lg shadow-lg shadow-cyan-500/30 hover:bg-white transition-all transform hover:-translate-y-1">
+                Leer investigación <i class="fa-solid fa-book-open ml-2"></i>
+            </a>
+        </div>
+    </div>
+
+    <!-- Slide 8 -->
+    <div class="carousel-slide absolute inset-0 w-full h-full opacity-0 transition-opacity duration-700 pointer-events-none">
+        <div class="absolute inset-0 bg-gradient-to-t from-storm-900 via-storm-900/60 to-transparent z-10"></div>
+        <img src="tornado8.png" 
+             alt="Física del Tornado" 
+             class="w-full h-full object-cover">
+        <div class="absolute inset-0 z-20 flex flex-col justify-center items-center text-center px-4 max-w-5xl mx-auto">
+            <span class="px-4 py-1.5 bg-indigo-500/20 border border-indigo-500/50 text-indigo-400 rounded-full text-xs md:text-sm font-bold tracking-widest uppercase mb-4">
+                CAPÍTULO 08
+            </span>
+            <h1 class="font-heading text-4xl sm:text-6xl md:text-7xl font-extrabold tracking-tight text-white uppercase drop-shadow-lg">
+                Física detrás de un tornado
+            </h1>
+            <p class="mt-4 text-base sm:text-xl text-gray-300 max-w-2xl font-light">
+                La fascinante mecánica de fluidos y la conservación del momento angular en acción.
+            </p>
+            <a href="#sec-8" class="mt-8 px-8 py-4 bg-indigo-500 text-white font-bold rounded-lg shadow-lg shadow-indigo-500/30 hover:bg-white hover:text-storm-900 transition-all transform hover:-translate-y-1">
+                Leer investigación <i class="fa-solid fa-book-open ml-2"></i>
+            </a>
+        </div>
+    </div>
+
+    <!-- Slide 9 -->
+    <div class="carousel-slide absolute inset-0 w-full h-full opacity-0 transition-opacity duration-700 pointer-events-none">
+        <div class="absolute inset-0 bg-gradient-to-t from-storm-900 via-storm-900/60 to-transparent z-10"></div>
+        <img src="tornado9.png" 
+             alt="Meteorología" 
+             class="w-full h-full object-cover">
+        <div class="absolute inset-0 z-20 flex flex-col justify-center items-center text-center px-4 max-w-5xl mx-auto">
+            <span class="px-4 py-1.5 bg-teal-500/20 border border-teal-500/50 text-teal-400 rounded-full text-xs md:text-sm font-bold tracking-widest uppercase mb-4">
+                CAPÍTULO 09
+            </span>
+            <h1 class="font-heading text-4xl sm:text-6xl md:text-7xl font-extrabold tracking-tight text-white uppercase drop-shadow-lg">
+                Meteorología relacionada con los tornados
+            </h1>
+            <p class="mt-4 text-base sm:text-xl text-gray-300 max-w-2xl font-light">
+                Cómo interactúan el índice CAPE, la humedad y las corrientes en chorro en altura.
+            </p>
+            <a href="#sec-9" class="mt-8 px-8 py-4 bg-teal-500 text-storm-900 font-bold rounded-lg shadow-lg shadow-teal-500/30 hover:bg-white transition-all transform hover:-translate-y-1">
+                Leer investigación <i class="fa-solid fa-book-open ml-2"></i>
+            </a>
+        </div>
+    </div>
+
+    <!-- Slide 10 -->
+    <div class="carousel-slide absolute inset-0 w-full h-full opacity-0 transition-opacity duration-700 pointer-events-none">
+        <div class="absolute inset-0 bg-gradient-to-t from-storm-900 via-storm-900/60 to-transparent z-10"></div>
+        <img src="tornado10.png" 
+             alt="Otros Fenómenos" 
+             class="w-full h-full object-cover">
+        <div class="absolute inset-0 z-20 flex flex-col justify-center items-center text-center px-4 max-w-5xl mx-auto">
+            <span class="px-4 py-1.5 bg-sky-500/20 border border-sky-500/50 text-sky-400 rounded-full text-xs md:text-sm font-bold tracking-widest uppercase mb-4">
+                CAPÍTULO 10
+            </span>
+            <h1 class="font-heading text-4xl sm:text-6xl md:text-7xl font-extrabold tracking-tight text-white uppercase drop-shadow-lg">
+                Tornados y otros fenómenos meteorológicos
+            </h1>
+            <p class="mt-4 text-base sm:text-xl text-gray-300 max-w-2xl font-light">
+                Distingue un tornado real de un remolino de polvo, una microrráfaga o un gustnado.
+            </p>
+            <a href="#sec-10" class="mt-8 px-8 py-4 bg-sky-500 text-storm-900 font-bold rounded-lg shadow-lg shadow-sky-500/30 hover:bg-white transition-all transform hover:-translate-y-1">
+                Leer investigación <i class="fa-solid fa-book-open ml-2"></i>
+            </a>
+        </div>
+    </div>
+
+    <!-- Slide 11 -->
+    <div class="carousel-slide absolute inset-0 w-full h-full opacity-0 transition-opacity duration-700 pointer-events-none">
+        <div class="absolute inset-0 bg-gradient-to-t from-storm-900 via-storm-900/60 to-transparent z-10"></div>
+        <img src="tornado11.png" 
+             alt="Detección y Estudio" 
+             class="w-full h-full object-cover">
+        <div class="absolute inset-0 z-20 flex flex-col justify-center items-center text-center px-4 max-w-5xl mx-auto">
+            <span class="px-4 py-1.5 bg-blue-500/20 border border-blue-500/50 text-blue-400 rounded-full text-xs md:text-sm font-bold tracking-widest uppercase mb-4">
+                CAPÍTULO 11
+            </span>
+            <h1 class="font-heading text-4xl sm:text-6xl md:text-7xl font-extrabold tracking-tight text-white uppercase drop-shadow-lg">
+                Cómo se detectan y estudian los tornados
+            </h1>
+            <p class="mt-4 text-base sm:text-xl text-gray-300 max-w-2xl font-light">
+                La tecnología de los radares Doppler y las firmas de escombros que salvan vidas.
+            </p>
+            <a href="#sec-11" class="mt-8 px-8 py-4 bg-blue-500 text-white font-bold rounded-lg shadow-lg shadow-blue-500/30 hover:bg-white hover:text-storm-900 transition-all transform hover:-translate-y-1">
+                Leer investigación <i class="fa-solid fa-book-open ml-2"></i>
+            </a>
+        </div>
+    </div>
+
+    <!-- Slide 12 -->
+    <div class="carousel-slide absolute inset-0 w-full h-full opacity-0 transition-opacity duration-700 pointer-events-none">
+        <div class="absolute inset-0 bg-gradient-to-t from-storm-900 via-storm-900/60 to-transparent z-10"></div>
+        <img src="tornado12.png" 
+             alt="Cambio Climático" 
+             class="w-full h-full object-cover">
+        <div class="absolute inset-0 z-20 flex flex-col justify-center items-center text-center px-4 max-w-5xl mx-auto">
+            <span class="px-4 py-1.5 bg-rose-600/20 border border-rose-600/50 text-rose-500 rounded-full text-xs md:text-sm font-bold tracking-widest uppercase mb-4">
+                CAPÍTULO 12
+            </span>
+            <h1 class="font-heading text-4xl sm:text-6xl md:text-7xl font-extrabold tracking-tight text-white uppercase drop-shadow-lg">
+                Tornados y cambio climático
+            </h1>
+            <p class="mt-4 text-base sm:text-xl text-gray-300 max-w-2xl font-light">
+                Analizamos si el calentamiento global está transformando la frecuencia de los brotes.
+            </p>
+            <a href="#sec-12" class="mt-8 px-8 py-4 bg-rose-600 text-white font-bold rounded-lg shadow-lg shadow-rose-600/30 hover:bg-white hover:text-storm-900 transition-all transform hover:-translate-y-1">
+                Leer investigación <i class="fa-solid fa-book-open ml-2"></i>
+            </a>
+        </div>
+    </div>
+
+    <!-- Carousel Navigation Controls -->
+    <button id="prevSlideBtn" class="absolute left-4 top-1/2 -translate-y-1/2 z-30 p-3 rounded-full glass-card text-white hover:text-storm-accent hover:border-storm-accent transition-all focus:outline-none">
+        <i class="fa-solid fa-chevron-left text-xl"></i>
+    </button>
+    <button id="nextSlideBtn" class="absolute right-4 top-1/2 -translate-y-1/2 z-30 p-3 rounded-full glass-card text-white hover:text-storm-accent hover:border-storm-accent transition-all focus:outline-none">
+        <i class="fa-solid fa-chevron-right text-xl"></i>
+    </button>
+</section>
+
+    <!-- MAIN CONTENT: INVESTIGACIÓN JUSTIFICADA CON ESPACIOS PARA IMÁGENES -->
+    <main id="investigacion" class="py-20 relative bg-storm-900 border-b border-gray-800">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 space-y-16">
+
+            <!-- INTRODUCCIÓN GENERAL -->
+            <div class="text-center max-w-3xl mx-auto mb-12">
+                <h2 class="font-heading text-3xl sm:text-5xl font-bold uppercase text-white tracking-wide">
+                    Estudio de Fenómenos <span class="text-storm-accent">Atmosféricos</span>
+                </h2>
+                <div class="w-24 h-1 bg-storm-accent mx-auto mt-4 rounded-full"></div>
+            </div>
+
+            <!-- SECCIÓN 1: QUÉ ES UN TORNADO -->
+            <section id="sec-1" class="glass-card p-8 sm:p-12 rounded-3xl space-y-6">
+                <span class="text-storm-accent font-bold uppercase tracking-widest text-xs">Capítulo 01</span>
+                <h2 class="font-heading text-3xl sm:text-4xl font-bold text-white border-b border-gray-800 pb-4">1. ¿Qué es un tornado?</h2>
+                
+                <div class="space-y-4 text-gray-300 leading-relaxed text-justified">
+                    <h3 class="font-heading text-xl font-semibold text-storm-accent">Definición científica</h3>
+                    <p>No todos los tornados exhiben la figura clásica de un embudo perfecto. Algunos se presentan como cilindros uniformes, otros como hilos delgados y retorcidos, y en ocasiones adopta la forma de una pared amorfa de polvo y agua en la base de la nube.
+                    <br><br>Es plenamente posible la existencia de un tornado sin un embudo visible; en estos casos, la presencia del vórtice se confirma visualmente por la intensa rotación de escombros y polvo a nivel del suelo. Asimismo, los tornados envueltos en lluvia (rain-wrapped tornadoes) ocurren cuando la precipitación intensa rodea por completo la circulación, volviéndolo invisible e impredecible a simple vista.
+                    </p>
+
+                    <h3 class="font-heading text-xl font-semibold text-storm-accent pt-2">Diferencia con una nube embudo</h3>
+                    <p>Existe una distinción fundamental entre una nube embudo (funnel cloud) y un tornado. La nube embudo es la columna visible de gotas de agua condensada que cuelga de la base de una tormenta rotatoria, pero que no ha entrado en contacto con el suelo. En el instante en que el campo de rotación toca la superficie terrestre e interactúa con el terreno, el fenómeno se clasifica oficialmente como un tornado, independientemente de si la condensación visible alcanza el suelo en toda su longitud.</p>
+
+                    <h3 class="font-heading text-xl font-semibold text-storm-accent pt-2">Contacto con el suelo y dinámica de rotación</h3>
+                    <p>El contacto con la superficie implica que la circulación ciclónica vertical se acopla directamente con la capa límite atmosférica y el terreno. Esta interacción física genera una succión masiva y fricción superficial, lo que permite al tornado arrastrar tierra, vegetación y objetos a su paso.</p>
+                    
+                    <h3 class="font-heading text-xl font-semibold text-storm-accent pt-2">Visibilidad del viento y condensación</h3>
+                    <p>El aire por sí mismo es un gas transparente e invisible a la luz. Por esta razón, el viento en rotación de un tornado no se puede ver de forma directa. La visibilidad del vórtice depende completamente de tres factores: la condensación de vapor de agua causada por la brusca caída de presión en el centro del vórtice, el polvo levantado del suelo y los escombros de las estructuras que van siendo destruidas.</p>
+                    
+                    <h3 class="font-heading text-xl font-semibold text-storm-accent pt-2">Duración, distancia y dimensiones</h3>
+                    <p>La duración de un tornado es sumamente variable. La gran mayoría de ellos persisten solo durante unos pocos minutos (generalmente entre 5 y 10 minutos). Sin embargo, los eventos más violentos pueden mantenerse activos durante más de una hora.
+                    <br><br>En cuanto al recorrido, los tornados débiles se desplazan apenas unos cientos de metros, mientras que los tornados de larga trayectoria pueden avanzar decenas e incluso más de 100 kilómetros a través del territorio.
+                    <br><br>El ancho del embudo varía desde unos escasos metros en tornados delgados hasta más de 4 kilómetros en tornados gigantescos de tipo cuña (wedge). Esta diferencia dimensional depende directamente de la escala del mesociclón, la cantidad de energía convectiva disponible y la estructura de las corrientes ascendentes de la tormenta madre.
+                    </p>
+
+                    <h3 class="font-heading text-xl font-semibold text-storm-accent pt-2">Tornados frente a tormentas convencionales y ciclones</h3>
+                    <p>A diferencia de una tormenta convencional, que produce lluvias y vientos rectos desorganizados, el tornado concentra su energía en un vórtice rotatorio vertical de escala muy reducida.
+                    <br><br>Por otro lado, los huracanes y ciclones tropicales son sistemas meteorológicos de escala sinóptica que abarcan cientos de kilómetros, persisten durante días y se alimentan de la evaporación del agua cálida del océano. El tornado es un evento de mesoescala cuya escala espacial es pequeña y su vida se mide en minutos u horas.
+                    </p>
+
+                    <h3 class="font-heading text-xl font-semibold text-storm-accent pt-2">Formas, visibilidad parcial y tornados ocultos</h3>
+                    <p>No todos los tornados exhiben la figura clásica de un embudo perfecto. Algunos se presentan como cilindros uniformes, otros como hilos delgados y retorcidos, y en ocasiones adopta la forma de una pared amorfa de polvo y agua en la base de la nube.
+                    <br><br>Es plenamente posible la existencia de un tornado sin un embudo visible; en estos casos, la presencia del vórtice se confirma visualmente por la intensa rotación de escombros y polvo a nivel del suelo. Asimismo, los tornados envueltos en lluvia (rain-wrapped tornadoes) ocurren cuando la precipitación intensa rodea por completo la circulación, volviéndolo invisible e impredecible a simple vista.
+                    </p>
+
+                    <h3 class="font-heading text-xl font-semibold text-storm-accent pt-2">El tornado: uno de los fenómenos atmosféricos más fascinantes y complejos</h3>
+                    <p>Representa la convergencia máxima entre la termodinámica de la atmósfera, la dinámica de fluidos y la transformación de la energía solar en potencia mecánica pura concentrada en apenas unos metros de diámetro.</p>
+                    </div>
+
+                <!-- RANURA LIBRE PARA IMAGEN DE LA SECCIÓN 1 -->
+                <div class="my-8 rounded-2xl overflow-hidden border border-gray-800 relative group">
+                    <img src="tornado1.png" 
+                         alt="Tornado Embudo" class="w-full h-100 object-cover group-hover:scale-105 transition-transform duration-500">
+                    <div class="absolute bottom-0 inset-x-0 bg-storm-950/80 p-3 text-xs text-gray-400 text-center">
+                        Espacio de Imagen 01: Embudo de condensación en contacto directo con la superficie terrestre.
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECCIÓN 2: CÓMO SE FORMA UN TORNADO -->
+            <section id="sec-2" class="glass-card p-8 sm:p-12 rounded-3xl space-y-6">
+                <span class="text-purple-400 font-bold uppercase tracking-widest text-xs">Capítulo 02</span>
+                <h2 class="font-heading text-3xl sm:text-4xl font-bold text-white border-b border-gray-800 pb-4">2. ¿Cómo se forma un tornado?</h2>
+                
+                <div class="space-y-4 text-gray-300 leading-relaxed text-justified">
+                    <h3 class="font-heading text-xl font-semibold text-purple-400">Condiciones atmosféricas fundamentales</h3>
+                    <p>La génesis de un tornado requiere una combinación precisa de factores meteorológicos. La atmósfera debe presentar abundante humedad en los niveles bajos, aire seco y frío en los niveles medios y altos, inestabilidad atmosférica elevada y una marcada cizalladura vertical del viento.</p>
+
+                    <h3 class="font-heading text-xl font-semibold text-purple-400 pt-2">Humedad e inestabilidad (CAPE)</h3>
+                    <p>La humedad del aire actúa como el combustible primordial. Cuando este aire cálido y húmedo asciende, la condensación libera calor latente, lo que acelera el ascenso del flujo. La inestabilidad se mide mediante la Energía Potencial Convectiva Disponible (CAPE). A mayor valor de CAPE, mayor será la aceleración de las corrientes ascendentes dentro de la tormenta.</p>
+                    
+                    <h3 class="font-heading text-xl font-semibold text-purple-400 pt-2">Cizalladura del viento y corrientes de aire</h3>
+                    <p>La cizalladura del viento es el cambio en la velocidad y/o dirección del viento con la altitud. Este contraste genera un tubo invisible de aire que gira de forma horizontal cerca del suelo. Cuando una corriente ascendente (updraft) de gran fuerza choca con este tubo de rotación horizontal, lo inclina y lo coloca en posición vertical.</p>
+                
+                    <h3 class="font-heading text-xl font-semibold text-purple-400 pt-2">Desarrollo de la supercélula y el mesociclón</h3>
+                    <p>Cuando la corriente ascendente de una tormenta eléctrica comienza a girar de forma continua, la tormenta se transforma en una supercélula. El núcleo rotatorio central de esta estructura se denomina mesociclón. La supercélula es capaz de mantener su fuerza durante horas porque la corriente descendente (downdraft), cargada de lluvia fría, cae a un lado de la corriente ascendente sin ahogarla ni bloquear su flujo de aire cálido.</p>
+                
+                    <h3 class="font-heading text-xl font-semibold text-purple-400 pt-2">La nube pared y el contacto con la superficie</h3>
+                    <p>Conforme la rotación del mesociclón se intensifica, se forma la nube pared (wall cloud), una zona baja y desprovista de lluvia que cuelga del techo de la tormenta. Las corrientes descendentes frías envuelven la parte trasera de la rotación y la comprimen hacia la superficie. Por el principio de conservación del momento angular, al estrecharse la columna de aire, su velocidad de giro se dispara bruscamente hasta tocar el suelo y formar el embudo de condensación.</p>
+                
+                    <h3 class="font-heading text-xl font-semibold text-purple-400 pt-2">Debilitamiento y disipación</h3>
+                    <p>Un tornado comienza a debilitarse cuando la corriente descendente fría rodea por completo el vórtice y corta el suministro de aire caliente y húmedo que lo alimenta. Este proceso, conocido como la occlusión del mesociclón, estrangula térmicamente la estructura, haciendo que el embudo se estire, se vuelva delgado y finalmente se disipe en la atmósfera.</p>
+                
+                    <h3 class="font-heading text-xl font-semibold text-purple-400 pt-2">Del aire invisible al tornado: el nacimiento de un vórtice</h3>
+                    <p>Es la muestra definitiva de cómo la energía térmica acumulada en grandes masas de aire puede canalizarse en cuestión de minutos hacia una columna mecánica concentrada de destrucción.</p>
+                </div>
+
+                <!-- RANURA LIBRE PARA IMAGEN DE LA SECCIÓN 2 -->
+                <div class="my-8 rounded-2xl overflow-hidden border border-gray-800 relative group">
+                    <img src="tornado2.png" 
+                         alt="Supercélula Tormentosa" class="w-full h-100 object-cover group-hover:scale-105 transition-transform duration-500">
+                    <div class="absolute bottom-0 inset-x-0 bg-storm-950/80 p-3 text-xs text-gray-400 text-center">
+                        Espacio de Imagen 02: Estructura giratoria de una supercélula con corriente ascendente activa.
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECCIÓN 3: ANATOMÍA DE UN TORNADO -->
+            <section id="sec-3" class="glass-card p-8 sm:p-12 rounded-3xl space-y-6">
+                <span class="text-emerald-400 font-bold uppercase tracking-widest text-xs">Capítulo 03</span>
+                <h2 class="font-heading text-3xl sm:text-4xl font-bold text-white border-b border-gray-800 pb-4">3. Anatomía de un tornado</h2>
+    
+                <div class="space-y-4 text-gray-300 leading-relaxed text-justified">
+                    <h3 class="font-heading text-xl font-semibold text-emerald-400">El embudo de condensación y el centro de rotación</h3>
+                    <p>El embudo de condensación es la envolvente visible formada por diminutas gotas de agua que se condensan debido al enfriamiento por descompresión en el núcleo. En el centro exacto de esta rotación se encuentra un área de bajísima presión atmosférica. La diferencia de presión entre el núcleo y el exterior genera el gradiente de succión destructivo del fenómeno.</p>
+                    
+                    <h3 class="font-heading text-xl font-semibold text-emerald-400 pt-2">Vórtices múltiples y secundarios</h3>
+                    <p>En los tornados más grandes y violentos, la rotación principal puede dividirse en varios vórtices secundarios más pequeños que giran alrededor del centro del tornado. Estos subvórtices concentran los vientos más extremos del sistema y son responsables de que una casa sea destruida por completo mientras la edificación contigua sufre daños menores.</p>
+                    
+                    <h3 class="font-heading text-xl font-semibold text-emerald-400 pt-2">La nube de escombros y la nube pared</h3>
+                    <p>En la base del tornado se ubica la nube de escombros (debris cloud), un anillo giratorio compuesto por polvo, rocas, vegetación y restos estructurales. En la parte superior, el embudo se conecta a la nube pared, la cual actúa como la plataforma de control dinámico conectada a la base de la tormenta.</p>
+                    
+                    <h3 class="font-heading text-xl font-semibold text-emerald-400 pt-2">La nube de escombros y la nube pared</h3>
+                    <p>El tornado funciona como una bomba de succión atmosférica. El aire es arrastrado hacia la base del vórtice desde todas las direcciones horizontales cerca del suelo. Al entrar en contacto con la superficie, la fricción terrestre reduce la componente de la fuerza centrífuga, obligando al aire a converger aceleradamente hacia el centro e iniciar un movimiento ascendente en espiral extremadamente rápido.</p>
+                    
+                    <h3 class="font-heading text-xl font-semibold text-emerald-400 pt-2">La nube de escombros y la nube pared</h3>
+                    <p>Lo que el ojo humano percibe como la "superficie del tornado" es únicamente una nube de condensación y escombros; el campo de vientos destructivos real se extiende a menudo mucho más allá de los límites visuales del embudo.</p>
+                </div>
+
+                <div class="my-8 rounded-2xl overflow-hidden border border-gray-800 relative group">
+                    <img src="tornado3.png" alt="Anatomía del Tornado" class="w-full h-100 object-cover group-hover:scale-105 transition-transform duration-500">
+                    <div class="absolute bottom-0 inset-x-0 bg-storm-950/80 p-3 text-xs text-gray-400 text-center">
+                        Espacio de Imagen 03: Estructura del embudo principal y la nube de escombros en la base.
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECCIÓN 4: TIPOS DE TORNADOS -->
+            <section id="sec-4" class="glass-card p-8 sm:p-12 rounded-3xl space-y-6">
+                <span class="text-amber-400 font-bold uppercase tracking-widest text-xs">Capítulo 04</span>
+                <h2 class="font-heading text-3xl sm:text-4xl font-bold text-white border-b border-gray-800 pb-4">4. Tipos de tornados</h2>
+    
+                <div class="space-y-6 text-gray-300 leading-relaxed text-justified">
+                    <div>
+                        <h3 class="font-heading text-xl font-semibold text-amber-400 mb-3">Tornados supercelulares clásicos</h3>
+                        <ul class="list-disc pl-5 space-y-2">
+                            <li><strong>Tornado cónico (Cone Tornado):</strong> Presenta la forma tradicional de un cono invertido, más ancho en la base de la nube y estrecho en el suelo.</li>
+                            <li><strong>Tornado en cuña (Wedge Tornado):</strong> Es un tornado masivo cuya anchura horizontal en la superficie es igual o mayor que la distancia entre el suelo y la base de la nube. Generalmente se asocia con las categorías de mayor intensidad de la escala EF.</li>
+                            <li><strong>Tornado de cuerda (Rope Tornado):</strong> Se caracteriza por una apariencia sinuosa, delgada y retorcida. Suele representar la fase final del ciclo de vida de un tornado, aunque mantiene vientos de gran peligrosidad.</li>
+                            <li><strong>Tornado cilíndrico:</strong> Mantiene un diámetro prácticamente uniforme desde la base de la nube hasta el suelo.</li>
+                            <li><strong>Tornado multivórtice:</strong> Alberga dos o más sub-vórtices de alta velocidad girando en torno a un centro de masa común.</li>
+                            <li><strong>Tornado envuelto en lluvia (Rain-wrapped):</strong> Permanece oculto detrás de una cortina gruesa de precipitación, ocultando su estructura visual a los observadores.</li>
+                        </ul>
+                    </div>
+
+                <div>
+                    <h3 class="font-heading text-xl font-semibold text-amber-400 mb-3">Tornados no supercelulares y trombas</h3>
+                        <ul class="list-disc pl-5 space-y-2">
+                            <li><strong>Landspout:</strong> Es un tornado que no se origina de un mesociclón profundo. Se forma cuando un vórtice rotatorio que ya existía cerca de la superficie es estirado verticalmente por la corriente ascendente de una nube en desarrollo.</li>
+                            <li><strong>Tromba marina (Waterspout):</strong> Es una columna rotatoria que ocurre sobre una masa de agua. Se dividen en trombas marinas no supercelulares (las más comunes y débiles) y trombas marinas tornádicas (supercélulas que se desplazan sobre el agua).</li>
+                            <li><strong>Tornados de línea de turbonada:</strong> Surgen en los bordes delanteros de sistemas convectivos a gran escala o líneas de tormenta, siendo por lo general breves y menos estructurados.</li>
+                        </ul>
+                    </div>
+
+                    <p class="italic text-gray-400 bg-storm-950/50 p-4 rounded-xl border border-gray-800">
+                        La apariencia externa de un tornado no determina de manera unívoca su fuerza; un tornado delgado de cuerda puede registrar velocidades de viento equivalentes a las de un tornado en cuña masivo.
+                    </p>
+                </div>
+
+                <!-- Ranura para Imagen -->
+                <div class="my-8 rounded-2xl overflow-hidden border border-gray-800 relative group">
+                <img src="tornado4.png" alt="Tipos de Tornados" class="w-full h-100 object-cover group-hover:scale-105 transition-transform duration-500">
+                    <div class="absolute bottom-0 inset-x-0 bg-storm-950/80 p-3 text-xs text-gray-400 text-center">
+                        Espacio de Imagen 04: Diversidad morfológica de los embudos convectivos.
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECCIÓN 5: CICLO DE VIDA DE UN TORNADO -->
+            <section id="sec-5" class="glass-card p-8 sm:p-12 rounded-3xl space-y-6">
+                <span class="text-rose-400 font-bold uppercase tracking-widest text-xs">Capítulo 05</span>
+                <h2 class="font-heading text-3xl sm:text-4xl font-bold text-white border-b border-gray-800 pb-4">5. Ciclo de vida de un tornado</h2>
+    
+                <div class="space-y-4 text-gray-300 leading-relaxed text-justified">
+                    <h3 class="font-heading text-xl font-semibold text-rose-400">Fase de formación e inicio</h3>
+                    <p>La primera etapa comienza con la consolidación de la rotación en los niveles medios y bajos de la tormenta. A medida que la corriente ascendente intensifica el estiramiento del vórtice, la condensación empieza a descender desde la nube pared y se forma la nube de escombros en la superficie.</p>
+                    
+                    <h3 class="font-heading text-xl font-semibold text-rose-400 pt-2">Fase de madurez</h3>
+                    <p>Durante la madurez, el tornado alcanza su tamaño máximo, su velocidad de rotación más elevada y su mayor potencial destructivo. El embudo de condensación se vuelve casi vertical y adopta una estructura bien definida.</p>
+                    
+                    <h3 class="font-heading text-xl font-semibold text-rose-400 pt-2">Fase de debilitamiento y disipación</h3>
+                    <p>En esta etapa final, la corriente descendente fría envuelve el sistema y bloquea el flujo de aire cálido. El tornado entra en un proceso de estiramiento donde pierde grosor, adopta la forma de una cuerda delgada y finalmente colapsa.</p>
+                    
+                    <h3 class="font-heading text-xl font-semibold text-rose-400 pt-2">Ciclos de reemplazo</h3>
+                    <p>Las supercélulas de larga duración pueden disipar un tornado y generar uno nuevo pocos minutos después a medida que se desarrolla un nuevo mesociclón. Este proceso hace que parezca que un mismo tornado "desaparece y reaparece" o "salta" a lo largo del terreno.</p>
+                </div>
+
+                <div class="my-8 rounded-2xl overflow-hidden border border-gray-800 relative group">
+                    <img src="tornado5.png" alt="Ciclo de vida" class="w-full h-100 object-cover group-hover:scale-105 transition-transform duration-500">
+                    <div class="absolute bottom-0 inset-x-0 bg-storm-950/80 p-3 text-xs text-gray-400 text-center">
+                        Espacio de Imagen 05: Fases evolutivas desde el desarrollo hasta la disipación.
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECCIÓN 6: ESCALA FUJITA Y ESCALA FUJITA MEJORADA (EF) -->
+            <section id="escala-fujita" class="glass-card p-8 sm:p-12 rounded-3xl space-y-6 border border-storm-warning/30">
+                <span class="text-storm-warning font-bold uppercase tracking-widest text-xs">Capítulo 06 • SECCIÓN ESPECIAL</span>
+                <h2 class="font-heading text-3xl sm:text-4xl font-bold text-white border-b border-gray-800 pb-4">6. Escala Fujita y Escala Fujita Mejorada (EF)</h2>
+    
+                <div class="space-y-4 text-gray-300 leading-relaxed text-justified">
+                    <h3 class="font-heading text-xl font-semibold text-storm-warning">Historia y evolución</h3>
+                    <p>La escala original fue desarrollada en 1971 por el Dr. Tetsuya "Ted" Fujita de la Universidad de Chicago con el fin de catalogar los tornados según los daños causados. En febrero de 2007, el Servicio Meteorológico Nacional de los Estados Unidos adoptó la Escala Fujita Mejorada (EF), la cual evalúa con mayor rigor científico el comportamiento de los vientos al utilizar 28 indicadores de daño estructural y ambiental.</p>
+
+                    <h3 class="font-heading text-xl font-semibold text-storm-warning pt-2">Categorías de la Escala Fujita Mejorada (EF)</h3>
+                </div>
+
+                <!-- Tabla de Categorías -->
+                <div class="overflow-x-auto pt-2">
+                    <table class="w-full text-left border-collapse rounded-xl overflow-hidden">
+                        <thead>
+                            <tr class="bg-storm-800 text-storm-warning font-heading uppercase text-sm tracking-wider">
+                                <th class="p-4 border-b border-gray-700">Categoría</th>
+                                <th class="p-4 border-b border-gray-700">Velocidad estimada del viento (ráfaga de 3 segundos)</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-800 text-sm text-gray-300">
+                            <tr class="hover:bg-storm-800/50 transition-colors">
+                                <td class="p-4 font-bold text-white">EF0</td>
+                                <td class="p-4 text-storm-accent font-semibold">105 a 137 km/h</td>
+                            </tr>
+                            <tr class="hover:bg-storm-800/50 transition-colors">
+                                <td class="p-4 font-bold text-white">EF1</td>
+                                <td class="p-4 text-storm-accent font-semibold">138 a 177 km/h</td>
+                            </tr>
+                            <tr class="hover:bg-storm-800/50 transition-colors">
+                                <td class="p-4 font-bold text-white">EF2</td>
+                                <td class="p-4 text-storm-accent font-semibold">178 a 217 km/h</td>
+                            </tr>
+                            <tr class="hover:bg-storm-800/50 transition-colors">
+                                <td class="p-4 font-bold text-white">EF3</td>
+                                <td class="p-4 text-storm-accent font-semibold">218 a 266 km/h</td>
+                            </tr>
+                            <tr class="hover:bg-storm-800/50 transition-colors">
+                                <td class="p-4 font-bold text-white">EF4</td>
+                                <td class="p-4 text-storm-accent font-semibold">267 a 322 km/h</td>
+                            </tr>
+                            <tr class="hover:bg-storm-800/50 transition-colors">
+                                <td class="p-4 font-bold text-white">EF5</td>
+                                <td class="p-4 text-storm-accent font-semibold">Más de 322 km/h</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="space-y-4 text-gray-300 leading-relaxed text-justified pt-4">
+                    <h3 class="font-heading text-xl font-semibold text-storm-warning">Metodología de clasificación</h3>
+                    <p>Los tornados no se miden directamente con anemómetros durante su paso, ya que los instrumentos suelen ser destruidos por los vientos extremados. La clasificación se asigna de manera diferida mediante inspecciones de campo que analizan los indicadores de daño (Damage Indicators) y los grados de daño (Degrees of Damage) en edificios, vegetación e infraestructura. No existe una categoría EF6; cualquier daño que supere la destrucción total teórica queda integrado en el umbral superior de la categoría EF5.</p>
+                </div>
+            </section>
+
+            <!-- SIMULADOR INTERACTIVO DE LA ESCALA FUJITA MEJORADA -->
+            <section id="pagina-interactiva" class="py-12 relative bg-storm-800/50 rounded-3xl p-6 sm:p-10 border border-storm-warning/30 mt-8">
+                <div class="text-center max-w-3xl mx-auto mb-8">
+                    <span class="text-storm-warning font-bold uppercase tracking-widest text-xs">Laboratorio de Pruebas</span>
+                    <h2 class="font-heading text-2xl sm:text-4xl font-bold uppercase text-white tracking-wide mt-2">
+                        Simulador de Escala <span class="text-storm-warning">Fujita Mejorada</span>
+                    </h2>
+                    <p class="mt-2 text-gray-300 text-sm">Selecciona o desliza para simular la intensidad de las ráfagas de viento y sus consecuencias estructurales.</p>
+                    <div class="w-16 h-1 bg-storm-warning mx-auto mt-4 rounded-full"></div>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                    <!-- Panel de Control (Izquierda) -->
+                    <div class="lg:col-span-5 space-y-6">
+                        <label class="block text-sm font-semibold text-gray-300 uppercase tracking-wider">
+                            Seleccionar Nivel de Intensidad:
+                        </label>
+            
+                        <div class="grid grid-cols-6 gap-2" id="efButtons">
+                            <button class="ef-btn p-3 rounded-lg font-heading text-lg font-bold bg-gray-700 hover:bg-storm-warning text-white transition-all" data-ef="0">EF0</button>
+                            <button class="ef-btn p-3 rounded-lg font-heading text-lg font-bold bg-gray-700 hover:bg-storm-warning text-white transition-all" data-ef="1">EF1</button>
+                            <button class="ef-btn p-3 rounded-lg font-heading text-lg font-bold bg-storm-warning text-storm-900 font-extrabold shadow-lg transition-all" data-ef="2">EF2</button>
+                            <button class="ef-btn p-3 rounded-lg font-heading text-lg font-bold bg-gray-700 hover:bg-storm-warning text-white transition-all" data-ef="3">EF3</button>
+                            <button class="ef-btn p-3 rounded-lg font-heading text-lg font-bold bg-gray-700 hover:bg-storm-warning text-white transition-all" data-ef="4">EF4</button>
+                            <button class="ef-btn p-3 rounded-lg font-heading text-lg font-bold bg-gray-700 hover:bg-storm-warning text-white transition-all" data-ef="5">EF5</button>
+                        </div>
+
+                        <div class="space-y-2 pt-4">
+                            <div class="flex justify-between text-xs text-gray-400 font-bold">
+                                <span>EF0 (Leve)</span>
+                                <span>EF5 (Catastrófico)</span>
+                            </div>
+                            <input type="range" min="0" max="5" value="2" id="efSlider" class="w-full h-3 bg-gray-700 rounded-lg appearance-none cursor-pointer accent-storm-warning">
+                        </div>
+
+                            <div class="bg-storm-900/90 p-6 rounded-2xl border border-gray-700 space-y-4">
+                            <div>
+                                <span class="text-xs text-gray-400 uppercase font-semibold">Velocidad del Viento Estimada</span>
+                                <div class="font-heading text-3xl font-extrabold text-storm-warning" id="windSpeed">178 - 217 km/h</div>
+                            </div>
+                            <div>
+                                <span class="text-xs text-gray-400 uppercase font-semibold">Categoría de Daños</span>
+                                <div class="text-lg font-bold text-white" id="damageCategory">Daño Considerable</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Panel Visualizador (Derecha) -->
+                    <div class="lg:col-span-7 bg-storm-900 rounded-2xl p-6 border border-gray-700 flex flex-col justify-center min-h-[350px] relative overflow-hidden">
+                        <div class="absolute right-4 top-4 opacity-10 pointer-events-none">
+                            <i class="fa-solid fa-tornado text-9xl text-white" id="tornadoBgIcon"></i>
+                        </div>
+
+                        <div class="relative z-10 space-y-4">
+                            <div class="flex items-center gap-3">
+                                <span class="px-3 py-1 bg-storm-warning/20 text-storm-warning rounded-full text-sm font-bold font-heading" id="efBadge">
+                                    ESCALA EF2
+                                </span>
+                                <span class="text-xs text-gray-400" id="efTitle">Tornado Significativo</span>
+                            </div>
+
+                            <h3 class="font-heading text-2xl sm:text-3xl font-bold text-white" id="effectsHeader">
+                                Daño Considerable
+                            </h3>
+
+                            <p class="text-gray-300 text-sm leading-relaxed" id="effectsDescription">
+                                Techos arrancados de casas bien construidas; cimientos de casas móviles destruidos; automóviles volcados.
+                            </p>
+
+                            <div class="pt-4">
+                                <div class="flex justify-between text-xs text-gray-400 mb-1">
+                                    <span>Nivel de Destrucción Estructural</span>
+                                    <span id="damagePercentage">55%</span>
+                                </div>
+                                <div class="w-full h-4 bg-gray-800 rounded-full overflow-hidden p-0.5 border border-gray-700">
+                                    <div id="damageMeter" class="h-full bg-gradient-to-r from-yellow-500 to-orange-500 rounded-full transition-all duration-500" style="width: 55%;"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECCIÓN 7: LAS TORMENTAS QUE PRODUCEN TORNADOS -->
+            <section id="sec-7" class="glass-card p-8 sm:p-12 rounded-3xl space-y-6">
+                <span class="text-cyan-400 font-bold uppercase tracking-widest text-xs">Capítulo 07</span>
+                <h2 class="font-heading text-3xl sm:text-4xl font-bold text-white border-b border-gray-800 pb-4">7. Las tormentas que producen tornados</h2>
+    
+                <div class="space-y-6 text-gray-300 leading-relaxed text-justified">
+                    <div>
+                        <h3 class="font-heading text-xl font-semibold text-cyan-400 mb-3">Tipos de tormentas</h3>
+                        <ul class="list-disc pl-5 space-y-2">
+                            <li><strong>Supercelda:</strong> La estructura tormentosa más organizada, caracterizada por un mesociclón en rotación constante. Produce la gran mayoría de los tornados violentos.</li>
+                            <li><strong>Tormenta multicelular:</strong> Complejos de celdas convectivas en distintas etapas de evolución. Pueden producir tornados de corta duración en sus bordes de racha.</li>
+                            <li><strong>Línea de turbonada (Squall Line):</strong> Una fila densa y continua de tormentas que genera vientos rectos dañinos y tornados incrustados en sus giros locales.</li>
+                            <li><strong>Tormenta unicelular:</strong> Célula aislada de vida corta que rara vez cuenta con la cizalladura necesaria para generar un tornado.</li>
+                        </ul>
+                    </div>
+
+                    <div>
+                        <h3 class="font-heading text-xl font-semibold text-cyan-400 mb-2">Componentes de la nube tormentosa</h3>
+                        <p>La nube cumulonimbus es la base física del sistema. En su parte superior se expande el yunque, formado cuando las corrientes ascendentes chocan contra la tropopausa. El frente de racha marca el límite donde el aire frío descendente choca con el aire cálido del entorno, actuando como un catalizador para la formación de nuevos núcleos convectivos.</p>
+                    </div>
+                </div>
+
+                <!-- Ranura para Imagen -->
+                <div class="my-8 rounded-2xl overflow-hidden border border-gray-800 relative group">
+                    <img src="tornado7.png" alt="Tormentas Asociadas" class="w-full h-100 object-cover group-hover:scale-105 transition-transform duration-500">
+                    <div class="absolute bottom-0 inset-x-0 bg-storm-950/80 p-3 text-xs text-gray-400 text-center">
+                        Espacio de Imagen 07: Estructuras supercelulares y cumulonimbus activos.
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECCIÓN 8: FÍSICA DETRÁS DE UN TORNADO -->
+            <section id="sec-8" class="glass-card p-8 sm:p-12 rounded-3xl space-y-6">
+                <span class="text-indigo-400 font-bold uppercase tracking-widest text-xs">Capítulo 08</span>
+                <h2 class="font-heading text-3xl sm:text-4xl font-bold text-white border-b border-gray-800 pb-4">8. Física detrás de un tornado</h2>
+    
+                <div class="space-y-4 text-gray-300 leading-relaxed text-justified">
+                    <h3 class="font-heading text-xl font-semibold text-indigo-400">Hidrodinámica y conservación del momento angular</h3>
+                    <p>El tornado es un sistema gobernado por la mecánica de fluidos. Al converger el aire hacia el centro de bajas presiones, el radio de rotación disminuye drásticamente. Por la ley de conservación del momento angular, esta reducción del radio provoca un incremento exponencial en la velocidad angular del viento.</p>
+                    
+                    <h3 class="font-heading text-xl font-semibold text-indigo-400 pt-2">Fuerzas en equilibrio</h3>
+                    <p>Dentro del vórtice interactúan la fuerza del gradiente de presión (que atrae el aire hacia el centro) y la fuerza centrífuga (que empuja el aire hacia afuera). La interacción entre ambas mantiene la cavidad de baja presión del embudo y evita que el vórtice colapse sobre sí mismo prematuramente.</p>
+                
+                    <h3 class="font-heading text-xl font-semibold text-indigo-400 pt-2">Levamiento e impacto de objetos</h3>
+                    <p>La capacidad de un tornado para elevar objetos pesados se debe a la combinación de la succión por diferencia de presión extrema y la fuerza ascensional hidrodinámica del flujo de aire vertical. Cuando los objetos son elevados, la fuerza centrífuga del vórtice los acelera tangencialmente y los proyecta hacia afuera como proyectiles a alta velocidad.</p>
+                </div>
+
+                <div class="my-8 rounded-2xl overflow-hidden border border-gray-800 relative group">
+                    <img src="tornado8.png" alt="Física de Fluidos" class="w-full h-100 object-cover group-hover:scale-105 transition-transform duration-500">
+                    <div class="absolute bottom-0 inset-x-0 bg-storm-950/80 p-3 text-xs text-gray-400 text-center">
+                        Espacio de Imagen 08: Fuerzas hidrodinámicas y dinámicas de fluidos en rotación.
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECCIÓN 9: METEOROLOGÍA RELACIONADA -->
+            <section id="sec-9" class="glass-card p-8 sm:p-12 rounded-3xl space-y-6">
+                <span class="text-teal-400 font-bold uppercase tracking-widest text-xs">Capítulo 09</span>
+                <h2 class="font-heading text-3xl sm:text-4xl font-bold text-white border-b border-gray-800 pb-4">9. Meteorología relacionada con los tornados</h2>
+    
+                <div class="space-y-6 text-gray-300 leading-relaxed text-justified">
+                    <div>
+                        <h3 class="font-heading text-xl font-semibold text-teal-400 mb-3">Indicadores termodinámicos</h3>
+                        <ul class="list-disc pl-5 space-y-2">
+                            <li><strong>CAPE (Energía Potencial Convectiva Disponible):</strong> Cuantifica la flotabilidad del aire en ascenso.</li>
+                            <li><strong>CIN (Inhibición Convectiva):</strong> Mide la energía requerida para romper la "tapa" de aire cálido en altura que impide el desarrollo temprano de tormentas.</li>
+                            <li><strong>Helicidad:</strong> Estima el potencial de rotación en los primeros kilómetros de la atmósfera a partir de la cizalladura presente.</li>
+                            <li><strong>Punto de rocío:</strong> Medida directa de la humedad absoluta en superficie; valores altos son indispensables para sostener la base baja de las nubes tormentosas.</li>
+                        </ul>
+                    </div>
+
+                    <div>
+                        <h3 class="font-heading text-xl font-semibold text-teal-400 mb-2">Factores sinópticos</h3>
+                        <p>La corriente en chorro (Jet Stream) y las vaguadas en niveles medios y altos proveen el soporte dinámico para la divergencia de masa en altura. En superficie, la línea seca (Dryline) actúa como una frontera de densidad entre el aire seco del desierto y el aire húmedo del golfo, sirviendo de zona frecuente para el disparo de supercélulas.</p>
+                    </div>
+                </div>
+
+                <!-- Ranura para Imagen -->
+                <div class="my-8 rounded-2xl overflow-hidden border border-gray-800 relative group">
+                    <img src="tornado9.png" alt="Meteorología" class="w-full h-100 object-cover group-hover:scale-105 transition-transform duration-500">
+                    <div class="absolute bottom-0 inset-x-0 bg-storm-950/80 p-3 text-xs text-gray-400 text-center">
+                        Espacio de Imagen 09: Análisis sinóptico y sondeos termodinámicos.
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECCIÓN 10: TORNADOS Y OTROS FENÓMENOS -->
+            <section id="sec-10" class="glass-card p-8 sm:p-12 rounded-3xl space-y-6">
+                <span class="text-sky-400 font-bold uppercase tracking-widest text-xs">Capítulo 10</span>
+                <h2 class="font-heading text-3xl sm:text-4xl font-bold text-white border-b border-gray-800 pb-4">10. Tornados y otros fenómenos meteorológicos</h2>
+    
+                <div class="space-y-4 text-gray-300 leading-relaxed text-justified">
+                    <h3 class="font-heading text-xl font-semibold text-sky-400">Cuadro comparativo de fenómenos rotatorios y destructivos</h3>
+                </div>
+
+                <!-- Tabla Comparativa -->
+                <div class="overflow-x-auto pt-2">
+                    <table class="w-full text-left border-collapse rounded-xl overflow-hidden text-sm">
+                        <thead>
+                            <tr class="bg-storm-800 text-sky-400 font-heading uppercase text-xs tracking-wider">
+                                <th class="p-4 border-b border-gray-700">Fenómeno</th>
+                                <th class="p-4 border-b border-gray-700">Origen principal</th>
+                                <th class="p-4 border-b border-gray-700">Nube asociada</th>
+                                <th class="p-4 border-b border-gray-700">Vientos característicos</th>
+                            </tr>
+                    </thead>
+                        <tbody class="divide-y divide-gray-800 text-gray-300">
+                            <tr class="hover:bg-storm-800/50 transition-colors">
+                                <td class="p-4 font-bold text-white">Tornado</td>
+                                <td class="p-4">Mesociclón o cizalladura intensa</td>
+                                <td class="p-4">Cumulonimbus / Nube Pared</td>
+                                <td class="p-4 text-storm-accent font-semibold">Rotatorios extremados (hasta +300 km/h)</td>
+                            </tr>
+                            <tr class="hover:bg-storm-800/50 transition-colors">
+                                <td class="p-4 font-bold text-white">Landspout</td>
+                                <td class="p-4">Estiramiento de vorticidad superficial</td>
+                                <td class="p-4">Cúmulus en desarrollo</td>
+                                <td class="p-4">Rotatorios moderados a fuertes</td>
+                            </tr>
+                            <tr class="hover:bg-storm-800/50 transition-colors">
+                                <td class="p-4 font-bold text-white">Tromba Marina</td>
+                                <td class="p-4">Convección sobre cuerpos de agua</td>
+                                <td class="p-4">Cúmulus / Cumulonimbus</td>
+                                <td class="p-4">Rotatorios débiles a moderados</td>
+                            </tr>
+                            <tr class="hover:bg-storm-800/50 transition-colors">
+                                <td class="p-4 font-bold text-white">Dust Devil</td>
+                                <td class="p-4">Calentamiento solar en suelo seco</td>
+                                <td class="p-4">Ninguna (cielo despejado)</td>
+                                <td class="p-4">Rotatorios débiles a moderados</td>
+                            </tr>
+                            <tr class="hover:bg-storm-800/50 transition-colors">
+                                <td class="p-4 font-bold text-white">Microrráfaga</td>
+                                <td class="p-4">Colapso de corriente descendente</td>
+                                <td class="p-4">Cumulonimbus</td>
+                                <td class="p-4">Vientos rectos salientes (straight-line)</td>
+                            </tr>
+                            <tr class="hover:bg-storm-800/50 transition-colors">
+                                <td class="p-4 font-bold text-white">Gustnado</td>
+                                <td class="p-4">Turbulencia en frente de racha</td>
+                                <td class="p-4">Nube de racha (Arco)</td>
+                                <td class="p-4">Rotatorios débiles de corta vida</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Ranura para Imagen -->
+                <div class="my-8 rounded-2xl overflow-hidden border border-gray-800 relative group">
+                    <img src="tornado10.png" alt="Fenómenos Comparados" class="w-full h-100 object-cover group-hover:scale-105 transition-transform duration-500">
+                    <div class="absolute bottom-0 inset-x-0 bg-storm-950/80 p-3 text-xs text-gray-400 text-center">
+                        Espacio de Imagen 10: Comparativa visual de fenómenos atmosféricos rotatorios y destructivos.
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECCIÓN 11: DETECCIÓN Y ESTUDIO -->
+            <section id="sec-11" class="glass-card p-8 sm:p-12 rounded-3xl space-y-6">
+                <span class="text-blue-400 font-bold uppercase tracking-widest text-xs">Capítulo 11</span>
+                <h2 class="font-heading text-3xl sm:text-4xl font-bold text-white border-b border-gray-800 pb-4">11. Cómo se detectan y estudian los tornados</h2>
+    
+                <div class="space-y-4 text-gray-300 leading-relaxed text-justified">
+                    <h3 class="font-heading text-xl font-semibold text-blue-400">Radar Doppler y firmas meteorológicas</h3>
+                    <p>El radar Doppler meteorológico mide la posición y la velocidad del aire al analizar el cambio de frecuencia en las ondas reflejadas. Permite identificar la firma de velocidad del mesociclón y el eco de gancho (Hook Echo) en las imágenes de reflectividad.
+                    <br><br>Cuando el tornado ya está destruyendo estructuras o arrancando vegetación, el radar detecta una zona compacta de alta reflectividad cerca de la rotación denominada Firma de Escombros de Tornado (Debris Ball), confirmando la presencia del fenómeno en el suelo.
+                    </p>
+
+                    <h3 class="font-heading text-xl font-semibold text-blue-400 pt-2">Herramientas complementarias e inteligencia artificial</h3>
+                    <p>La recopilación de datos se complementa con radiosondas (globos meteorológicos) que analizan la estabilidad vertical de la atmósfera y satélites meteorológicos de alta resolución. Actualmente, los modelos numéricos de predicción utilizan algoritmos de inteligencia artificial para procesar patrones de radar y campos de viento en tiempo real, aumentando los tiempos de alerta temprana para la población.</p>
+                </div>
+
+                <div class="my-8 rounded-2xl overflow-hidden border border-gray-800 relative group">
+                    <img src="tornado11.png" alt="Radar y Detección" class="w-full h-100 object-cover group-hover:scale-105 transition-transform duration-500">
+                    <div class="absolute bottom-0 inset-x-0 bg-storm-950/80 p-3 text-xs text-gray-400 text-center">
+                        Espacio de Imagen 11: Sistemas de radar meteorológico e imágenes de reflectividad.
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECCIÓN 12: CAMBIO CLIMÁTICO -->
+            <section id="sec-12" class="glass-card p-8 sm:p-12 rounded-3xl space-y-6">
+                <span class="text-rose-500 font-bold uppercase tracking-widest text-xs">Capítulo 12</span>
+                <h2 class="font-heading text-3xl sm:text-4xl font-bold text-white border-b border-gray-800 pb-4">12. Tornados y cambio climático</h2>
+    
+                <div class="space-y-4 text-gray-300 leading-relaxed text-justified">
+                    <h3 class="font-heading text-xl font-semibold text-rose-500">Registros históricos y sesgo de reporte</h3>
+                    <p>El número total de reportes de tornados en las últimas décadas muestra una tendencia al alza. Sin embargo, la comunidad científica concuerda en que este incremento se debe en gran medida al despliegue de la red de radares Doppler, la expansión urbana y la omnipresencia de dispositivos de grabación y redes de cazatormentas, más que a un cambio climático directo en la frecuencia pura del fenómeno.</p>
+
+                    <h3 class="font-heading text-xl font-semibold text-rose-500 pt-2">Variabilidad regional y concentración de eventos</h3>
+                    <p>Los estudios recientes indican que aunque el número de días con tornados al año ha disminuido ligeramente en regiones tradicionales como el Tornado Alley de Estados Unidos, la cantidad de tornados que ocurren en un solo día durante un brote severo (outbreak) ha aumentado. Asimismo, se ha detectado un desplazamiento progresivo de las zonas de mayor actividad hacia el sureste de los Estados Unidos (Dixie Alley).</p>
+
+                    <h3 class="font-heading text-xl font-semibold text-rose-500 pt-2">Atribución e incertidumbre científica</h3>
+                    <p>Atribuir un tornado específico al cambio climático global es sumamente complejo debido a la escala reducida del fenómeno. El calentamiento global incrementa la humedad en superficie y el valor de CAPE (favoreciendo tormentas más fuertes), pero al mismo tiempo puede reducir la cizalladura del viento en ciertas latitudes. Los modelos climáticos actuales continúan bajo investigación para resolver con mayor precisión el balance final entre estos factores opuestos.</p>
+                
+                <div class="my-8 rounded-2xl overflow-hidden border border-gray-800 relative group">
+                    <img src="tornado12.png" alt="Tendencias Climáticas" class="w-full h-100 object-cover group-hover:scale-105 transition-transform duration-500">
+                    <div class="absolute bottom-0 inset-x-0 bg-storm-950/80 p-3 text-xs text-gray-400 text-center">
+                        Espacio de Imagen 12: Tendencias de variabilidad climática y eventos extremos.
+                    </div>
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <!-- CARRUSEL DE REFERENCIAS BIBLIOGRÁFICAS (DE 3 EN 3) -->
+<section id="explora-titulos" class="py-20 bg-storm-800 border-t border-b border-gray-800 relative">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        <!-- Cabecera -->
+        <div class="text-center max-w-3xl mx-auto mb-12">
+            <span class="text-storm-accent font-bold uppercase tracking-widest text-xs">FUENTES Y DOCUMENTACIÓN</span>
+            <h2 class="font-heading text-3xl sm:text-4xl font-bold text-white uppercase mt-2">
+                Referencias Bibliográficas e Institucionales
+            </h2>
+            <p class="text-gray-400 text-sm mt-2">Fuentes científicas y académicas consultadas en formato APA (Texto estático sin redirecciones).</p>
+            <div class="w-16 h-1 bg-storm-accent mx-auto mt-4 rounded-full"></div>
+        </div>
+
+        <!-- Contenedor de las 3 tarjetas del Carrusel -->
+        <div class="relative px-2 sm:px-12">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6" id="titleCardsContainer">
+                <!-- Inyectado dinámicamente de 3 en 3 por JavaScript -->
+            </div>
+
+            <!-- Botones de Navegación -->
+            <button id="prevCardsBtn" class="absolute left-0 top-1/2 -translate-y-1/2 p-3 rounded-full glass-card text-white hover:text-storm-accent transition-all focus:outline-none z-20">
+                <i class="fa-solid fa-chevron-left text-lg"></i>
+            </button>
+            <button id="nextCardsBtn" class="absolute right-0 top-1/2 -translate-y-1/2 p-3 rounded-full glass-card text-white hover:text-storm-accent transition-all focus:outline-none z-20">
+                <i class="fa-solid fa-chevron-right text-lg"></i>
+            </button>
+        </div>
+
+        <!-- Indicadores de Página -->
+        <div class="flex justify-center items-center space-x-2 mt-8" id="cardsIndicators">
+            <!-- Inyectado JS -->
+        </div>
+
+    </div>
+</section>
+
+    <!-- FOOTER PROFESIONAL CON ENLACES Y CASILLAS DIRECTAS -->
+    <footer class="bg-storm-950 border-t border-gray-800 pt-16 pb-12 text-gray-400 text-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+            
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 border-b border-gray-800 pb-12">
+                <!-- Columna 1: Marca -->
+                <div class="space-y-4">
+                    <div class="flex items-center gap-3">
+                        <div class="p-2 bg-storm-accent/10 rounded-lg">
+                            <i class="fa-solid fa-tornado text-storm-accent text-xl"></i>
+                        </div>
+                        <span class="font-heading text-2xl font-bold tracking-wider text-white">TORNADOS, <span class="text-storm-accent">CIENCIAS Y MAS</span></span>
+                    </div>
+                    <p class="text-xs text-gray-400 leading-relaxed text-justified">
+                        proyecto creado para la investigacion y la comprension acerca de los tornados y las diferentes ciencias que estos con llevan consigo.
+                    </p>
+                </div>
+
+                <!-- Columna 2: Enlaces Rápidos Secciones -->
+                <div>
+                    <h4 class="font-heading text-white text-base font-bold uppercase mb-4 tracking-wider border-l-2 border-storm-accent pl-3">Temas Principales</h4>
+                    <ul class="space-y-2 text-xs">
+                        <li><a href="#sec-1" class="hover:text-storm-accent transition-colors">1. ¿Qué es un tornado?</a></li>
+                        <li><a href="#sec-2" class="hover:text-storm-accent transition-colors">2. ¿Cómo se forma un tornado?</a></li>
+                        <li><a href="#sec-3" class="hover:text-storm-accent transition-colors">3. Anatomía de un tornado</a></li>
+                        <li><a href="#sec-4" class="hover:text-storm-accent transition-colors">4. Tipos de tornados</a></li>
+                        <li><a href="#sec-5" class="hover:text-storm-accent transition-colors">5. Ciclo de vida de un tornado</a></li>
+                    </ul>
+                </div>
+
+                <!-- Columna 3: Enlaces Especiales -->
+                <div>
+                    <h4 class="font-heading text-white text-base font-bold uppercase mb-4 tracking-wider border-l-2 border-purple-500 pl-3">Medición y Física</h4>
+                    <ul class="space-y-2 text-xs">
+                        <li><a href="#escala-fujita" class="hover:text-purple-400 transition-colors">6. Escala Fujita y Escala Fujita Mejorada (EF)</a></li>
+                        <li><a href="#sec-7" class="hover:text-purple-400 transition-colors">7. Las tormentas que producen tornados</a></li>
+                        <li><a href="#sec-8" class="hover:text-purple-400 transition-colors">8. Física detrás de un tornado</a></li>
+                        <li><a href="#sec-9" class="hover:text-purple-400 transition-colors">9. Meteorología relacionada con los tornados</a></li>
+                        <li><a href="#sec-10" class="hover:text-purple-400 transition-colors">10. Tornados y otros fenómenos meteorológicos</a></li>
+                        <li><a href="#sec-11" class="hover:text-purple-400 transition-colors">11. Cómo se detectan y estudian los tornados</a></li>
+                        <li><a href="#sec-12" class="hover:text-purple-400 transition-colors">12. Tornados y cambio climático</a></li>
+                    </ul>
+                </div>
+
+                <!-- Columna 4: Ranura Abierta para Páginas Futuras -->
+                <div>
+                    <h4 class="font-heading text-white text-base font-bold uppercase mb-4 tracking-wider border-l-2 border-emerald-500 pl-3">Navegación Sitio</h4>
+                    <ul class="space-y-2 text-xs">
+                        <li><a href="#inicio" class="hover:text-emerald-400 transition-colors">Inicio / Subir</a></li>
+                        <li><a href="#explora-titulos" class="hover:text-emerald-400 transition-colors">Explorador de Tarjetas</a></li>
+                        <!-- Ranura abierta para incorporar enlaces externos o subpáginas -->
+                        <!-- <li><a href="contacto.html" class="hover:text-emerald-400 transition-colors">Contacto / Créditos</a></li> -->
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Footer Bottom -->
+            <div class="flex flex-col sm:flex-row justify-between items-center text-xs text-gray-500 gap-4">
+                <p>© 2026 Tornados, Ciencias y mas. Todos los derechos reservados.</p>
+            </div>
+
+        </div>
+    </footer>
+
+    <!-- JAVASCRIPT DE CONTROLADORES -->
+    <script>
+        // 1. CAROUSEL HERO INICIAL
+        const slides = document.querySelectorAll('.carousel-slide');
+        const prevBtn = document.getElementById('prevSlideBtn');
+        const nextBtn = document.getElementById('nextSlideBtn');
+        let currentSlide = 0;
+
+        function goToSlide(index) {
+            slides[currentSlide].classList.remove('opacity-100', 'pointer-events-auto');
+            slides[currentSlide].classList.add('opacity-0', 'pointer-events-none');
+            currentSlide = (index + slides.length) % slides.length;
+            slides[currentSlide].classList.remove('opacity-0', 'pointer-events-none');
+            slides[currentSlide].classList.add('opacity-100', 'pointer-events-auto');
+        }
+
+        if(nextBtn && prevBtn) {
+            nextBtn.addEventListener('click', () => goToSlide(currentSlide + 1));
+            prevBtn.addEventListener('click', () => goToSlide(currentSlide - 1));
+            setInterval(() => goToSlide(currentSlide + 1), 6000);
+        }
+
+        // 2. MOBILE MENU NAVBAR
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+        const mobileLinks = document.querySelectorAll('.mobile-link');
+
+        if(mobileMenuBtn) {
+            mobileMenuBtn.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+            mobileLinks.forEach(link => {
+                link.addEventListener('click', () => mobileMenu.classList.add('hidden'));
+            });
+        }
+
+// CONTROL DE MODO CLARO / OSCURO
+const themeToggleBtn = document.getElementById('themeToggleBtn');
+const themeIcon = document.getElementById('themeIcon');
+const themeLabel = document.getElementById('themeLabel');
+const htmlElement = document.documentElement;
+
+// El botón siempre indica el modo al que se puede cambiar.
+function applyTheme(isDark) {
+    htmlElement.classList.toggle('dark', isDark);
+
+    const targetMode = isDark ? 'claro' : 'oscuro';
+    if (themeIcon) themeIcon.textContent = isDark ? '☀️' : '🌙';
+    if (themeLabel) themeLabel.textContent = isDark ? 'Modo claro' : 'Modo oscuro';
+    if (themeToggleBtn) {
+        themeToggleBtn.setAttribute('aria-label', 'Cambiar a modo ' + targetMode);
+        themeToggleBtn.setAttribute('title', 'Cambiar a modo ' + targetMode);
+    }
+}
+
+const savedTheme = localStorage.getItem('theme');
+applyTheme(savedTheme === 'dark');
+
+if (themeToggleBtn) {
+    themeToggleBtn.addEventListener('click', () => {
+        const newDarkState = !htmlElement.classList.contains('dark');
+        applyTheme(newDarkState);
+        localStorage.setItem('theme', newDarkState ? 'dark' : 'light');
+    });
+}
+
+        // --- FUJITA SCALE INTERACTIVE SIMULATOR ---
+        const efData = [
+            {
+                ef: 'EF0',
+                title: 'Tornado Leve',
+                wind: '105 - 137 km/h',
+                category: 'Daño Leve',
+                effects: 'Ramas rotas de árboles, letreros de calles dañados y algunas tejas levantadas de tejados débiles.',
+                percentage: '15%',
+                colorClass: 'from-blue-500 to-green-500'
+            },
+            {
+                ef: 'EF1',
+                title: 'Tornado Moderado',
+                wind: '138 - 178 km/h',
+                category: 'Daño Moderado',
+                effects: 'Superficies de tejados arrancadas; cobertizos y garajes destruidos; casas móviles volcadas o desplazadas.',
+                percentage: '35%',
+                colorClass: 'from-green-500 to-yellow-500'
+            },
+            {
+                ef: 'EF2',
+                title: 'Tornado Significativo',
+                wind: '179 - 218 km/h',
+                category: 'Daño Considerable',
+                effects: 'Techos arrancados de casas bien construidas; cimientos de casas móviles destruidos; automóviles volcados.',
+                percentage: '55%',
+                colorClass: 'from-yellow-500 to-orange-500'
+            },
+            {
+                ef: 'EF3',
+                title: 'Tornado Severo',
+                wind: '219 - 266 km/h',
+                category: 'Daño Grave',
+                effects: 'Pisos enteros de casas sólidas destruidos; trenes volcados; árboles en bosques enteros descortezados.',
+                percentage: '75%',
+                colorClass: 'from-orange-500 to-red-500'
+            },
+            {
+                ef: 'EF4',
+                title: 'Tornado Devastador',
+                wind: '267 - 322 km/h',
+                category: 'Daño Devastador',
+                effects: 'Casas bien construidas totalmente niveladas; estructuras con cimientos débiles lanzadas a distancia.',
+                percentage: '90%',
+                colorClass: 'from-red-500 to-rose-700'
+            },
+            {
+                ef: 'EF5',
+                title: 'Tornado Increíble / Catastrófico',
+                wind: '> 322 km/h',
+                category: 'Destrucción Total',
+                effects: 'Estructuras de hormigón armado seriamente dañadas; automóviles vuelan como proyectiles más de 100 metros.',
+                percentage: '100%',
+                colorClass: 'from-rose-700 to-purple-900'
+            }
+        ];
+
+        const efButtons = document.querySelectorAll('.ef-btn');
+        const efSlider = document.getElementById('efSlider');
+        const windSpeed = document.getElementById('windSpeed');
+        const damageCategory = document.getElementById('damageCategory');
+        const efBadge = document.getElementById('efBadge');
+        const efTitle = document.getElementById('efTitle');
+        const effectsHeader = document.getElementById('effectsHeader');
+        const effectsDescription = document.getElementById('effectsDescription');
+        const damagePercentage = document.getElementById('damagePercentage');
+        const damageMeter = document.getElementById('damageMeter');
+
+        function updateSimulator(efLevel) {
+            const data = efData[efLevel];
+
+            // Update UI text
+            windSpeed.textContent = data.wind;
+            damageCategory.textContent = data.category;
+            efBadge.textContent = `ESCALA ${data.ef}`;
+            efTitle.textContent = data.title;
+            effectsHeader.textContent = data.category;
+            effectsDescription.textContent = data.effects;
+            damagePercentage.textContent = data.percentage;
+
+            // Update Meter width
+            damageMeter.style.width = data.percentage;
+
+            // Update buttons styling
+            efButtons.forEach((btn, index) => {
+                if (index === parseInt(efLevel)) {
+                    btn.className = 'ef-btn p-3 rounded-lg font-heading text-lg font-bold bg-storm-warning text-storm-900 font-extrabold shadow-lg transition-all scale-105';
+                } else {
+                    btn.className = 'ef-btn p-3 rounded-lg font-heading text-lg font-bold bg-gray-700 hover:bg-storm-warning text-white transition-all';
+                }
+            });
+
+            // Update slider position if triggered via button
+            efSlider.value = efLevel;
+        }
+
+        // Button clicks
+        efButtons.forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const level = parseInt(e.target.dataset.ef);
+                updateSimulator(level);
+            });
+        });
+
+        // Slider movement
+        efSlider.addEventListener('input', (e) => {
+            const level = parseInt(e.target.value);
+            updateSimulator(level);
+        });
+
+        // Initialize Simulator with EF2
+        updateSimulator(2);
+
+       // CARRUSEL DE REFERENCIAS APA (De 3 en 3, estáticas y sin enlaces)
+const allReferences = [
+    { 
+        author: "National Oceanic and Atmospheric Administration & National Weather Service (NOAA & NWS)", 
+        year: "(2007–2026)", 
+        title: "EF Scale Training and Severe Weather Documentation", 
+        source: "U.S. Department of Commerce.", 
+        icon: "fa-book-bookmark", 
+        color: "storm-accent" 
+    },
+    { 
+        author: "American Meteorological Society (AMS)", 
+        year: "(2025)", 
+        title: "Glossary of Meteorology: Tornado, Mesocyclone, and Supercell Definitions", 
+        source: "Boston, MA.", 
+        icon: "fa-book-bookmark", 
+        color: "purple-400" 
+    },
+    { 
+        author: "BBC Science Focus Magazine", 
+        year: "(2024)", 
+        title: "What is happening to tornadoes across the US?", 
+        source: "Global Weather Dynamics & Climate Trends, 112(4), 45-50.", 
+        icon: "fa-book-bookmark", 
+        color: "emerald-400" 
+    },
+    { 
+        author: "Science Photo Library & Earth Observing System (EOS)", 
+        year: "(2025)", 
+        title: "Visual and Dynamic Studies of Vortex Life Cycles and Atmospheric Fluid Mechanics", 
+        source: "NASA Earth Science Data.", 
+        icon: "fa-book-bookmark", 
+        color: "amber-400" 
+    },
+    { 
+        author: "Doswell, C. A. III. (Ed.)", 
+        year: "(2001)", 
+        title: "Severe Convective Storms", 
+        source: "Meteorological Monographs, No. 28. American Meteorological Society.", 
+        icon: "fa-book-bookmark", 
+        color: "rose-400" 
+    }
+];
+
+let cardsPageIndex = 0;
+const totalCardsPages = Math.ceil(allReferences.length / 3);
+const container = document.getElementById('titleCardsContainer');
+const indicatorsContainer = document.getElementById('cardsIndicators');
+const prevCardsBtn = document.getElementById('prevCardsBtn');
+const nextCardsBtn = document.getElementById('nextCardsBtn');
+
+function renderCardsPage(page) {
+    if(!container) return;
+    container.innerHTML = '';
+    const startIndex = page * 3;
+    const selectedRefs = allReferences.slice(startIndex, startIndex + 3);
+
+    selectedRefs.forEach(ref => {
+        const card = document.createElement('div');
+        // Usamos 'div' en lugar de 'a' para que no sea un enlace ni redirija a ningún lado
+        card.className = `glass-card p-6 rounded-2xl border border-gray-800 border-${ref.color}/40 flex flex-col justify-between select-none shadow-xl`;
+        card.innerHTML = `
+            <div>
+                <div class="flex items-center justify-between mb-4">
+                    <span class="text-xs font-bold font-heading text-${ref.color} tracking-widest uppercase">Formato APA</span>
+                    <div class="w-10 h-10 rounded-xl bg-gray-800/80 flex items-center justify-center text-lg text-${ref.color}">
+                        <i class="fa-solid ${ref.icon}"></i>
+                    </div>
+                </div>
+                <p class="text-gray-300 text-xs sm:text-sm leading-relaxed text-justified">
+                    <strong>${ref.author}</strong> ${ref.year}. <em>${ref.title}</em>. ${ref.source}
+                </p>
+            </div>
+            <div class="mt-6 pt-3 border-t border-gray-800/60 flex items-center justify-between text-xs font-semibold text-gray-500">
+                <span>Referencia Oficial</span>
+                <i class="fa-solid fa-check text-${ref.color}"></i>
+            </div>
+        `;
+        container.appendChild(card);
+    });
+
+    // Actualizar indicadores (puntos de navegación)
+    if(indicatorsContainer) {
+        indicatorsContainer.innerHTML = '';
+        for(let i = 0; i < totalCardsPages; i++) {
+            const dot = document.createElement('button');
+            dot.className = `w-3 h-3 rounded-full transition-all ${i === page ? 'bg-storm-accent w-6' : 'bg-gray-700'}`;
+            dot.addEventListener('click', () => {
+                cardsPageIndex = i;
+                renderCardsPage(cardsPageIndex);
+            });
+            indicatorsContainer.appendChild(dot);
+        }
+    }
+}
+
+if(prevCardsBtn && nextCardsBtn) {
+    prevCardsBtn.addEventListener('click', () => {
+        cardsPageIndex = (cardsPageIndex - 1 + totalCardsPages) % totalCardsPages;
+        renderCardsPage(cardsPageIndex);
+    });
+    nextCardsBtn.addEventListener('click', () => {
+        cardsPageIndex = (cardsPageIndex + 1) % totalCardsPages;
+        renderCardsPage(cardsPageIndex);
+    });
+}
+
+// Inicializar renderizado en la página 0
+renderCardsPage(0);
+    </script>
+</body>
+</html>

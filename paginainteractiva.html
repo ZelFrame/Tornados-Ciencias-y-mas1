@@ -1,0 +1,1388 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pagina Interactiva - Tornados, Ciencias y mas</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Three.js y OrbitControls -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+    <!-- FontAwesome para Iconos -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * { user-select: none; }
+        body, html { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background-color: #090d16; }
+        #canvas-container { width: 100vw; height: 100vh; position: absolute; top: 0; left: 0; z-index: 1; }
+        .pro-panel {
+            background: rgba(15, 23, 42, 0.92);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(148, 163, 184, 0.15);
+        }
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-track { background: rgba(15,23,42,0.6); }
+        ::-webkit-scrollbar-thumb { background: rgba(148,163,184,0.3); border-radius: 2px; }
+        ::-webkit-scrollbar-thumb:hover { background: rgba(148,163,184,0.5); }
+    </style>
+</head>
+<body class="text-slate-200">
+
+    <!-- Canvas Three.js -->
+    <div id="canvas-container"></div>
+
+    <!-- UI Overlay -->
+    <div class="relative z-10 flex flex-col justify-between h-screen p-4 pointer-events-none">
+        
+        <!-- Header & Top Bar -->
+        <header class="flex flex-col md:flex-row justify-between items-start md:items-center gap-3 pointer-events-auto">
+            <div class="pro-panel p-3.5 px-5 rounded-lg shadow-xl max-w-xl border-l-4 border-l-blue-400">
+                <h1 class="text-lg md:text-xl font-semibold tracking-tight text-slate-100 flex items-center gap-2">
+                    <i class="fa-solid fa-tornado text-blue-400"></i>
+                    Simulador de Tornados
+                </h1>
+                <p class="text-[11px] text-slate-400 mt-0.5">Control de vórtices, órbita física, 3 cámaras dinámicas y comando de voz.</p>
+            </div>
+
+            <!-- Reconocimiento de Voz -->
+            <div class="pro-panel px-4 py-2.5 rounded-lg flex items-center space-x-3 shadow-xl border border-slate-700/60">
+                <button id="mic-btn" class="relative flex items-center justify-center w-10 h-10 rounded-md bg-slate-800 hover:bg-slate-700 transition border border-slate-600 focus:outline-none">
+                    <i id="mic-icon" class="fa-solid fa-microphone text-slate-400 text-sm"></i>
+                    <span id="mic-ping" class="absolute inline-flex h-full w-full rounded-md bg-rose-500 opacity-0 animate-ping"></span>
+                </button>
+                <div class="text-xs">
+                    <div class="font-medium text-slate-200" id="voice-status">Reconocimiento: Inactivo</div>
+                    <div class="text-slate-400 text-[10px] italic" id="voice-last-cmd">Di "EF3", "Cuña", "Subvórtices 5", "Lluvia al 0"</div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Panel & Controls Container -->
+        <div class="flex justify-between items-end w-full pointer-events-none">
+            
+            <!-- Panel Izquierdo: Controles Principales -->
+            <div class="pro-panel p-4 rounded-xl w-80 md:w-96 space-y-3 max-h-[84vh] overflow-y-auto pointer-events-auto shadow-2xl border border-slate-800">
+                
+                <!-- Gestión de Tornados -->
+                <div class="bg-slate-900/80 p-3 rounded-lg border border-slate-800 space-y-2">
+                    <div class="flex justify-between items-center">
+                        <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider"><i class="fa-solid fa-layer-group mr-1"></i> TORNADOS INDEPENDIENTES</span>
+                        <span id="tornado-count-badge" class="bg-blue-600 text-white text-[10px] px-2 py-0.5 rounded font-mono">1/5</span>
+                    </div>
+                    <div class="grid grid-cols-2 gap-2">
+                        <button id="btn-add-tornado" class="bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-medium py-1.5 px-2 rounded transition border border-slate-600 flex items-center justify-center">
+                            <i class="fa-solid fa-plus mr-1 text-[10px]"></i> Agregar
+                        </button>
+                        <button id="btn-remove-tornado" class="bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-medium py-1.5 px-2 rounded transition border border-slate-600 flex items-center justify-center">
+                            <i class="fa-solid fa-minus mr-1 text-[10px]"></i> Eliminar
+                        </button>
+                    </div>
+                    <div>
+                        <label class="text-[10px] text-slate-400 font-medium block mb-1 uppercase">SELECCIONAR TORNADO EN CONTROL</label>
+                        <select id="active-tornado-select" class="w-full bg-slate-950 border border-slate-700 rounded px-2 py-1.5 text-xs text-blue-300 font-medium focus:outline-none focus:border-blue-500">
+                            <option value="0">Tornado #1 (Principal)</option>
+                            <option value="ALL">TODOS A LA VEZ (GLOBAL)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Selección Directa EF0 - EF5 -->
+                <div>
+                    <label class="text-[10px] text-slate-400 font-medium block mb-1.5 uppercase">INTENSIDAD (ESCALA FUJITA MEJORADA - EF)</label>
+                    <div class="grid grid-cols-6 gap-1" id="ef-buttons-container">
+                        <button data-ef="0" class="ef-btn bg-slate-800/80 hover:bg-blue-600 border border-slate-700 rounded py-1 text-xs font-mono font-medium transition text-slate-300">EF0</button>
+                        <button data-ef="1" class="ef-btn bg-slate-800/80 hover:bg-blue-600 border border-slate-700 rounded py-1 text-xs font-mono font-medium transition text-slate-300">EF1</button>
+                        <button data-ef="2" class="ef-btn bg-blue-600 text-white font-bold rounded py-1 text-xs font-mono transition shadow">EF2</button>
+                        <button data-ef="3" class="ef-btn bg-slate-800/80 hover:bg-blue-600 border border-slate-700 rounded py-1 text-xs font-mono font-medium transition text-slate-300">EF3</button>
+                        <button data-ef="4" class="ef-btn bg-slate-800/80 hover:bg-blue-600 border border-slate-700 rounded py-1 text-xs font-mono font-medium transition text-slate-300">EF4</button>
+                        <button data-ef="5" class="ef-btn bg-slate-800/80 hover:bg-blue-600 border border-slate-700 rounded py-1 text-xs font-mono font-medium transition text-slate-300">EF5</button>
+                    </div>
+                </div>
+
+                <!-- Selección de Horario, Nubosidad y Neblina -->
+                <div class="space-y-2 bg-slate-900/40 p-2.5 rounded-lg border border-slate-800">
+                    <div>
+                        <label class="text-[10px] text-slate-400 font-medium block mb-1 uppercase"><i class="fa-solid fa-sun mr-1 text-amber-400"></i> AMBIENTE Y CONDICIONES</label>
+                        <select id="time-select" class="w-full bg-slate-950 border border-slate-700 rounded px-2 py-1 text-xs text-slate-200 focus:outline-none focus:border-blue-500">
+                            <option value="day">Día</option>
+                            <option value="sunset">Tarde (Atardecer)</option>
+                            <option value="night" selected>Noche</option>
+                        </select>
+                    </div>
+
+                    <!-- Slider Nubosidad -->
+                    <div>
+                        <div class="flex justify-between text-[11px] mb-0.5">
+                            <span class="text-slate-400">Nubosidad:</span>
+                            <span id="val-cloud" class="text-blue-400 font-mono">80%</span>
+                        </div>
+                        <input type="range" id="slider-cloud" min="0" max="100" value="80" step="5" class="w-full accent-blue-500 bg-slate-800 rounded h-1 cursor-pointer">
+                    </div>
+
+                    <!-- Slider Neblina -->
+                    <div>
+                        <div class="flex justify-between text-[11px] mb-0.5">
+                            <span class="text-slate-400">Neblina (Niebla baja):</span>
+                            <span id="val-teal" class="text-teal-400 font-mono">20%</span>
+                        </div>
+                        <input type="range" id="slider-fog" min="0" max="100" value="20" step="5" class="w-full accent-teal-500 bg-slate-800 rounded h-1 cursor-pointer">
+                    </div>
+                </div>
+
+                <!-- Elemento y Forma Completa (20 Tipos Bilingües) -->
+                <div class="grid grid-cols-2 gap-2">
+                    <div>
+                        <label class="text-[10px] text-slate-400 font-medium block mb-1 uppercase">ELEMENTO</label>
+                        <select id="type-select" class="w-full bg-slate-950 border border-slate-700 rounded px-2 py-1 text-xs text-slate-200 focus:outline-none focus:border-blue-500">
+                            <option value="classic">Classic (Clásico)</option>
+                            <option value="invisible">Invisible (Fantasma)</option>
+                            <option value="sand">Sand (Arena/Haboob)</option>
+                            <option value="fire">Fire (Fuego)</option>
+                            <option value="water">Water (Agua/Tromba)</option>
+                            <option value="ice">Ice (Hielo/Ventisca)</option>
+                            <option value="electric">Electric (Eléctrico/Rayos)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="text-[10px] text-slate-400 font-medium block mb-1 uppercase">FORMA (20 TIPOS)</label>
+                        <select id="shape-select" class="w-full bg-slate-950 border border-slate-700 rounded px-2 py-1 text-xs text-slate-200 focus:outline-none focus:border-blue-500">
+                            <option value="needle">Needle (Aguja)</option>
+                            <option value="rope">Rope (Cuerda)</option>
+                            <option value="cone" selected>Cone (Cono Clásico)</option>
+                            <option value="wedge">Wedge (Cuña Ancha)</option>
+                            <option value="stovepipe">Stovepipe (Chimenea)</option>
+                            <option value="wire">Wire (Alambre)</option>
+                            <option value="vshaped">V-Shaped (En V)</option>
+                            <option value="cigar">Cigar (Puro)</option>
+                            <option value="cylinder">Cylinder (Cilindro)</option>
+                            <option value="landspout">Landspout (Tromba Terrestre)</option>
+                            <option value="concavesided">Concave-sided (Lados Cóncavos)</option>
+                            <option value="straightsided">Straight-sided (Lados Rectos)</option>
+                            <option value="convexsided">Convex-sided (Lados Convexos)</option>
+                            <option value="segmented">Segmented (Segmentado)</option>
+                            <option value="truncatedcone">Truncated Cone (Cono Truncado)</option>
+                            <option value="bulbshaped">Bulb Shaped (En Bulbo)</option>
+                            <option value="bowlshaped">Bowl-Shaped (En Tazón)</option>
+                            <option value="flaredbase">Flared Base (Base Acampanada)</option>
+                            <option value="hourglass">Hourglass (Reloj de Arena)</option>
+                            <option value="sheathed">Sheathed (Envainado / Enfundado)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Casilla de Inclinación y Sentido -->
+                <div class="grid grid-cols-2 gap-2 bg-slate-900/60 p-2.5 rounded-lg border border-slate-800 items-center">
+                    <div class="flex items-center space-x-2">
+                        <input type="checkbox" id="check-tilt" checked class="w-3.5 h-3.5 accent-blue-500 cursor-pointer">
+                        <label for="check-tilt" class="text-[11px] text-slate-300 font-medium cursor-pointer">Inclinación (Tilt)</label>
+                    </div>
+                    <div>
+                        <select id="rotation-dir" class="w-full bg-slate-950 border border-slate-700 rounded px-2 py-0.5 text-xs text-slate-200 focus:outline-none focus:border-blue-500">
+                            <option value="1">Ciclónico</option>
+                            <option value="-1">Anticiclónico</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Subvórtices y Sistema Vorticial -->
+                <div class="grid grid-cols-2 gap-2">
+                    <div>
+                        <label class="text-[10px] text-slate-400 font-medium block mb-0.5 uppercase">SUBVÓRTICES</label>
+                        <input type="number" id="subvortex-count" min="0" max="8" value="0" class="w-full bg-slate-950 border border-slate-700 rounded px-2 py-1 text-center text-blue-300 font-mono text-xs focus:outline-none focus:border-blue-400">
+                    </div>
+                    <div>
+                        <label class="text-[10px] text-slate-400 font-medium block mb-0.5 uppercase">SISTEMA ACOPLADO</label>
+                        <select id="sistemaVorticial" class="w-full bg-slate-950 border border-slate-700 rounded px-2 py-1 text-xs text-blue-300 font-semibold focus:outline-none focus:border-blue-500">
+                            <option value="1">Único</option>
+                            <option value="2">Gemelos</option>
+                            <option value="3">Triples</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Sliders Físicos -->
+                <div class="space-y-2 bg-slate-900/40 p-2.5 rounded-lg border border-slate-800">
+                    <div>
+                        <div class="flex justify-between text-[11px] mb-0.5">
+                            <span class="text-slate-400">Factor Inclinación:</span>
+                            <span id="val-tilt" class="text-blue-400 font-mono">100%</span>
+                        </div>
+                        <input type="range" id="slider-tilt" min="0" max="100" value="100" step="5" class="w-full accent-blue-500 bg-slate-800 rounded h-1 cursor-pointer">
+                    </div>
+
+                    <div>
+                        <div class="flex justify-between text-[11px] mb-0.5">
+                            <span class="text-slate-400">Tormenta (Lluvia):</span>
+                            <span id="val-rain" class="text-blue-400 font-mono">50%</span>
+                        </div>
+                        <input type="range" id="slider-rain" min="0" max="100" value="50" step="5" class="w-full accent-blue-500 bg-slate-800 rounded h-1 cursor-pointer">
+                    </div>
+
+                    <div>
+                        <div class="flex justify-between text-[11px] mb-0.5">
+                            <span class="text-slate-400">Vientos Ambientales:</span>
+                            <span id="val-gust" class="text-blue-400 font-mono">35 km/h</span>
+                        </div>
+                        <input type="range" id="slider-gust" min="0" max="150" value="35" step="5" class="w-full accent-blue-500 bg-slate-800 rounded h-1 cursor-pointer">
+                    </div>
+                </div>
+
+                <!-- Botones de Acción -->
+                <div class="grid grid-cols-3 gap-2">
+                    <button id="btn-lightning" class="bg-indigo-600/80 hover:bg-indigo-500 text-white text-xs py-1.5 rounded transition border border-indigo-400/30 flex items-center justify-center">
+                        <i class="fa-solid fa-bolt mr-1 text-[10px]"></i> Rayo
+                    </button>
+                    <button id="btn-debris" class="bg-amber-600/80 hover:bg-amber-500 text-white text-xs py-1.5 rounded transition border border-amber-400/30 flex items-center justify-center">
+                        <i class="fa-solid fa-cubes mr-1 text-[10px]"></i> Escombros
+                    </button>
+                    <button id="btn-reset" class="bg-emerald-600/80 hover:bg-emerald-500 text-white text-xs py-1.5 rounded transition border border-emerald-400/30 flex items-center justify-center">
+                        <i class="fa-solid fa-rotate-left mr-1 text-[10px]"></i> Reiniciar
+                    </button>
+                    <button onclick="window.location.href='index.html'" class="w-95 bg-gray-600/80 hover:bg-gray-500 text-white text-[11px] py-1 px-2 rounded transition border border-gray-400/90 flex items-center justify-center gap-1.5 shadow-sm">
+                        <i class="fa-solid fa-arrow-left text-[9px]"></i> Regresar a Inicio
+                    </button>
+                </div>
+            </div>
+
+            <!-- Panel Derecho: Telemetría y Controles -->
+            <div class="space-y-3 pointer-events-auto hidden md:block">
+                <div class="pro-panel p-3.5 rounded-xl w-72 text-xs space-y-2 shadow-2xl border border-slate-800">
+                    <div class="font-semibold text-slate-200 border-b border-slate-700/80 pb-1.5 flex justify-between items-center">
+                        <span><i class="fa-solid fa-chart-line mr-1.5 text-blue-400"></i> Telemetría Escala EF</span>
+                        <span id="telemetry-ef" class="text-blue-400 font-mono font-bold">EF2</span>
+                    </div>
+                    <div class="space-y-1.5 text-[11px]">
+                        <div class="flex justify-between items-center">
+                            <span class="text-slate-400">Velocidad Viento (km/h):</span>
+                            <input type="number" id="windSpeedInput" value="220" class="w-20 bg-slate-950 border border-slate-700 rounded px-1 py-0.5 text-right text-blue-300 font-mono focus:outline-none">
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-slate-400">Presión Central (hPa):</span>
+                            <input type="number" id="pressureInput" value="960" class="w-20 bg-slate-950 border border-slate-700 rounded px-1 py-0.5 text-right text-blue-300 font-mono focus:outline-none">
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-slate-400">Radio Vórtice (m):</span>
+                            <input type="number" id="radiusInput" value="85" class="w-20 bg-slate-950 border border-slate-700 rounded px-1 py-0.5 text-right text-blue-300 font-mono focus:outline-none">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="pro-panel p-3.5 rounded-xl w-72 text-xs space-y-1 shadow-2xl border border-slate-800">
+                    <div class="font-medium text-slate-300 border-b border-slate-700/80 pb-1">
+                        <i class="fa-solid fa-gamepad mr-1.5 text-teal-400"></i> Desplazamiento
+                    </div>
+                    <p class="text-[10px] text-slate-300 leading-relaxed">
+                        Mueve el tornado activo con <b class="text-teal-300">Flechas Teclado</b> o teclas <b class="text-teal-300">W, A, S, D</b>.
+                    </p>
+                </div>
+
+                <!-- Modos de Cámara -->
+                <div class="pro-panel p-3.5 rounded-xl w-72 text-xs space-y-2 shadow-2xl border border-slate-800">
+                    <div class="font-medium text-slate-300 border-b border-slate-700/80 pb-1.5">
+                        <i class="fa-solid fa-video mr-1.5 text-blue-400"></i> Modos de Vista
+                    </div>
+                    <div class="grid grid-cols-3 gap-1.5">
+                        <button id="btn-camera-normal" class="bg-blue-600 text-white font-semibold text-[11px] py-1.5 rounded transition">Aérea</button>
+                        <button id="btn-camera-follow" class="bg-slate-800 hover:bg-slate-700 text-slate-300 text-[11px] py-1.5 rounded transition border border-slate-700">Seguir</button>
+                        <button id="btn-camera-fp" class="bg-slate-800 hover:bg-slate-700 text-slate-300 text-[11px] py-1.5 rounded transition border border-slate-700">1ra Pers.</button>
+                    </div>
+                    <p id="camera-status" class="text-[10px] text-slate-400 text-center">Vista aérea libre</p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Script Principal -->
+    <script>
+        // --- ESCENA Y RENDERER ---
+        const container = document.getElementById('canvas-container');
+        const scene = new THREE.Scene();
+        let fogDensity = 0.005;
+        scene.fog = new THREE.FogExp2(0x090d16, fogDensity);
+
+        const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1500);
+        camera.position.set(0, 50, 180);
+
+        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false, powerPreference: "high-performance" });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        renderer.shadowMap.enabled = true;
+        renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+        container.appendChild(renderer.domElement);
+
+        const controls = new THREE.OrbitControls(camera, renderer.domElement);
+        controls.enableDamping = true;
+        controls.dampingFactor = 0.05;
+        controls.maxPolarAngle = Math.PI / 2 - 0.01;
+
+        let cameraMode = 'normal'; 
+
+        // --- ILUMINACIÓN DINÁMICA ---
+        const ambientLight = new THREE.AmbientLight(0x334155, 1.4);
+        scene.add(ambientLight);
+
+        const dirLight = new THREE.DirectionalLight(0xaaccff, 1.2);
+        dirLight.position.set(100, 200, 100);
+        dirLight.castShadow = true;
+        scene.add(dirLight);
+
+        const tornadoPointLight = new THREE.PointLight(0x3b82f6, 3.5, 120);
+        tornadoPointLight.position.set(0, 20, 0);
+        scene.add(tornadoPointLight);
+
+        // --- MANEJO DE ATMÓSFERA ---
+        let selectedTime = 'night';
+        let cloudDensity = 80;
+        let fogLevel = 20;
+
+        const TIME_BASE_COLORS = {
+            day: { sky: new THREE.Color(0x87ceeb), darkSky: new THREE.Color(0x1e293b), amb: new THREE.Color(0xffffff), dir: new THREE.Color(0xfffbeb) },
+            sunset: { sky: new THREE.Color(0xc2410c), darkSky: new THREE.Color(0x2d120d), amb: new THREE.Color(0xf97316), dir: new THREE.Color(0xfcb316) },
+            night: { sky: new THREE.Color(0x090d16), darkSky: new THREE.Color(0x020617), amb: new THREE.Color(0x334155), dir: new THREE.Color(0x1e293b) }
+        };
+
+        function updateAtmosphere() {
+            const base = TIME_BASE_COLORS[selectedTime];
+            const cloudFactor = cloudDensity / 100;
+
+            fogDensity = 0.002 + (fogLevel / 100) * 0.018;
+            scene.fog.density = fogDensity;
+
+            const currentSky = base.sky.clone().lerp(base.darkSky, cloudFactor);
+            scene.fog.color.copy(currentSky);
+            renderer.setClearColor(currentSky);
+
+            ambientLight.color.copy(base.amb);
+            ambientLight.intensity = THREE.MathUtils.lerp(1.6, 0.4, cloudFactor);
+
+            dirLight.color.copy(base.dir);
+            dirLight.intensity = THREE.MathUtils.lerp(1.8, 0.3, cloudFactor);
+        }
+
+        // --- ESCALA FUJITA MEJORADA (EF0 - EF5) ---
+        const efData = {
+            0: { speed: 110, pressure: 995, radius: 30, count: 6000 },
+            1: { speed: 155, pressure: 985, radius: 50, count: 9000 },
+            2: { speed: 215, pressure: 965, radius: 80, count: 14000 },
+            3: { speed: 280, pressure: 940, radius: 120, count: 20000 },
+            4: { speed: 360, pressure: 910, radius: 170, count: 28000 },
+            5: { speed: 450, pressure: 870, radius: 230, count: 40000 }
+        };
+
+        const TORNADO_TYPES = {
+            classic: { color1: new THREE.Color(0x8899a6), color2: new THREE.Color(0x222d38), glow: false, isInvisible: false },
+            invisible: { color1: new THREE.Color(0xdbeafe), color2: new THREE.Color(0x93c5fd), glow: false, isInvisible: true },
+            sand: { color1: new THREE.Color(0xd97706), color2: new THREE.Color(0x78350f), glow: false, isInvisible: false },
+            fire: { color1: new THREE.Color(0xef4444), color2: new THREE.Color(0xf59e0b), glow: true, isInvisible: false },
+            water: { color1: new THREE.Color(0x06b6d4), color2: new THREE.Color(0x1e3a8a), glow: false, isInvisible: false },
+            ice: { color1: new THREE.Color(0xe0f2fe), color2: new THREE.Color(0x38bdf8), glow: true, isInvisible: false },
+            electric: { color1: new THREE.Color(0xa855f7), color2: new THREE.Color(0x3b82f6), glow: true, isInvisible: false }
+        };
+
+        let activeControlledIndex = "0";
+        let moveKeys = { up: false, down: false, left: false, right: false };
+        let houses = [];
+        let isTiltEnabled = true;
+        let tiltFactorUser = 1.0;
+        let globalAmbientWind = 35; // Variable global unificada para vientos
+
+        // TEXTURA SUAVE DE PARTÍCULAS
+        function createParticleTexture() {
+            const canvas = document.createElement('canvas');
+            canvas.width = 64; canvas.height = 64;
+            const ctx = canvas.getContext('2d');
+            const grad = ctx.createRadialGradient(32, 32, 0, 32, 32, 32);
+            grad.addColorStop(0, 'rgba(255,255,255,1)');
+            grad.addColorStop(0.3, 'rgba(255,255,255,0.6)');
+            grad.addColorStop(1, 'rgba(255,255,255,0)');
+            ctx.fillStyle = grad;
+            ctx.fillRect(0, 0, 64, 64);
+            return new THREE.CanvasTexture(canvas);
+        }
+        const particleTexture = createParticleTexture();
+
+        // 20 FORMAS MORFOLÓGICAS DE TORNADOS
+        function calculateShapeRadius(y, shape) {
+            switch(shape) {
+                case 'needle': return 0.03 + 0.5 * Math.pow(y, 2.2);
+                case 'rope': return 0.07 + 0.45 * Math.pow(y, 1.3);
+                case 'cone': return 0.15 + 1.8 * y;
+                case 'wedge': return 1.5 + 2.2 * y;
+                case 'stovepipe': return 0.65 + 0.1 * y;
+                case 'wire': return 0.1 + 0.15 * y;
+                case 'vshaped': return 0.2 + 2.0 * y;
+                case 'cigar': return 0.4 + 1.2 * Math.sin(y * Math.PI);
+                case 'cylinder': return 0.8;
+                case 'landspout': return 0.28 + 0.3 * y;
+                case 'concavesided': return 0.2 + 1.8 * Math.pow(y, 2.5);
+                case 'straightsided': return 0.3 + 1.4 * y;
+                case 'convexsided': return 0.3 + 1.6 * Math.sqrt(y);
+                case 'segmented': return (0.3 + 1.5 * y) * (Math.sin(y * Math.PI * 4) > -0.2 ? 1 : 0.15);
+                case 'truncatedcone': return 0.4 + 1.2 * Math.min(y, 0.7);
+                case 'bulbshaped': return 0.3 + 1.8 * Math.pow(Math.sin(y * Math.PI * 0.85), 0.7);
+                case 'bowlshaped': return 0.3 + 2.6 * Math.pow(y, 3);
+                case 'flaredbase': return 0.3 + 1.5 * y + 1.2 * Math.exp(-y * 6);
+                case 'hourglass': return 0.4 + 1.5 * Math.pow(Math.abs(y - 0.5) * 2, 1.8);
+                case 'sheathed': return (0.25 + 1.4 * y) * (Math.random() > 0.3 ? 1.25 : 0.75);
+                default: return 0.15 + 1.8 * y;
+            }
+        }
+
+        // CLASE DE TORNADO
+        class TornadoInstance {
+            constructor(id, position) {
+                this.id = id;
+                this.pos = position.clone();
+                this.velocity = new THREE.Vector2(0, 0); 
+                this.ef = 2;
+                this.typeKey = 'classic';
+                this.shapeKey = 'cone';
+                this.rotationDir = 1;
+                this.subvortexCount = 0;
+                this.isTwinSatellite = false; 
+
+                this.liveSpeed = efData[2].speed;
+                this.livePressure = efData[2].pressure;
+                this.liveRadius = efData[2].radius;
+                this.speedFactor = 1.0;
+
+                this.particlesMesh = null;
+                this.geometry = null;
+                this.material = null;
+                this.particleData = [];
+                this.subvortices = [];
+
+                this.init();
+            }
+
+            init() {
+                this.destroy();
+
+                const efInfo = efData[this.ef] || efData[2];
+                const count = efInfo.count;
+                const typeConfig = TORNADO_TYPES[this.typeKey] || TORNADO_TYPES.classic;
+
+                const pressureFactor = Math.max(0.5, (1013 - this.livePressure) / 150);
+                const effectiveRadius = this.liveRadius * (1 + pressureFactor * 0.2);
+
+                this.geometry = new THREE.BufferGeometry();
+                const positions = new Float32Array(count * 3);
+                const colors = new Float32Array(count * 3);
+                const sizes = new Float32Array(count);
+
+                this.particleData = [];
+
+                for (let i = 0; i < count; i++) {
+                    const yNorm = Math.random();
+                    const height = yNorm * 120;
+                    
+                    if (typeConfig.isInvisible && yNorm > 0.35 && Math.random() > 0.08) {
+                        continue;
+                    }
+
+                    const baseR = calculateShapeRadius(yNorm, this.shapeKey) * effectiveRadius * 0.3;
+                    const radius = baseR * (0.8 + Math.random() * 0.4);
+                    const angle = Math.random() * Math.PI * 2;
+
+                    positions[i * 3] = Math.cos(angle) * radius;
+                    positions[i * 3 + 1] = height;
+                    positions[i * 3 + 2] = Math.sin(angle) * radius;
+
+                    const mixedColor = typeConfig.color1.clone().lerp(typeConfig.color2, yNorm);
+                    colors[i * 3] = mixedColor.r;
+                    colors[i * 3 + 1] = mixedColor.g;
+                    colors[i * 3 + 2] = mixedColor.b;
+
+                    sizes[i] = typeConfig.isInvisible ? (yNorm < 0.2 ? 2.5 : 0.8) : (Math.random() * 1.5 + 0.8);
+
+                    this.particleData.push({
+                        yNorm: yNorm,
+                        height: height,
+                        angle: angle,
+                        speed: (0.02 + Math.random() * 0.04) * (1 + (1 - yNorm) * 0.5),
+                        upSpeed: 0.3 + Math.random() * 0.4
+                    });
+                }
+
+                this.geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+                this.geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+                this.geometry.setAttribute('size', new THREE.BufferAttribute(sizes, 1));
+
+                let targetOpacity = 0.65;
+                if (typeConfig.isInvisible) targetOpacity = 0.04; 
+                else if (typeConfig.glow) targetOpacity = 0.85;
+
+                this.material = new THREE.PointsMaterial({
+                    size: 2.0,
+                    vertexColors: true,
+                    map: particleTexture,
+                    transparent: true,
+                    opacity: targetOpacity,
+                    blending: typeConfig.glow ? THREE.AdditiveBlending : THREE.NormalBlending,
+                    depthWrite: false
+                });
+
+                this.particlesMesh = new THREE.Points(this.geometry, this.material);
+                this.particlesMesh.position.copy(this.pos);
+                scene.add(this.particlesMesh);
+
+                // Subvórtices
+                if (this.subvortexCount > 0) {
+                    const subParticleCount = 1200;
+                    for (let sv = 0; sv < this.subvortexCount; sv++) {
+                        const subGeo = new THREE.BufferGeometry();
+                        const subPos = new Float32Array(subParticleCount * 3);
+                        const subCols = new Float32Array(subParticleCount * 3);
+                        const subData = [];
+
+                        for (let i = 0; i < subParticleCount; i++) {
+                            const yNorm = Math.random();
+                            const h = yNorm * 60;
+                            const r = (0.1 + yNorm * 0.8) * (effectiveRadius * 0.08);
+                            const a = Math.random() * Math.PI * 2;
+
+                            subPos[i * 3] = Math.cos(a) * r;
+                            subPos[i * 3 + 1] = h;
+                            subPos[i * 3 + 2] = Math.sin(a) * r;
+
+                            subCols[i * 3] = typeConfig.color1.r;
+                            subCols[i * 3 + 1] = typeConfig.color1.g;
+                            subCols[i * 3 + 2] = typeConfig.color1.b;
+
+                            subData.push({ yNorm, height: h, angle: a, speed: 0.05 + Math.random() * 0.03, upSpeed: 0.5 });
+                        }
+
+                        subGeo.setAttribute('position', new THREE.BufferAttribute(subPos, 3));
+                        subGeo.setAttribute('color', new THREE.BufferAttribute(subCols, 3));
+
+                        const subMesh = new THREE.Points(subGeo, this.material);
+                        scene.add(subMesh);
+
+                        this.subvortices.push({
+                            mesh: subMesh,
+                            data: subData,
+                            geo: subGeo,
+                            orbitAngle: (sv / this.subvortexCount) * Math.PI * 2,
+                            orbitDist: effectiveRadius * 0.25
+                        });
+                    }
+                }
+            }
+
+            update(delta, time) {
+                if (this.isTwinSatellite && tornadoes.length > 0) {
+                    const leader = tornadoes[0];
+                    const orbitRadius = 45;
+                    const orbitSpeed = 0.8;
+                    const angleOffset = (Math.PI * 2 / Math.max(1, tornadoes.length - 1)) * (this.id - 1);
+
+                    this.pos.x = leader.pos.x + Math.cos(time * orbitSpeed + angleOffset) * or
+                    bitRadius;
+                    this.pos.z = leader.pos.z + Math.sin(time * orbitSpeed + angleOffset) * orbitRadius;
+                } else {
+                    this.pos.x += this.velocity.x;
+                    this.pos.z += this.velocity.y;
+                    this.velocity.multiplyScalar(0.92);
+                }
+
+                if (this.particlesMesh) {
+                    this.particlesMesh.position.copy(this.pos);
+                    const posArr = this.geometry.attributes.position.array;
+                    const realWindSpeedFactor = (this.liveSpeed / 200) * this.rotationDir;
+                    const pressureFactor = Math.max(0.5, (1013 - this.livePressure) / 150);
+                    const effectiveRadius = this.liveRadius * (1 + pressureFactor * 0.2);
+
+                    // INCLINACIÓN APLICADA A TODOS LOS TORNADOS EXCEPTO CUÑA Y CHIMENEA (wedge, stovepipe)
+                    const isWedgeOrStovepipe = (this.shapeKey === 'wedge' || this.shapeKey === 'stovepipe');
+                    const canTilt = isTiltEnabled && !isWedgeOrStovepipe;
+                    const windTilt = canTilt ? ((globalAmbientWind / 100) * 38 * tiltFactorUser) : 0;
+                    const isNeedleOrRope = (this.shapeKey === 'needle' || this.shapeKey === 'rope');
+
+                    for (let i = 0; i < this.particleData.length; i++) {
+                        const p = this.particleData[i];
+                        p.height += p.upSpeed * this.speedFactor;
+                        if (p.height > 120) p.height = 0;
+                        p.yNorm = p.height / 120;
+
+                        p.angle += p.speed * this.speedFactor * realWindSpeedFactor;
+
+                        const baseR = calculateShapeRadius(p.yNorm, this.shapeKey) * effectiveRadius * 0.3;
+                        const r = baseR * 0.9 + Math.sin(time * 3 + p.height) * 0.3;
+
+                        let tiltX = Math.pow(p.yNorm, 1.4) * windTilt;
+                        let tiltZ = (isNeedleOrRope && canTilt) ? Math.sin(p.yNorm * Math.PI * 1.8 + time * 0.8) * (18 * p.yNorm) : 0;
+
+                        posArr[i * 3] = Math.cos(p.angle) * r + tiltX;
+                        posArr[i * 3 + 1] = p.height;
+                        posArr[i * 3 + 2] = Math.sin(p.angle) * r + tiltZ;
+                    }
+                    this.geometry.attributes.position.needsUpdate = true;
+                }
+
+                // Subvórtices con inclinación heredada y filtrada
+                const realWindSpeedFactor = (this.liveSpeed / 200) * this.rotationDir;
+                const isWedgeOrStovepipeSub = (this.shapeKey === 'wedge' || this.shapeKey === 'stovepipe');
+                const canTiltSub = isTiltEnabled && !isWedgeOrStovepipeSub;
+                const subWindTilt = canTiltSub ? ((globalAmbientWind / 100) * 20 * tiltFactorUser) : 0;
+
+                this.subvortices.forEach(sub => {
+                    sub.orbitAngle += 0.02 * realWindSpeedFactor * this.speedFactor;
+                    const subX = this.pos.x + Math.cos(sub.orbitAngle) * sub.orbitDist;
+                    const subZ = this.pos.z + Math.sin(sub.orbitAngle) * sub.orbitDist;
+                    sub.mesh.position.set(subX, 0, subZ);
+
+                    const sPos = sub.geo.attributes.position.array;
+                    for (let i = 0; i < sub.data.length; i++) {
+                        const p = sub.data[i];
+                        p.height += p.upSpeed * this.speedFactor;
+                        if (p.height > 60) p.height = 0;
+                        p.yNorm = p.height / 60;
+                        p.angle += p.speed * realWindSpeedFactor;
+
+                        const r = (0.1 + p.yNorm * 0.8) * (this.liveRadius * 0.08);
+                        let subTiltX = Math.pow(p.yNorm, 1.4) * subWindTilt;
+
+                        sPos[i * 3] = Math.cos(p.angle) * r + subTiltX;
+                        sPos[i * 3 + 1] = p.height;
+                        sPos[i * 3 + 2] = Math.sin(p.angle) * r;
+                    }
+                    sub.geo.attributes.position.needsUpdate = true;
+                });
+            }
+
+            destroy() {
+                if (this.particlesMesh) {
+                    scene.remove(this.particlesMesh);
+                    this.geometry.dispose();
+                    this.material.dispose();
+                    this.particlesMesh = null;
+                }
+                this.subvortices.forEach(sub => scene.remove(sub.mesh));
+                this.subvortices = [];
+            }
+        }
+
+        // GESTOR GLOBAL DE TORNADOS
+        const tornadoes = [new TornadoInstance(0, new THREE.Vector3(0, 0, 0))];
+
+        function getActiveTornadoes() {
+            if (activeControlledIndex === "ALL") return tornadoes;
+            const idx = parseInt(activeControlledIndex);
+            return tornadoes[idx] ? [tornadoes[idx]] : [];
+        }
+
+        // --- MUNDO Y ESTRUCTURAS ---
+        function createWorld() {
+            const groundGeo = new THREE.PlaneGeometry(1200, 1200);
+            groundGeo.rotateX(-Math.PI / 2);
+            const groundMat = new THREE.MeshStandardMaterial({ color: 0x1a2615, roughness: 0.9 });
+            const ground = new THREE.Mesh(groundGeo, groundMat);
+            ground.name = "ground";
+            ground.receiveShadow = true;
+            scene.add(ground);
+
+            const grid = new THREE.GridHelper(1200, 100, 0x3b82f6, 0x1e293b);
+            grid.position.y = 0.1;
+            scene.add(grid);
+
+            const houseMat = new THREE.MeshStandardMaterial({ color: 0x8b5a2b });
+            const roofMat = new THREE.MeshStandardMaterial({ color: 0xb22222 });
+
+            for (let i = 0; i < 50; i++) {
+                const x = (Math.random() - 0.5) * 500;
+                const z = (Math.random() - 0.5) * 500;
+                if (Math.abs(x) < 35 && Math.abs(z) < 35) continue;
+
+                const houseGroup = new THREE.Group();
+                const body = new THREE.Mesh(new THREE.BoxGeometry(6, 5, 6), houseMat);
+                body.position.y = 2.5;
+                body.castShadow = true;
+
+                const roof = new THREE.Mesh(new THREE.ConeGeometry(5.5, 3.5, 4), roofMat);
+                roof.position.y = 6.75;
+                roof.rotation.y = Math.PI / 4;
+                roof.castShadow = true;
+
+                houseGroup.add(body);
+                houseGroup.add(roof);
+
+                houseGroup.position.set(x, 0, z);
+                scene.add(houseGroup);
+
+                houses.push({
+                    mesh: houseGroup,
+                    origin: new THREE.Vector3(x, 0, z),
+                    orbitAngle: Math.random() * Math.PI * 2,
+                    orbitSpeed: 0.02 + Math.random() * 0.03,
+                    liftHeight: 0,
+                    flyRadius: 10 + Math.random() * 20
+                });
+            }
+        }
+        createWorld();
+
+        function resetHouses() {
+            houses.forEach(h => {
+                h.liftHeight = 0;
+                h.mesh.position.copy(h.origin);
+                h.mesh.rotation.set(0, 0, 0);
+            });
+            speak("Estructuras restablecidas");
+        }
+
+        // --- SISTEMA ATMOSFÉRICO DE TORMENTA ---
+        let rainParticles, rainGeometry, hailParticles, hailGeometry;
+        let rainCount = 15000;
+        let hailCount = 3000;
+        let stormIntensity = 0.5;
+
+        function initStormSystem() {
+            if (rainParticles) scene.remove(rainParticles);
+            if (hailParticles) scene.remove(hailParticles);
+
+            rainGeometry = new THREE.BufferGeometry();
+            const pos = new Float32Array(rainCount * 3);
+            for (let i = 0; i < rainCount * 3; i += 3) {
+                pos[i] = (Math.random() - 0.5) * 900;
+                pos[i + 1] = Math.random() * 350;
+                pos[i + 2] = (Math.random() - 0.5) * 900;
+            }
+            rainGeometry.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+            rainParticles = new THREE.Points(rainGeometry, new THREE.PointsMaterial({
+                color: 0x93c5fd, size: 1.2, transparent: true, opacity: 0.6, depthWrite: false
+            }));
+            scene.add(rainParticles);
+
+            hailGeometry = new THREE.BufferGeometry();
+            const hPos = new Float32Array(hailCount * 3);
+            for (let i = 0; i < hailCount * 3; i += 3) {
+                hPos[i] = (Math.random() - 0.5) * 900;
+                hPos[i + 1] = Math.random() * 350;
+                hPos[i + 2] = (Math.random() - 0.5) * 900;
+            }
+            hailGeometry.setAttribute('position', new THREE.BufferAttribute(hPos, 3));
+            hailParticles = new THREE.Points(hailGeometry, new THREE.PointsMaterial({
+                color: 0xffffff, size: 2.8, transparent: true, opacity: 0.9, depthWrite: false
+            }));
+            scene.add(hailParticles);
+        }
+        initStormSystem();
+
+        // --- ESCOMBROS ---
+        let debrisMesh, debrisData = [];
+        function initDebris() {
+            if (debrisMesh) scene.remove(debrisMesh);
+            const count = 150;
+            const geo = new THREE.BoxGeometry(1.5, 1.5, 1.5);
+            const mat = new THREE.MeshStandardMaterial({ color: 0x64748b, roughness: 0.6 });
+            debrisMesh = new THREE.InstancedMesh(geo, mat, count);
+            debrisData = [];
+
+            const dummy = new THREE.Object3D();
+            for (let i = 0; i < count; i++) {
+                const angle = Math.random() * Math.PI * 2;
+                const dist = 8 + Math.random() * 60;
+                const height = Math.random() * 50;
+                dummy.position.set(Math.cos(angle) * dist, height, Math.sin(angle) * dist);
+                dummy.updateMatrix();
+                debrisMesh.setMatrixAt(i, dummy.matrix);
+                debrisData.push({ angle: angle, dist: dist, height: height, speed: 0.03 + Math.random() * 0.04 });
+            }
+            debrisMesh.instanceMatrix.needsUpdate = true;
+            scene.add(debrisMesh);
+        }
+        initDebris();
+
+        let lightningLine;
+        function triggerLightning() {
+            if (lightningLine) scene.remove(lightningLine);
+
+            const targetPos = tornadoes[0] ? tornadoes[0].pos : new THREE.Vector3(0, 0, 0);
+            const points = [];
+            let currentY = 200;
+            let currX = targetPos.x + (Math.random() - 0.5) * 120;
+            let currZ = targetPos.z + (Math.random() - 0.5) * 120;
+
+            points.push(new THREE.Vector3(currX, currentY, currZ));
+
+            while (currentY > 0) {
+                currentY -= 12 + Math.random() * 15;
+                currX += (Math.random() - 0.5) * 20;
+                currZ += (Math.random() - 0.5) * 20;
+                points.push(new THREE.Vector3(currX, Math.max(0, currentY), currZ));
+            }
+
+            const lightningGeo = new THREE.BufferGeometry().setFromPoints(points);
+            const lightningMat = new THREE.LineBasicMaterial({ color: 0xffffff, linewidth: 3 });
+            lightningLine = new THREE.Line(lightningGeo, lightningMat);
+            scene.add(lightningLine);
+
+            const orig = dirLight.intensity;
+            dirLight.intensity = 4.5;
+            tornadoPointLight.intensity = 15.0;
+
+            setTimeout(() => {
+                dirLight.intensity = orig;
+                tornadoPointLight.intensity = 3.0;
+                if (lightningLine) scene.remove(lightningLine);
+            }, 150);
+        }
+
+        // --- ANIMACIÓN PRINCIPAL ---
+        const clock = new THREE.Clock();
+
+        function animate() {
+            requestAnimationFrame(animate);
+            const delta = clock.getDelta();
+            const time = clock.getElapsedTime();
+
+            const accel = 0.22; 
+            getActiveTornadoes().forEach(t => {
+                if (moveKeys.up) t.velocity.y -= accel;
+                if (moveKeys.down) t.velocity.y += accel;
+                if (moveKeys.left) t.velocity.x -= accel;
+                if (moveKeys.right) t.velocity.x += accel;
+            });
+
+            tornadoes.forEach(t => t.update(delta, time));
+
+            houses.forEach(h => {
+                let affected = false;
+                tornadoes.forEach(t => {
+                    if (t.ef < 2) return; 
+
+                    const dx = h.mesh.position.x - t.pos.x;
+                    const dz = h.mesh.position.z - t.pos.z;
+                    const dist = Math.sqrt(dx * dx + dz * dz);
+                    const activeRadius = t.liveRadius * (1 + (1013 - t.livePressure) / 500);
+
+                    if (dist < activeRadius) {
+                        affected = true;
+                        h.orbitAngle += h.orbitSpeed * t.speedFactor * (t.liveSpeed / 100) * t.rotationDir;
+                        h.liftHeight = Math.min(85, h.liftHeight + 0.35 * t.speedFactor * (t.liveSpeed / 150));
+
+                        const r = h.flyRadius;
+                        h.mesh.position.x = t.pos.x + Math.cos(h.orbitAngle) * r;
+                        h.mesh.position.z = t.pos.z + Math.sin(h.orbitAngle) * r;
+                        h.mesh.position.y = h.liftHeight;
+
+                        h.mesh.rotation.x += 0.04 * (t.liveSpeed / 150);
+                        h.mesh.rotation.y += 0.06 * (t.liveSpeed / 150);
+                    }
+                });
+
+                if (!affected && h.liftHeight > 0) {
+                    h.liftHeight = Math.max(0, h.liftHeight - 0.7);
+                    h.mesh.position.y = h.liftHeight;
+                }
+            });
+
+            if (rainParticles) {
+                const rPos = rainGeometry.attributes.position.array;
+                const drawLimit = Math.floor(rainCount * stormIntensity);
+                rainParticles.geometry.setDrawRange(0, drawLimit);
+
+                if (stormIntensity > 0) {
+                    for (let i = 1; i < rPos.length; i += 3) {
+                        rPos[i] -= 3.5 + stormIntensity * 4;
+                        rPos[i - 1] += (globalAmbientWind / 25);
+                        if (rPos[i] < 0) {
+                            rPos[i] = 300;
+                            rPos[i - 1] = (Math.random() - 0.5) * 900;
+                        }
+                    }
+                    rainGeometry.attributes.position.needsUpdate = true;
+                }
+            }
+
+            if (hailParticles) {
+                const hailActiveLimit = stormIntensity > 0.6 ? Math.floor(hailCount * ((stormIntensity - 0.6) / 0.4)) : 0;
+                hailParticles.geometry.setDrawRange(0, hailActiveLimit);
+
+                if (hailActiveLimit > 0) {
+                    const hPos = hailGeometry.attributes.position.array;
+                    for (let i = 1; i < hPos.length; i += 3) {
+                        hPos[i] -= 8 + Math.random() * 4;
+                        hPos[i - 1] += (globalAmbientWind / 20);
+                        if (hPos[i] < 0) {
+                            hPos[i] = 300;
+                            hPos[i - 1] = (Math.random() - 0.5) * 900;
+                        }
+                    }
+                    hailGeometry.attributes.position.needsUpdate = true;
+                }
+            }
+
+            if (stormIntensity >= 0.92 && Math.random() < 0.012) triggerLightning();
+
+            if (debrisMesh && tornadoes[0]) {
+                const mainPos = tornadoes[0].pos;
+                debrisMesh.position.copy(mainPos);
+                const rotationFactor = tornadoes[0].rotationDir;
+                const dummy = new THREE.Object3D();
+                for (let i = 0; i < debrisData.length; i++) {
+                    const d = debrisData[i];
+                    d.angle += d.speed * tornadoes[0].speedFactor * rotationFactor;
+                    d.height += 0.12;
+                    if (d.height > 55) d.height = 0.5;
+
+                    dummy.position.set(Math.cos(d.angle) * d.dist, d.height, Math.sin(d.angle) * d.dist);
+                    dummy.rotation.x += 0.05;
+                    dummy.rotation.y += 0.05;
+                    dummy.updateMatrix();
+                    debrisMesh.setMatrixAt(i, dummy.matrix);
+                }
+                debrisMesh.instanceMatrix.needsUpdate = true;
+            }
+
+            let activeIdx = activeControlledIndex === "ALL" ? 0 : parseInt(activeControlledIndex);
+            const focusTornado = tornadoes[activeIdx] || tornadoes[0];
+            const refPos = focusTornado ? focusTornado.pos : new THREE.Vector3(0, 0, 0);
+
+            let dirX = focusTornado.velocity.x;
+            let dirZ = focusTornado.velocity.y;
+
+            if (Math.abs(dirX) < 0.01 && Math.abs(dirZ) < 0.01) {
+                dirX = 0; dirZ = -1;
+            } else {
+                const mag = Math.sqrt(dirX*dirX + dirZ*dirZ);
+                dirX /= mag; dirZ /= mag;
+            }
+
+            if (cameraMode === 'fp') {
+                camera.position.set(refPos.x, 15, refPos.z); 
+                controls.target.set(refPos.x + dirX * 50, 15, refPos.z + dirZ * 50);
+            } else if (cameraMode === 'follow') {
+                camera.position.set(refPos.x - dirX * 90, 35, refPos.z - dirZ * 90);
+                controls.target.set(refPos.x, 15, refPos.z);
+            } else {
+                controls.target.set(refPos.x, 20, refPos.z);
+            }
+
+            tornadoPointLight.position.set(refPos.x, 20 + Math.sin(time * 2) * 5, refPos.z);
+
+            controls.update();
+            renderer.render(scene, camera);
+        }
+
+        // --- INTERFAZ DE USUARIO ---
+        function syncUIFromActive() {
+            let t = null;
+            if (activeControlledIndex === "ALL") {
+                t = tornadoes[0];
+            } else {
+                const idx = parseInt(activeControlledIndex);
+                t = tornadoes[idx] || tornadoes[0];
+            }
+            if (!t) return;
+
+            document.getElementById('windSpeedInput').value = t.liveSpeed;
+            document.getElementById('pressureInput').value = t.livePressure;
+            document.getElementById('radiusInput').value = t.liveRadius;
+            document.getElementById('telemetry-ef').innerText = "EF" + t.ef;
+            document.getElementById('type-select').value = t.typeKey;
+            document.getElementById('shape-select').value = t.shapeKey;
+            document.getElementById('rotation-dir').value = t.rotationDir;
+            document.getElementById('subvortex-count').value = t.subvortexCount;
+
+            document.querySelectorAll('.ef-btn').forEach(b => {
+                const efVal = parseInt(b.getAttribute('data-ef'));
+                if (efVal === t.ef) {
+                    b.className = "ef-btn bg-blue-600 text-white font-bold rounded py-1 text-xs font-mono transition shadow";
+                } else {
+                    b.className = "ef-btn bg-slate-800/80 hover:bg-blue-600 border border-slate-700 rounded py-1 text-xs font-mono font-medium transition text-slate-300";
+                }
+            });
+        }
+
+        function updateTornadoSelectorUI() {
+            const select = document.getElementById('active-tornado-select');
+            select.innerHTML = '';
+            tornadoes.forEach((t, i) => {
+                const opt = document.createElement('option');
+                opt.value = i;
+                opt.innerText = `Tornado #${i + 1}${i === 0 ? ' (Principal)' : ''}`;
+                select.appendChild(opt);
+            });
+            const optAll = document.createElement('option');
+            optAll.value = "ALL";
+            optAll.innerText = "TODOS A LA VEZ (GLOBAL)";
+            select.appendChild(optAll);
+            select.value = activeControlledIndex;
+
+            document.getElementById('tornado-count-badge').innerText = `${tornadoes.length}/5`;
+        }
+
+        document.getElementById('btn-add-tornado').addEventListener('click', () => {
+            if (tornadoes.length >= 5) return;
+            const offset = new THREE.Vector3((Math.random() - 0.5) * 120, 0, (Math.random() - 0.5) * 120);
+            const newT = new TornadoInstance(tornadoes.length, offset);
+            newT.isTwinSatellite = false; 
+            tornadoes.push(newT);
+            updateTornadoSelectorUI();
+            syncUIFromActive();
+        });
+
+        document.getElementById('btn-remove-tornado').addEventListener('click', () => {
+            if (tornadoes.length <= 1) return;
+            const removed = tornadoes.pop();
+            removed.destroy();
+            activeControlledIndex = "0";
+            updateTornadoSelectorUI();
+            syncUIFromActive();
+        });
+
+        document.getElementById('active-tornado-select').addEventListener('change', (e) => {
+            activeControlledIndex = e.target.value;
+            syncUIFromActive();
+        });
+
+        document.querySelectorAll('.ef-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const efVal = parseInt(e.target.getAttribute('data-ef'));
+                getActiveTornadoes().forEach(t => {
+                    t.ef = efVal;
+                    t.liveSpeed = efData[efVal].speed;
+                    t.livePressure = efData[efVal].pressure;
+                    t.liveRadius = efData[efVal].radius;
+                    t.init();
+                });
+                syncUIFromActive();
+            });
+        });
+
+        document.getElementById('type-select').addEventListener('change', (e) => {
+            getActiveTornadoes().forEach(t => { t.typeKey = e.target.value; t.init(); });
+        });
+
+        document.getElementById('shape-select').addEventListener('change', (e) => {
+            getActiveTornadoes().forEach(t => { t.shapeKey = e.target.value; t.init(); });
+        });
+
+        document.getElementById('check-tilt').addEventListener('change', (e) => {
+            isTiltEnabled = e.target.checked;
+        });
+
+        document.getElementById('slider-tilt').addEventListener('input', (e) => {
+            tiltFactorUser = parseInt(e.target.value) / 100;
+            document.getElementById('val-tilt').innerText = e.target.value + "%";
+        });
+
+        document.getElementById('rotation-dir').addEventListener('change', (e) => {
+            const val = parseInt(e.target.value);
+            getActiveTornadoes().forEach(t => { t.rotationDir = val; });
+        });
+
+        document.getElementById('subvortex-count').addEventListener('input', (e) => {
+            const count = parseInt(e.target.value) || 0;
+            getActiveTornadoes().forEach(t => { t.subvortexCount = count; t.init(); });
+        });
+
+        document.getElementById('time-select').addEventListener('change', (e) => {
+            selectedTime = e.target.value;
+            updateAtmosphere();
+        });
+
+        document.getElementById('slider-cloud').addEventListener('input', (e) => {
+            cloudDensity = parseInt(e.target.value);
+            document.getElementById('val-cloud').innerText = cloudDensity + "%";
+            updateAtmosphere();
+        });
+
+        document.getElementById('slider-fog').addEventListener('input', (e) => {
+            fogLevel = parseInt(e.target.value);
+            document.getElementById('val-teal').innerText = fogLevel + "%";
+            updateAtmosphere();
+        });
+
+        document.getElementById('slider-rain').addEventListener('input', (e) => {
+            stormIntensity = parseInt(e.target.value) / 100;
+            document.getElementById('val-rain').innerText = e.target.value + "%";
+        });
+
+        document.getElementById('slider-gust').addEventListener('input', (e) => {
+            globalAmbientWind = parseInt(e.target.value);
+            document.getElementById('val-gust').innerText = globalAmbientWind + " km/h";
+        });
+
+        document.getElementById('sistemaVorticial').addEventListener('change', (e) => {
+            const count = parseInt(e.target.value);
+            while(tornadoes.length > 0) {
+                const removed = tornadoes.pop();
+                removed.destroy();
+            }
+            for(let i = 0; i < count; i++) {
+                const t = new TornadoInstance(i, new THREE.Vector3(i * 30, 0, 0));
+                t.isTwinSatellite = (i > 0); 
+                tornadoes.push(t);
+            }
+            activeControlledIndex = "0";
+            updateTornadoSelectorUI();
+            syncUIFromActive();
+        });
+
+        // CÁMARA
+        const btnCamNormal = document.getElementById('btn-camera-normal');
+        const btnCamFollow = document.getElementById('btn-camera-follow');
+        const btnCamFp = document.getElementById('btn-camera-fp');
+
+        function resetCameraButtons() {
+            const baseClass = "bg-slate-800 hover:bg-slate-700 text-slate-300 text-[11px] py-1.5 rounded transition border border-slate-700";
+            btnCamNormal.className = baseClass;
+            btnCamFollow.className = baseClass;
+            btnCamFp.className = baseClass;
+        }
+
+        btnCamNormal.addEventListener('click', () => {
+            cameraMode = 'normal';
+            document.getElementById('camera-status').innerText = "Vista aérea libre";
+            resetCameraButtons();
+            btnCamNormal.className = "bg-blue-600 text-white font-semibold text-[11px] py-1.5 rounded transition";
+        });
+
+        btnCamFollow.addEventListener('click', () => {
+            cameraMode = 'follow';
+            document.getElementById('camera-status').innerText = "Siguiendo trayectoria";
+            resetCameraButtons();
+            btnCamFollow.className = "bg-blue-600 text-white font-semibold text-[11px] py-1.5 rounded transition";
+        });
+
+        btnCamFp.addEventListener('click', () => {
+            cameraMode = 'fp';
+            document.getElementById('camera-status').innerText = "Vista desde el interior del ojo";
+            resetCameraButtons();
+            btnCamFp.className = "bg-blue-600 text-white font-semibold text-[11px] py-1.5 rounded transition";
+        });
+
+        document.getElementById('btn-lightning').addEventListener('click', triggerLightning);
+        document.getElementById('btn-debris').addEventListener('click', initDebris);
+        document.getElementById('btn-reset').addEventListener('click', resetHouses);
+
+        // Teclado
+        window.addEventListener('keydown', (e) => handleKey(e, true));
+        window.addEventListener('keyup', (e) => handleKey(e, false));
+
+        function handleKey(e, isDown) {
+            const k = e.key;
+            const lk = k.toLowerCase();
+            if (k === 'ArrowUp' || lk === 'w') moveKeys.up = isDown;
+            if (k === 'ArrowDown' || lk === 's') moveKeys.down = isDown;
+            if (k === 'ArrowLeft' || lk === 'a') moveKeys.left = isDown;
+            if (k === 'ArrowRight' || lk === 'd') moveKeys.right = isDown;
+        }
+
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+        // --- MÓDULO DE VOZ ---
+        function speak(text) {
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel();
+                const utter = new SpeechSynthesisUtterance(text);
+                utter.lang = 'es-ES';
+                window.speechSynthesis.speak(utter);
+            }
+        }
+
+        const micBtn = document.getElementById('mic-btn');
+        const micIcon = document.getElementById('mic-icon');
+        const micPing = document.getElementById('mic-ping');
+        const voiceStatus = document.getElementById('voice-status');
+        const voiceLastCmd = document.getElementById('voice-last-cmd');
+
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+        if (SpeechRecognition) {
+            const recognition = new SpeechRecognition();
+            recognition.continuous = true;
+            recognition.lang = 'es-ES';
+            let isListening = false;
+
+            micBtn.addEventListener('click', () => {
+                if (!isListening) {
+                    try {
+                        recognition.start();
+                        isListening = true;
+                        micIcon.className = "fa-solid fa-microphone text-rose-500 text-sm";
+                        micPing.classList.remove('opacity-0');
+                        voiceStatus.innerText = "Escuchando...";
+                        speak("Reconocimiento de voz activo");
+                    } catch(err) { console.error(err); }
+                } else {
+                    recognition.stop();
+                    isListening = false;
+                    micIcon.className = "fa-solid fa-microphone text-slate-400 text-sm";
+                    micPing.classList.add('opacity-0');
+                    voiceStatus.innerText = "Reconocimiento: Inactivo";
+                }
+            });
+
+            recognition.onresult = (e) => {
+                const cmd = e.results[e.results.length - 1][0].transcript.toLowerCase().trim();
+                voiceLastCmd.innerText = `"${cmd}"`;
+                processVoiceAICommand(cmd);
+            };
+        }
+
+        function processVoiceAICommand(cmd) {
+            let responded = false;
+
+            for (let i = 0; i <= 5; i++) {
+                if (cmd.includes(`ef${i}`) || cmd.includes(`ef ${i}`) || cmd.includes(`f${i}`) || cmd.includes(`f ${i}`) || cmd.includes(`fuerza ${i}`) || cmd.includes(`nivel ${i}`)) {
+                    getActiveTornadoes().forEach(t => {
+                        t.ef = i;
+                        t.liveSpeed = efData[i].speed;
+                        t.livePressure = efData[i].pressure;
+                        t.liveRadius = efData[i].radius;
+                        t.init();
+                    });
+                    syncUIFromActive();
+                    speak(`Intensidad ajustada a E F ${i}`);
+                    responded = true;
+                    break;
+                }
+            }
+
+            if (!responded && (cmd.includes("anticiclónico") || cmd.includes("anticiclonico"))) {
+                getActiveTornadoes().forEach(t => t.rotationDir = -1);
+                document.getElementById('rotation-dir').value = "-1";
+                speak("Rotación ajustada a anticiclónico");
+                responded = true;
+            } else if (!responded && (cmd.includes("ciclónico") || cmd.includes("ciclonico"))) {
+                getActiveTornadoes().forEach(t => t.rotationDir = 1);
+                document.getElementById('rotation-dir').value = "1";
+                speak("Rotación ajustada a ciclónico");
+                responded = true;
+            }
+
+            if (!responded && (cmd.includes("subvórtices") || cmd.includes("subvortices"))) {
+                const match = cmd.match(/\d+/);
+                if (match) {
+                    const num = parseInt(match[0]);
+                    getActiveTornadoes().forEach(t => { t.subvortexCount = num; t.init(); });
+                    document.getElementById('subvortex-count').value = num;
+                    speak(`Subvórtices ajustados a ${num}`);
+                    responded = true;
+                }
+            }
+
+            if (!responded) {
+                let val = null;
+                if (cmd.includes("cero")) {
+                    val = 0;
+                } else {
+                    const numMatch = cmd.match(/\d+/);
+                    if (numMatch) val = parseInt(numMatch[0]);
+                }
+
+                if (val !== null) {
+                    if (cmd.includes("neblina") || cmd.includes("niebla")) {
+                        fogLevel = val;
+                        document.getElementById('slider-fog').value = val;
+                        document.getElementById('val-teal').innerText = val + "%";
+                        updateAtmosphere();
+                        speak(`Neblina ajustada al ${val} por ciento`);
+                        responded = true;
+                    } else if (cmd.includes("nubosidad")) {
+                        cloudDensity = val;
+                        document.getElementById('slider-cloud').value = val;
+                        document.getElementById('val-cloud').innerText = val + "%";
+                        updateAtmosphere();
+                        speak(`Nubosidad ajustada al ${val} por ciento`);
+                        responded = true;
+                    } else if (cmd.includes("lluvia")) {
+                        stormIntensity = val / 100;
+                        document.getElementById('slider-rain').value = val;
+                        document.getElementById('val-rain').innerText = val + "%";
+                        speak(`Lluvia ajustada al ${val} por ciento`);
+                        responded = true;
+                    } else if (cmd.includes("viento") || cmd.includes("vientos")) {
+                        globalAmbientWind = val;
+                        document.getElementById('slider-gust').value = val;
+                        document.getElementById('val-gust').innerText = val + " km/h";
+                        speak(`Viento ambiental ajustado a ${val} kilómetros por hora`);
+                        responded = true;
+                    } else if (cmd.includes("inclinación") || cmd.includes("inclinacion")) {
+                        tiltFactorUser = val / 100;
+                        document.getElementById('slider-tilt').value = val;
+                        document.getElementById('val-tilt').innerText = val + "%";
+                        speak(`Inclinación ajustada al ${val} por ciento`);
+                        responded = true;
+                    }
+                }
+            }
+
+            if (!responded) {
+                const shapeMap = {
+                    'aguja': 'needle', 'cuerda': 'rope', 'cono': 'cone', 'cuña': 'wedge',
+                    'chimenea': 'stovepipe', 'alambre': 'wire', 'v': 'vshaped', 'puro': 'cigar',
+                    'cilindro': 'cylinder', 'tierra': 'landspout', 'cóncavo': 'concavesided',
+                    'recto': 'straightsided', 'convexo': 'convexsided', 'segmentado': 'segmented',
+                    'truncado': 'truncatedcone', 'bulbo': 'bulbshaped', 'tazón': 'bowlshaped',
+                    'base': 'flaredbase', 'reloj': 'hourglass', 'envainado': 'sheathed', 'enfundado': 'sheathed'
+                };
+
+                for (const [key, val] of Object.entries(shapeMap)) {
+                    if (cmd.includes(key)) {
+                        getActiveTornadoes().forEach(t => { t.shapeKey = val; t.init(); });
+                        document.getElementById('shape-select').value = val;
+                        speak(`Forma ajustada a ${key}`);
+                        responded = true;
+                        break;
+                    }
+                }
+            }
+
+            if (!responded) {
+                const elementMap = {
+                    'fuego': 'fire', 'agua': 'water', 'arena': 'sand',
+                    'hielo': 'ice', 'eléctrico': 'electric', 'electrico': 'electric',
+                    'clásico': 'classic', 'clasico': 'classic', 'invisible': 'invisible'
+                };
+                for (const [key, val] of Object.entries(elementMap)) {
+                    if (cmd.includes(key)) {
+                        getActiveTornadoes().forEach(t => { t.typeKey = val; t.init(); });
+                        document.getElementById('type-select').value = val;
+                        syncUIFromActive();
+                        speak(`Elemento cambiado a ${key}`);
+                        responded = true;
+                        break;
+                    }
+                }
+            }
+
+            if (!responded) {
+                if (cmd.includes("día") || cmd.includes("dia")) {
+                    selectedTime = 'day';
+                    document.getElementById('time-select').value = 'day';
+                    updateAtmosphere();
+                    speak("Modo día");
+                    responded = true;
+                } else if (cmd.includes("noche")) {
+                    selectedTime = 'night';
+                    document.getElementById('time-select').value = 'night';
+                    updateAtmosphere();
+                    speak("Modo noche");
+                    responded = true;
+                } else if (cmd.includes("atardecer") || cmd.includes("tarde")) {
+                    selectedTime = 'sunset';
+                    document.getElementById('time-select').value = 'sunset';
+                    updateAtmosphere();
+                    speak("Modo atardecer");
+                    responded = true;
+                }
+            }
+        }
+
+        // Inicio
+        updateAtmosphere();
+        syncUIFromActive();
+        animate();
+    </script>
+</body>
+</html>

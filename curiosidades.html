@@ -1,0 +1,1147 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Curiosidades - Tornados, Ciencias y mas</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&family=Oswald:wght@500;700&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        storm: {
+                            950: '#060a12',
+                            900: '#0b1120',
+                            800: '#111827',
+                            700: '#1f2937',
+                            accent: '#38bdf8',
+                            warning: '#f59e0b',
+                            danger: '#ef4444'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Montserrat', 'sans-serif'],
+                        heading: ['Oswald', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .glass-card { background: rgba(255,255,255,.90); border:1px solid rgba(0,0,0,.10); color:#1f2937; backdrop-filter:blur(12px); }
+        .dark .glass-card { background:rgba(17,24,39,.75); border:1px solid rgba(255,255,255,.1); color:#f3f4f6; }
+        .carousel-slide { transition:opacity .7s ease-in-out; }
+        .text-justified { text-align:justify; text-justify:inter-word; }
+        html { scroll-padding-top:6rem; }
+        html:not(.dark) body { background:#f3f4f6; color:#1f2937; }
+        html.dark body { background:#0b1120; color:#f3f4f6; }
+        html:not(.dark) main, html:not(.dark) #explora-titulos { background:#f3f4f6; border-color:#d1d5db; }
+        html:not(.dark) main .glass-card, html:not(.dark) #explora-titulos .glass-card { background:#fff; border-color:#d1d5db; color:#1f2937; }
+        /* En modo día se oscurecen los textos neutros; los colores propios de cada capítulo permanecen intactos. */
+        html:not(.dark) main .text-white, html:not(.dark) #explora-titulos .text-white, html:not(.dark) footer .text-white { color:#1f2937; }
+        html:not(.dark) main .text-gray-100, html:not(.dark) main .text-gray-200, html:not(.dark) main .text-gray-300,
+        html:not(.dark) main .text-gray-400, html:not(.dark) #explora-titulos .text-gray-300,
+        html:not(.dark) #explora-titulos .text-gray-400, html:not(.dark) #explora-titulos .text-gray-500,
+        html:not(.dark) footer .text-gray-400, html:not(.dark) footer .text-gray-500 { color:#4b5563; }
+        html:not(.dark) main .border-gray-800, html:not(.dark) main .border-gray-700,
+        html:not(.dark) #explora-titulos .border-gray-800, html:not(.dark) footer .border-gray-800 { border-color:#d1d5db; }
+        html:not(.dark) main .bg-storm-900, html:not(.dark) main .bg-storm-950,
+        html:not(.dark) main .bg-storm-800, html:not(.dark) #explora-titulos.bg-storm-800 { background-color:#e5e7eb; }
+        html:not(.dark) #explora-titulos [class~="bg-gray-800/80"] { background-color:#e5e7eb; }
+        html:not(.dark) footer { background:#e5e7eb; border-color:#d1d5db; color:#4b5563; }
+        html:not(.dark) footer h4 { color:#1f2937; }
+        html:not(.dark) footer ul { color:#4b5563; }
+        html:not(.dark) .carousel-slide .text-white { color:#fff; }
+        html:not(.dark) .carousel-slide .text-gray-300 { color:#e5e7eb; }
+        #themeToggleBtn { white-space:nowrap; }
+        html:not(.dark) #themeToggleBtn { background:#e5e7eb; color:#374151; }
+        html.dark #themeToggleBtn { background:#1f2937; color:#facc15; }
+        @media (max-width:767px) { #themeToggleBtn { padding:.45rem .65rem; font-size:.7rem; } }
+    </style>
+</head>
+<body class="bg-gray-100 text-gray-800 dark:bg-storm-900 dark:text-gray-100 font-sans antialiased overflow-x-hidden selection:bg-purple-500 selection:text-white transition-colors duration-300">
+
+    <!-- NAVBAR -->
+    <nav class="fixed top-0 left-0 w-full z-50 glass-card transition-all duration-300" id="navbar">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex items-center justify-between h-20">
+            <!-- Logo -->
+            <a href="#" class="flex items-center gap-2 group min-w-0">
+                <div class="p-2 bg-purple-500/10 rounded-lg group-hover:bg-purple-500/20 transition-colors shrink-0">
+                    <i class="fa-solid fa-tornado text-purple-500 text-xl group-hover:rotate-45 transition-transform duration-500"></i>
+                </div>
+                <span class="font-heading text-lg sm:text-xl font-semibold tracking-wider dark:text-white text-gray-900 truncate">
+                    TORNADOS, <span class="text-purple-500">CIENCIAS Y MÁS</span>
+                </span>
+            </a>
+
+            <!-- Desktop Nav Links -->
+            <div class="hidden md:flex items-center space-x-1 lg:space-x-4" id="navLinksContainer">
+                <a href="index.html" class="px-3 py-2 text-sm font-semibold hover:text-purple-500 transition-colors tracking-wide uppercase">Inicio</a>
+                <a href="#curiosidades" class="px-3 py-2 text-sm text-sm font-semibold text-purple-500 hover:text-purple-400 transition-colors tracking-wide uppercase">Curiosidades</a>
+                <a href="tornadosmundo.html" class="px-3 py-2 text-sm font-semibold hover:text-purple-500 transition-colors tracking-wide uppercase">Tornados por el mundo</a>
+                <a href="paginainteractiva.html" class="px-3 py-2 text-sm font-semibold hover:text-purple-500 transition-colors tracking-wide uppercase">Página Interactiva</a>
+                <a href="acercade.html" class="px-3 py-2 text-sm font-semibold hover:text-purple-500 transition-colors tracking-wide uppercase">Acerca de</a>
+            </div>
+
+            <!-- Controles a la derecha (Botón Tema + Menú Móvil) -->
+            <div class="flex items-center gap-3">
+                <!-- Botón de Modo Oscuro / Claro -->
+                <button id="themeToggleBtn" aria-label="Cambiar a modo oscuro" title="Cambiar a modo oscuro" class="px-3 py-2 rounded-full bg-gray-200 dark:bg-storm-800 text-gray-700 dark:text-yellow-400 hover:scale-105 transition-transform focus:outline-none flex items-center gap-2 text-xs font-semibold">
+                    <span id="themeIcon" aria-hidden="true">🌙</span>
+                    <span id="themeLabel">Modo oscuro</span>
+                </button>
+
+                <!-- Mobile Menu Button -->
+                <div class="md:hidden">
+                    <button id="mobileMenuBtn" type="button" class="dark:text-gray-300 text-gray-700 hover:text-storm-accent focus:outline-none p-2 rounded-md">
+                        <i class="fa-solid fa-bars text-2xl" id="menuIcon"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile Menu Desplegable -->
+    <div id="mobileMenu" class="hidden md:hidden glass-card border-t border-gray-200 dark:border-gray-800 max-h-[80vh] overflow-y-auto">
+        <div class="px-4 pt-3 pb-6 space-y-2">
+            <a href="index.html" class="mobile-link block px-3 py-2 rounded-md text-base font-medium dark:text-white text-gray-800 hover:bg-storm-800 hover:text-purple-500">INICIO</a>
+            <a href="#curiosidades" class="mobile-link block px-3 py-2 rounded-md text-base font-medium dark:text-white text-gray-800 hover:bg-storm-800 hover:text-purple-500">CURIOSIDADES</a>
+            <a href="tornadosmundo.html" class="mobile-link block px-3 py-2 rounded-md text-base font-medium dark:text-white text-gray-800 hover:bg-storm-800 hover:text-purple-500">TORNADOS POR EL MUNDO</a>
+            <a href="paginainteractiva.html" class="mobile-link block px-3 py-2 rounded-md text-base font-medium dark:text-white text-gray-800 hover:bg-storm-800 hover:text-purple-500">PÁGINA INTERACTIVA</a>
+            <a href="acercade.html" class="mobile-link block px-3 py-2 rounded-md text-base font-medium dark:text-white text-gray-800 hover:bg-storm-800 hover:text-purple-500">ACERCA DE</a>
+            <hr class="border-gray-300 dark:border-gray-800 my-2">
+            <span class="block px-3 py-1 text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Capítulos de curiosidades</span>
+            <a href="#sec-1" class="mobile-link block px-3 py-2 rounded-md text-sm font-medium dark:text-gray-300 text-gray-700 hover:bg-storm-800 hover:text-purple-500">1. Los Grandes Récords</a>
+            <a href="#sec-2" class="mobile-link block px-3 py-2 rounded-md text-sm font-medium dark:text-gray-300 text-gray-700 hover:bg-storm-800 hover:text-purple-500">2. Movimientos que parecen imposibles</a>
+            <a href="#sec-3" class="mobile-link block px-3 py-2 rounded-md text-sm font-medium dark:text-gray-300 text-gray-700 hover:bg-storm-800 hover:text-purple-500">3. Remolinos que no son tornados</a>
+            <a href="#mitos" class="mobile-link block px-3 py-2 rounded-md text-sm font-medium dark:text-gray-300 text-gray-700 hover:bg-storm-800 hover:text-purple-500">4. Mitos y realidades</a>
+            <a href="#sec-5" class="mobile-link block px-3 py-2 rounded-md text-sm font-medium dark:text-gray-300 text-gray-700 hover:bg-storm-800 hover:text-purple-500">5. El rugido de un tornado</a>
+            <a href="#sec-6" class="mobile-link block px-3 py-2 rounded-md text-sm font-medium dark:text-gray-300 text-gray-700 hover:bg-storm-800 hover:text-purple-500">6. Formas y colores extraordinarios</a>
+            <a href="#sec-7" class="mobile-link block px-3 py-2 rounded-md text-sm font-medium dark:text-gray-300 text-gray-700 hover:bg-storm-800 hover:text-purple-500">7. Tornados nocturnos</a>
+            <a href="#sec-8" class="mobile-link block px-3 py-2 rounded-md text-sm font-medium dark:text-gray-300 text-gray-700 hover:bg-storm-800 hover:text-purple-500">8. Tornados y vida animal</a>
+            <a href="#sec-9" class="mobile-link block px-3 py-2 rounded-md text-sm font-medium dark:text-gray-300 text-gray-700 hover:bg-storm-800 hover:text-purple-500">9. Vórtices en otros planetas</a>
+            <a href="#sec-10" class="mobile-link block px-3 py-2 rounded-md text-sm font-medium dark:text-gray-300 text-gray-700 hover:bg-storm-800 hover:text-purple-500">10. Tornados en la cultura popular</a>
+            <a href="#sec-11" class="mobile-link block px-3 py-2 rounded-md text-sm font-medium dark:text-gray-300 text-gray-700 hover:bg-storm-800 hover:text-purple-500">11. Preguntas rápidas</a>
+            <a href="#sec-12" class="mobile-link block px-3 py-2 rounded-md text-sm font-medium dark:text-gray-300 text-gray-700 hover:bg-storm-800 hover:text-purple-500">12. Fenómenos que acompañan a las tormentas</a>
+            <a href="#sec-13" class="mobile-link block px-3 py-2 rounded-md text-sm font-medium dark:text-gray-300 text-gray-700 hover:bg-storm-800 hover:text-purple-500">13. La psicología del riesgo</a>
+        </div>
+    </div>
+</nav>
+
+    <!-- CAROUSEL HERO SECTION -->
+    <section class="relative h-screen min-h-[600px] w-full pt-20 overflow-hidden" id="inicio">
+        <!-- Slide 1 -->
+        <div class="carousel-slide absolute inset-0 w-full h-full opacity-100 transition-opacity duration-700 pointer-events-auto">
+            <div class="absolute inset-0 bg-gradient-to-t from-storm-900 via-storm-900/60 to-transparent z-10"></div>
+            <img src="Ctornado1.png" 
+                 alt="Fenómenos Extraños" 
+                 class="w-full h-full object-cover">
+            <div class="absolute inset-0 z-20 flex flex-col justify-center items-center text-center px-4 max-w-5xl mx-auto">
+                <span class="px-4 py-1.5 bg-purple-500/20 border border-purple-500/50 text-purple-400 rounded-full text-xs md:text-sm font-bold tracking-widest uppercase mb-4">
+                    CAPITULO 01
+                </span>
+                <h1 class="font-heading text-4xl sm:text-6xl md:text-7xl font-extrabold tracking-tight text-white uppercase drop-shadow-lg">
+                    Récords, Mitos & Anomalías
+                </h1>
+                <p class="mt-4 text-base sm:text-xl text-gray-300 max-w-2xl font-light">
+                    Explora los fenómenos más sorprendentes, las apariencias inusuales y la cultura popular en torno a los vórtices extremos.
+                </p>
+                <a href="#curiosidades" class="mt-8 px-8 py-4 bg-purple-500 text-white font-bold rounded-lg shadow-lg shadow-purple-500/30 hover:bg-white hover:text-storm-900 transition-all transform hover:-translate-y-1">
+                    Leer investigación <i class="fa-solid fa-book-open ml-2"></i>
+                </a>
+            </div>
+        </div>
+
+        <!-- Slide 2 -->
+        <div class="carousel-slide absolute inset-0 w-full h-full opacity-0 transition-opacity duration-700 pointer-events-none">
+            <div class="absolute inset-0 bg-gradient-to-t from-storm-900 via-storm-900/60 to-transparent z-10"></div>
+            <img src="Ctornado2.png" 
+                 alt="Cambios de trayectoria y vórtices múltiples" 
+                 class="w-full h-full object-cover">
+            <div class="absolute inset-0 z-20 flex flex-col justify-center items-center text-center px-4 max-w-5xl mx-auto">
+                <span class="px-4 py-1.5 bg-storm-accent/20 border border-storm-accent/50 text-storm-accent rounded-full text-xs md:text-sm font-bold tracking-widest uppercase mb-4">
+                    CAPÍTULO 02
+                </span>
+                <h1 class="font-heading text-4xl sm:text-6xl md:text-7xl font-extrabold tracking-tight text-white uppercase drop-shadow-lg">
+                    Movimientos que parecen imposibles
+                </h1>
+                <p class="mt-4 text-base sm:text-xl text-gray-300 max-w-2xl font-light">
+                    Cambios de dirección, vórtices múltiples y tornados que parecen desaparecer o permanecer casi estacionarios.
+                </p>
+                <a href="#sec-2" class="mt-8 px-8 py-4 bg-storm-accent text-storm-900 font-bold rounded-lg shadow-lg shadow-storm-accent/30 hover:bg-white transition-all transform hover:-translate-y-1">
+                    Leer investigación <i class="fa-solid fa-book-open ml-2"></i>
+                </a>
+            </div>
+        </div>
+
+        <!-- Slide 3 -->
+        <div class="carousel-slide absolute inset-0 w-full h-full opacity-0 transition-opacity duration-700 pointer-events-none">
+            <div class="absolute inset-0 bg-gradient-to-t from-storm-900 via-storm-900/60 to-transparent z-10"></div>
+            <img src="Ctornado3.png" 
+                 alt="Remolinos que no son tornados" 
+                 class="w-full h-full object-cover">
+            <div class="absolute inset-0 z-20 flex flex-col justify-center items-center text-center px-4 max-w-5xl mx-auto">
+                <span class="px-4 py-1.5 bg-emerald-500/20 border border-emerald-500/50 text-emerald-400 rounded-full text-xs md:text-sm font-bold tracking-widest uppercase mb-4">
+                    CAPÍTULO 03
+                </span>
+                <h1 class="font-heading text-4xl sm:text-6xl md:text-7xl font-extrabold tracking-tight text-white uppercase drop-shadow-lg">
+                    Remolinos que no son tornados
+                </h1>
+                <p class="mt-4 text-base sm:text-xl text-gray-300 max-w-2xl font-light">
+                    Dust devils, fire whirls, gustnados, trombas marinas y otros fenómenos.
+                </p>
+                <a href="#sec-3" class="mt-8 px-8 py-4 bg-emerald-500 text-white font-bold rounded-lg shadow-lg shadow-emerald-500/30 hover:bg-white hover:text-storm-900 transition-all transform hover:-translate-y-1">
+                    Leer investigación <i class="fa-solid fa-book-open ml-2"></i>
+                </a>
+            </div>
+        </div>
+
+        <!-- Slide 4 -->
+        <div class="carousel-slide absolute inset-0 w-full h-full opacity-0 transition-opacity duration-700 pointer-events-none">
+            <div class="absolute inset-0 bg-gradient-to-t from-storm-900 via-storm-900/60 to-transparent z-10"></div>
+            <img src="Ctornado4.png" 
+                 alt="Mitos y realidades" 
+                 class="w-full h-full object-cover">
+            <div class="absolute inset-0 z-20 flex flex-col justify-center items-center text-center px-4 max-w-5xl mx-auto">
+                <span class="px-4 py-1.5 bg-amber-500/20 border border-amber-500/50 text-amber-400 rounded-full text-xs md:text-sm font-bold tracking-widest uppercase mb-4">
+                    CAPÍTULO 04
+                </span>
+                <h1 class="font-heading text-4xl sm:text-6xl md:text-7xl font-extrabold tracking-tight text-white uppercase drop-shadow-lg">
+                    Mitos y realidades
+                </h1>
+                <p class="mt-4 text-base sm:text-xl text-gray-300 max-w-2xl font-light">
+                    Conoce qué creencias populares sobre los tornados son falsas y por qué.
+                </p>
+                <a href="#mitos" class="mt-8 px-8 py-4 bg-amber-500 text-white font-bold rounded-lg shadow-lg shadow-amber-500/30 hover:bg-white hover:text-storm-900 transition-all transform hover:-translate-y-1">
+                    Leer investigación <i class="fa-solid fa-book-open ml-2"></i>
+                </a>
+            </div>
+        </div>
+
+        <!-- Slide 5 -->
+        <div class="carousel-slide absolute inset-0 w-full h-full opacity-0 transition-opacity duration-700 pointer-events-none">
+            <div class="absolute inset-0 bg-gradient-to-t from-storm-900 via-storm-900/60 to-transparent z-10"></div>
+            <img src="Ctornado5.png" 
+                 alt="El rugido de un tornado" 
+                 class="w-full h-full object-cover">
+            <div class="absolute inset-0 z-20 flex flex-col justify-center items-center text-center px-4 max-w-5xl mx-auto">
+                <span class="px-4 py-1.5 bg-rose-500/20 border border-rose-500/50 text-rose-400 rounded-full text-xs md:text-sm font-bold tracking-widest uppercase mb-4">
+                    CAPÍTULO 05
+                </span>
+                <h1 class="font-heading text-4xl sm:text-6xl md:text-7xl font-extrabold tracking-tight text-white uppercase drop-shadow-lg">
+                    El rugido de un tornado
+                </h1>
+                <p class="mt-4 text-base sm:text-xl text-gray-300 max-w-2xl font-light">
+                    La acústica del viento, los escombros y el sonido parecido a un tren de carga.
+                </p>
+                <a href="#sec-5" class="mt-8 px-8 py-4 bg-rose-500 text-white font-bold rounded-lg shadow-lg shadow-rose-500/30 hover:bg-white hover:text-storm-900 transition-all transform hover:-translate-y-1">
+                    Leer investigación <i class="fa-solid fa-book-open ml-2"></i>
+                </a>
+            </div>
+        </div>
+
+        <!-- Slide 6 -->
+        <div class="carousel-slide absolute inset-0 w-full h-full opacity-0 transition-opacity duration-700 pointer-events-none">
+            <div class="absolute inset-0 bg-gradient-to-t from-storm-900 via-storm-900/60 to-transparent z-10"></div>
+            <img src="Ctornado6.png" 
+                 alt="Formas y colores extraordinarios" 
+                 class="w-full h-full object-cover">
+            <div class="absolute inset-0 z-20 flex flex-col justify-center items-center text-center px-4 max-w-5xl mx-auto">
+                <span class="px-4 py-1.5 bg-cyan-500/20 border border-cyan-500/50 text-cyan-400 rounded-full text-xs md:text-sm font-bold tracking-widest uppercase mb-4">
+                    CAPÍTULO 06
+                </span>
+                <h1 class="font-heading text-4xl sm:text-6xl md:text-7xl font-extrabold tracking-tight text-white uppercase drop-shadow-lg">
+                    Formas y colores extraordinarios
+                </h1>
+                <p class="mt-4 text-base sm:text-xl text-gray-300 max-w-2xl font-light">
+                    De embudos transparentes a enormes tornados en forma de cuña.
+                </p>
+                <a href="#sec-6" class="mt-8 px-8 py-4 bg-cyan-500 text-white font-bold rounded-lg shadow-lg shadow-cyan-500/30 hover:bg-white hover:text-storm-900 transition-all transform hover:-translate-y-1">
+                    Leer investigación <i class="fa-solid fa-book-open ml-2"></i>
+                </a>
+            </div>
+        </div>
+
+        <!-- Slide 7 -->
+        <div class="carousel-slide absolute inset-0 w-full h-full opacity-0 transition-opacity duration-700 pointer-events-none">
+            <div class="absolute inset-0 bg-gradient-to-t from-storm-900 via-storm-900/60 to-transparent z-10"></div>
+            <img src="Ctornado7.png" 
+                 alt="El peligro de los tornados nocturnos" 
+                 class="w-full h-full object-cover">
+            <div class="absolute inset-0 z-20 flex flex-col justify-center items-center text-center px-4 max-w-5xl mx-auto">
+                <span class="px-4 py-1.5 bg-indigo-500/20 border border-indigo-500/50 text-indigo-400 rounded-full text-xs md:text-sm font-bold tracking-widest uppercase mb-4">
+                    CAPÍTULO 07
+                </span>
+                <h1 class="font-heading text-4xl sm:text-6xl md:text-7xl font-extrabold tracking-tight text-white uppercase drop-shadow-lg">
+                    El peligro de los tornados nocturnos
+                </h1>
+                <p class="mt-4 text-base sm:text-xl text-gray-300 max-w-2xl font-light">
+                    La falta de visibilidad y la importancia de las alertas meteorológicas.
+                </p>
+                <a href="#sec-7" class="mt-8 px-8 py-4 bg-indigo-500 text-white font-bold rounded-lg shadow-lg shadow-indigo-500/30 hover:bg-white hover:text-storm-900 transition-all transform hover:-translate-y-1">
+                    Leer investigación <i class="fa-solid fa-book-open ml-2"></i>
+                </a>
+            </div>
+        </div>
+
+        <!-- Slide 8 -->
+        <div class="carousel-slide absolute inset-0 w-full h-full opacity-0 transition-opacity duration-700 pointer-events-none">
+            <div class="absolute inset-0 bg-gradient-to-t from-storm-900 via-storm-900/60 to-transparent z-10"></div>
+            <img src="Ctornado8.png" 
+                 alt="Tornados y vida animal" 
+                 class="w-full h-full object-cover">
+            <div class="absolute inset-0 z-20 flex flex-col justify-center items-center text-center px-4 max-w-5xl mx-auto">
+                <span class="px-4 py-1.5 bg-teal-500/20 border border-teal-500/50 text-teal-400 rounded-full text-xs md:text-sm font-bold tracking-widest uppercase mb-4">
+                    CAPÍTULO 08
+                </span>
+                <h1 class="font-heading text-4xl sm:text-6xl md:text-7xl font-extrabold tracking-tight text-white uppercase drop-shadow-lg">
+                    Tornados y vida animal
+                </h1>
+                <p class="mt-4 text-base sm:text-xl text-gray-300 max-w-2xl font-light">
+                    El impacto de los vórtices sobre los ecosistemas y el comportamiento animal.
+                </p>
+                <a href="#sec-8" class="mt-8 px-8 py-4 bg-teal-500 text-white font-bold rounded-lg shadow-lg shadow-teal-500/30 hover:bg-white hover:text-storm-900 transition-all transform hover:-translate-y-1">
+                    Leer investigación <i class="fa-solid fa-book-open ml-2"></i>
+                </a>
+            </div>
+        </div>
+
+        <!-- Slide 9 -->
+        <div class="carousel-slide absolute inset-0 w-full h-full opacity-0 transition-opacity duration-700 pointer-events-none">
+            <div class="absolute inset-0 bg-gradient-to-t from-storm-900 via-storm-900/60 to-transparent z-10"></div>
+            <img src="Ctornado9.png" 
+                 alt="Vórtices en otros planetas" 
+                 class="w-full h-full object-cover">
+            <div class="absolute inset-0 z-20 flex flex-col justify-center items-center text-center px-4 max-w-5xl mx-auto">
+                <span class="px-4 py-1.5 bg-sky-500/20 border border-sky-500/50 text-sky-400 rounded-full text-xs md:text-sm font-bold tracking-widest uppercase mb-4">
+                    CAPÍTULO 09
+                </span>
+                <h1 class="font-heading text-4xl sm:text-6xl md:text-7xl font-extrabold tracking-tight text-white uppercase drop-shadow-lg">
+                    Vórtices en otros planetas
+                </h1>
+                <p class="mt-4 text-base sm:text-xl text-gray-300 max-w-2xl font-light">
+                    Explora los remolinos marcianos y las grandes estructuras de Júpiter y Saturno.
+                </p>
+                <a href="#sec-9" class="mt-8 px-8 py-4 bg-sky-500 text-white font-bold rounded-lg shadow-lg shadow-sky-500/30 hover:bg-white hover:text-storm-900 transition-all transform hover:-translate-y-1">
+                    Leer investigación <i class="fa-solid fa-book-open ml-2"></i>
+                </a>
+            </div>
+        </div>
+
+        <!-- Slide 10 -->
+        <div class="carousel-slide absolute inset-0 w-full h-full opacity-0 transition-opacity duration-700 pointer-events-none">
+            <div class="absolute inset-0 bg-gradient-to-t from-storm-900 via-storm-900/60 to-transparent z-10"></div>
+            <img src="Ctornado10.png" 
+                 alt="Tornados en la cultura popular" 
+                 class="w-full h-full object-cover">
+            <div class="absolute inset-0 z-20 flex flex-col justify-center items-center text-center px-4 max-w-5xl mx-auto">
+                <span class="px-4 py-1.5 bg-pink-500/20 border border-pink-500/50 text-pink-400 rounded-full text-xs md:text-sm font-bold tracking-widest uppercase mb-4">
+                    CAPÍTULO 10
+                </span>
+                <h1 class="font-heading text-4xl sm:text-6xl md:text-7xl font-extrabold tracking-tight text-white uppercase drop-shadow-lg">
+                    Tornados en la cultura popular
+                </h1>
+                <p class="mt-4 text-base sm:text-xl text-gray-300 max-w-2xl font-light">
+                    Del cine clásico a las simulaciones digitales de las películas actuales.
+                </p>
+                <a href="#sec-10" class="mt-8 px-8 py-4 bg-pink-500 text-white font-bold rounded-lg shadow-lg shadow-pink-500/30 hover:bg-white hover:text-storm-900 transition-all transform hover:-translate-y-1">
+                    Leer investigación <i class="fa-solid fa-book-open ml-2"></i>
+                </a>
+            </div>
+        </div>
+
+        <!-- Slide 11 -->
+        <div class="carousel-slide absolute inset-0 w-full h-full opacity-0 transition-opacity duration-700 pointer-events-none">
+            <div class="absolute inset-0 bg-gradient-to-t from-storm-900 via-storm-900/60 to-transparent z-10"></div>
+            <img src="Ctornado11.png" 
+                 alt="Preguntas rápidas" 
+                 class="w-full h-full object-cover">
+            <div class="absolute inset-0 z-20 flex flex-col justify-center items-center text-center px-4 max-w-5xl mx-auto">
+                <span class="px-4 py-1.5 bg-amber-400/20 border border-amber-400/50 text-amber-300 rounded-full text-xs md:text-sm font-bold tracking-widest uppercase mb-4">
+                    CAPÍTULO 11
+                </span>
+                <h1 class="font-heading text-4xl sm:text-6xl md:text-7xl font-extrabold tracking-tight text-white uppercase drop-shadow-lg">
+                    Preguntas rápidas
+                </h1>
+                <p class="mt-4 text-base sm:text-xl text-gray-300 max-w-2xl font-light">
+                    Respuestas breves sobre peligro, velocidad, color y detección de tornados.
+                </p>
+                <a href="#sec-11" class="mt-8 px-8 py-4 bg-amber-400 text-storm-900 font-bold rounded-lg shadow-lg shadow-amber-400/30 hover:bg-white transition-all transform hover:-translate-y-1">
+                    Leer investigación <i class="fa-solid fa-book-open ml-2"></i>
+                </a>
+            </div>
+        </div>
+
+        <!-- Slide 12 -->
+        <div class="carousel-slide absolute inset-0 w-full h-full opacity-0 transition-opacity duration-700 pointer-events-none">
+            <div class="absolute inset-0 bg-gradient-to-t from-storm-900 via-storm-900/60 to-transparent z-10"></div>
+            <img src="Ctornado12.png" 
+                 alt="Fenómenos que acompañan a las tormentas" 
+                 class="w-full h-full object-cover">
+            <div class="absolute inset-0 z-20 flex flex-col justify-center items-center text-center px-4 max-w-5xl mx-auto">
+                <span class="px-4 py-1.5 bg-orange-500/20 border border-orange-500/50 text-orange-400 rounded-full text-xs md:text-sm font-bold tracking-widest uppercase mb-4">
+                    CAPÍTULO 12
+                </span>
+                <h1 class="font-heading text-4xl sm:text-6xl md:text-7xl font-extrabold tracking-tight text-white uppercase drop-shadow-lg">
+                    Fenómenos que acompañan a las tormentas
+                </h1>
+                <p class="mt-4 text-base sm:text-xl text-gray-300 max-w-2xl font-light">
+                    Granizo, rayos, lluvias torrenciales, microrráfagas y nubes especiales.
+                </p>
+                <a href="#sec-12" class="mt-8 px-8 py-4 bg-orange-500 text-white font-bold rounded-lg shadow-lg shadow-orange-500/30 hover:bg-white hover:text-storm-900 transition-all transform hover:-translate-y-1">
+                    Leer investigación <i class="fa-solid fa-book-open ml-2"></i>
+                </a>
+            </div>
+        </div>
+
+        <!-- Slide 13 -->
+        <div class="carousel-slide absolute inset-0 w-full h-full opacity-0 transition-opacity duration-700 pointer-events-none">
+            <div class="absolute inset-0 bg-gradient-to-t from-storm-900 via-storm-900/60 to-transparent z-10"></div>
+            <img src="Ctornado13.png" 
+                 alt="La psicología del riesgo" 
+                 class="w-full h-full object-cover">
+            <div class="absolute inset-0 z-20 flex flex-col justify-center items-center text-center px-4 max-w-5xl mx-auto">
+                <span class="px-4 py-1.5 bg-red-500/20 border border-red-500/50 text-red-400 rounded-full text-xs md:text-sm font-bold tracking-widest uppercase mb-4">
+                    CAPÍTULO 13
+                </span>
+                <h1 class="font-heading text-4xl sm:text-6xl md:text-7xl font-extrabold tracking-tight text-white uppercase drop-shadow-lg">
+                    La psicología del riesgo
+                </h1>
+                <p class="mt-4 text-base sm:text-xl text-gray-300 max-w-2xl font-light">
+                    Cómo influyen el sesgo de normalidad y la fatiga de alertas en la prevención.
+                </p>
+                <a href="#sec-13" class="mt-8 px-8 py-4 bg-red-500 text-white font-bold rounded-lg shadow-lg shadow-red-500/30 hover:bg-white hover:text-storm-900 transition-all transform hover:-translate-y-1">
+                    Leer investigación <i class="fa-solid fa-book-open ml-2"></i>
+                </a>
+            </div>
+        </div>
+        <!-- Carousel Navigation Controls -->
+        <button id="prevSlideBtn" class="absolute left-4 top-1/2 -translate-y-1/2 z-30 p-3 rounded-full glass-card text-white hover:text-purple-400 hover:border-purple-400 transition-all focus:outline-none">
+            <i class="fa-solid fa-chevron-left text-xl"></i>
+        </button>
+        <button id="nextSlideBtn" class="absolute right-4 top-1/2 -translate-y-1/2 z-30 p-3 rounded-full glass-card text-white hover:text-purple-400 hover:border-purple-400 transition-all focus:outline-none">
+            <i class="fa-solid fa-chevron-right text-xl"></i>
+        </button>
+    </section>
+
+    <!-- MAIN CONTENT: INVESTIGACIÓN JUSTIFICADA CON ESPACIOS PARA IMÁGENES -->
+    <main id="curiosidades1" class="py-20 relative bg-storm-900 border-b border-gray-800">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 space-y-16">
+
+            <!-- INTRODUCCIÓN GENERAL -->
+            <div class="text-center max-w-3xl mx-auto mb-12">
+                <h2 class="font-heading text-3xl sm:text-5xl font-bold uppercase text-white tracking-wide">
+                    El Lado Extraño de los <span class="text-purple-400">Tornados</span>
+                </h2>
+                <div class="w-24 h-1 bg-purple-500 mx-auto mt-4 rounded-full"></div>
+            </div>
+
+            <!-- SECCIÓN 1: LOS GRANDES RÉCORDS -->
+            <section id="sec-1" class="glass-card p-8 sm:p-12 rounded-3xl space-y-6">
+                <span class="text-purple-400 font-bold uppercase tracking-widest text-xs">Capítulo 01</span>
+                <h2 class="font-heading text-3xl sm:text-4xl font-bold text-white border-b border-gray-800 pb-4">1. Los grandes récords de los tornados</h2>
+                
+                <div class="space-y-4 text-gray-300 leading-relaxed text-justified">
+                    <h3 class="font-heading text-xl font-semibold text-purple-400">El tornado más ancho registrado</h3>
+                    <p>El tornado de El Reno, Oklahoma, registrado el 31 de mayo de 2013, ostenta el récord absoluto de anchura jamás medido. Alcanzó un diámetro máximo de 4,2 kilómetros (2,6 millas), superando las dimensiones habituales de estos fenómenos y desconcertando a los meteorólogos por su estructura en cuña gigante.</p>
+
+                    <h3 class="font-heading text-xl font-semibold text-purple-400 pt-2">El tornado de mayor trayectoria</h3>
+                    <p>El histórico Tri-State Tornado del 18 de marzo de 1925 mantiene la marca de la trayectoria continua más larga jamás documentada. Recorrió aproximadamente 352 kilómetros a lo largo de tres estados de los Estados Unidos (Misuri, Illinois e Indiana) en un periodo de poco más de tres horas y media.</p>
+
+                    <h3 class="font-heading text-xl font-semibold text-purple-400 pt-2">El tornado que permaneció más tiempo en tierra</h3>
+                    <p>Aunque la duración promedio de un tornado no suele superar los 10 minutos, existen eventos excepcionales asociados a supercélulas de larga vida que han mantenido su vórtice sobre el suelo durante más de tres horas continuas, récord estrechamente vinculado al tornado del Triestatal.</p>
+
+                    <h3 class="font-heading text-xl font-semibold text-purple-400 pt-2">Velocidades de viento más extremas</h3>
+                    <p>Mediante radares Doppler móviles colocados en superficie, los científicos han medido ráfagas de viento extremas que superan los 484 a 512 km/h (como se registró en el tornado de Bridge Creek-Moore en 1999), ubicándose en el límite superior de las escalas empíricas de daño.</p>
+
+                    <h3 class="font-heading text-xl font-semibold text-purple-400 pt-2">Eventos con mayor número de víctimas mortales</h3>
+                    <p>El tornado de Daulatpur-Saturia en Bangladés, ocurrido el 26 de abril de 1989, provocó la muerte de aproximadamente 1.300 personas. Es el desastre tornádico más mortífero de la historia humana, debido a la elevada densidad de población y a la alta vulnerabilidad de las viviendas locales.</p>
+
+                    <h3 class="font-heading text-xl font-semibold text-purple-400 pt-2">Los mayores brotes de tornados</h3>
+                    <p>El Super Outbreak del 3 y 4 de abril de 1974 generó 148 tornados confirmados en 13 estados norteamericanos en menos de 24 horas. Este récord numérico fue superado en abril de 2011 con más de 350 tornados en un solo brote, aunque el evento de 1974 destaca por su inédita concentración de tornados violentos categorizados como F4 y F5.</p>
+
+                    <h3 class="font-heading text-xl font-semibold text-purple-400 pt-2">Alcance geográfico y daños locales</h3>
+                    <p>Los brotes masivos de tormentas severas tienen la capacidad de impactar docenas de condados, pueblos y áreas urbanas de manera simultánea, colapsando la infraestructura de transporte y los servicios de emergencia regionales.</p>
+
+                    <h3 class="font-heading text-xl font-semibold text-purple-400 pt-2">Registros de radar más destacados</h3>
+                    <p>La introducción de la Firma de Escombros de Tornado (Debris Ball) y el análisis de la velocidad radial en sistemas de radar Doppler han permitido visualizar la elevación de escombros e infraestructura a miles de metros de altitud en tiempo real.</p>
+
+                    <h3 class="font-heading text-xl font-semibold text-purple-400 pt-2">Tornados que transformaron la investigación</h3>
+                    <p>El brote de Palm Sunday en 1965 motivó al Dr. Tetsuya "Ted" Fujita a proponer formalmente la escala de evaluación de daños que lleva su nombre y a profundizar en el análisis de los subvórtices de succión.</p>
+
+                    <h3 class="font-heading text-xl font-semibold text-purple-400 pt-2">Los eventos más estudiados por la ciencia</h3>
+                    <p>Eventos monitoreados en proyectos de campo masivos como VORTEX (Verification of the Origins of Rotation in Tornadoes Experiment) han aportado terabytes de datos invaluables sobre la dinámica termodinámica del mesociclón y las corrientes descendentes.</p>
+                </div>
+
+                <!-- ARTÍCULO ESPECIAL DESTACADO -->
+                <div class="p-6 rounded-2xl bg-purple-500/10 border border-purple-500/30 text-purple-200">
+                    <span class="font-bold text-xs uppercase tracking-widest text-purple-400 block mb-1">Artículo Especial</span>
+                    <h4 class="font-heading text-xl font-bold text-white mb-2">Los récords más impresionantes de la historia de los tornados</h4>
+                    <p class="text-sm text-justified leading-relaxed">
+                        Una recopilación de los límites físicos a los que puede llegar la atmósfera terrestre cuando la inestabilidad termodinámica, la humedad y la cizalladura colisionan en un punto específico del planeta.
+                    </p>
+                </div>
+
+                <!-- RANURA LIBRE PARA IMAGEN DE LA SECCIÓN 1 -->
+                <div class="my-8 rounded-2xl overflow-hidden border border-gray-800 relative group">
+                    <img src="Ctornado1.png" 
+                         alt="Tornado Récord El Reno" class="w-full h-100 object-cover group-hover:scale-105 transition-transform duration-500">
+                    <div class="absolute bottom-0 inset-x-0 bg-storm-950/80 p-3 text-xs text-gray-400 text-center">
+                        Espacio de Imagen 01: Tornado de gran dimensión en cuña azotando praderas abiertas.
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECCIÓN 2: ¿PUEDE UN TORNADO HACER COSAS IMPOSIBLES? -->
+            <section id="sec-2" class="glass-card p-8 sm:p-12 rounded-3xl space-y-6">
+                <span class="text-storm-accent font-bold uppercase tracking-widest text-xs">Capítulo 02</span>
+                <h2 class="font-heading text-3xl sm:text-4xl font-bold text-white border-b border-gray-800 pb-4">2. ¿Puede un tornado hacer cosas que parecen imposibles?</h2>
+                
+                <div class="space-y-4 text-gray-300 leading-relaxed text-justified">
+                    <h3 class="font-heading text-xl font-semibold text-storm-accent">Cambios de dirección bruscos</h3>
+                    <p>Sí, un tornado puede cambiar repentinamente de trayectoria, describir curvas o realizar bucles debido a perturbaciones en los frentes de racha, interacciones con el relieve o cambios en el flujo de la corriente ascendente de la tormenta madre.</p>
+
+                    <h3 class="font-heading text-xl font-semibold text-storm-accent pt-2">Desplazamiento lento y estados estacionarios</h3>
+                    <p>Aunque la velocidad de traslación común oscila entre los 30 y 60 km/h, un tornado puede reducir su velocidad al punto de quedar prácticamente estacionario sobre un lugar, prolongando la destrucción en esa zona específica.</p>
+
+                    <h3 class="font-heading text-xl font-semibold text-storm-accent pt-2">Desaparición y reaparición visual</h3>
+                    <p>Un embudo de condensación puede retraerse o disiparse visualmente al cambiar la humedad de la columna, mientras que el vórtice de viento sigue girando en la superficie. De igual modo, una tormenta puede disipar un tornado e inminentemente formar uno nuevo a pocos metros.</p>
+
+                    <h3 class="font-heading text-xl font-semibold text-storm-accent pt-2">Vórtices múltiples y tornados simultáneos</h3>
+                    <p>Es común que los tornados de gran tamaño contengan vórtices secundarios girando dentro del eje principal. Además, una sola supercélula puede generar varios tornados al mismo tiempo o de forma consecutiva a lo largo de su trayectoria.</p>
+
+                    <h3 class="font-heading text-xl font-semibold text-storm-accent pt-2">Trayectoria sobre zonas urbanas, ríos y montañas</h3>
+                    <p>Los tornados no son detenidos por accidentes geográficos o infraestructuras humanas. Pueden atravesar ríos (absorbiendo agua o generando trombas), recorrer zonas montañosas elevadas y golpear de manera directa el centro de grandes ciudades.</p>
+
+                    <h3 class="font-heading text-xl font-semibold text-storm-accent pt-2">Tornados en la noche o en regiones frías</h3>
+                    <p>Los tornados nocturnos son frecuentes y conllevan una peligrosidad extremadamente alta por la nula visibilidad visual. Asimismo, pueden formarse en entornos con temperaturas bajas siempre que exista el gradiente de cizalladura e inestabilidad suficiente.</p>
+
+                    <h3 class="font-heading text-xl font-semibold text-storm-accent pt-2">Tornados envueltos en lluvia o sin embudo visible</h3>
+                    <p>Existen tornados ocultos por intensas cortinas de precipitación (rain-wrapped) que los vuelven invisibles a simple vista. De igual manera, un tornado puede estar activo en el suelo sin un embudo de condensación formado.</p>
+                </div>
+
+                <!-- RANURA LIBRE PARA IMAGEN DE LA SECCIÓN 2 -->
+                <div class="my-8 rounded-2xl overflow-hidden border border-gray-800 relative group">
+                    <img src="Ctornado2.png" 
+                         alt="Tornado Nocturno e Inusual" class="w-full h-100 object-cover group-hover:scale-105 transition-transform duration-500">
+                    <div class="absolute bottom-0 inset-x-0 bg-storm-950/80 p-3 text-xs text-gray-400 text-center">
+                        Espacio de Imagen 02: Remolinos y estructuras tornádicas complejas cruzando terrenos variados.
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECCIÓN 3: FENÓMENOS QUE PARECEN TORNADOS -->
+            <section id="sec-3" class="glass-card p-8 sm:p-12 rounded-3xl space-y-6">
+                <span class="text-emerald-400 font-bold uppercase tracking-widest text-xs">Capítulo 03</span>
+                <h2 class="font-heading text-3xl sm:text-4xl font-bold text-white border-b border-gray-800 pb-4">3. Fenómenos que parecen tornados, pero no lo son</h2>
+                
+                <div class="space-y-4 text-gray-300 leading-relaxed text-justified">
+                    <h3 class="font-heading text-xl font-semibold text-emerald-400">Dust Devils (Remolinos de polvo)</h3>
+                    <p>Son vórtices térmicos que se originan en el suelo en días soleados y despejados debido al calentamiento intenso de la superficie. No están vinculados a ninguna nube de tormenta ni a procesos de inestabilidad profunda.</p>
+
+                    <h3 class="font-heading text-xl font-semibold text-emerald-400 pt-2">Fire Whirls (Remolinos de fuego)</h3>
+                    <p>Vórtices de viento y aire caliente que se forman sobre incendios forestales de gran magnitud. El calor extremo genera corrientes ascendentes que absorben humo, llamas y gases en combustión.</p>
+
+                    <h3 class="font-heading text-xl font-semibold text-emerald-400 pt-2">Steam Devils (Remolinos de vapor)</h3>
+                    <p>Pequeñas columnas rotatorias compuestas por vapor de agua que se forman cuando una masa de aire muy frío pasa por encima de un cuerpo de agua relativamente cálido.</p>
+
+                    <h3 class="font-heading text-xl font-semibold text-emerald-400 pt-2">Gustnados</h3>
+                    <p>Torbellinos de corta duración que se desarrollan en el frente de racha (gust front) de una tormenta debido a la turbulencia del aire saliente. No están conectados con la rotación del mesociclón en la base de la nube.</p>
+
+                    <h3 class="font-heading text-xl font-semibold text-emerald-400 pt-2">Snow Devils (Remolinos de nieve)</h3>
+                    <p>Fenómenos térmicos o dinámicos similares a los remolinos de polvo, pero que se forman sobre campos cubiertos de nieve cuando convergen fuertes corrientes de viento o gradientes de temperatura.</p>
+
+                    <h3 class="font-heading text-xl font-semibold text-emerald-400 pt-2">Waterspouts (Trombas marinas)</h3>
+                    <p>Vórtices en rotación que ocurren sobre masas de agua. Las no tornádicas se originan desde la superficie bajo nubes cúmulus en desarrollo, mientras que las tornádicas son supercélulas que se desplazan sobre el mar o lagos.</p>
+
+                    <h3 class="font-heading text-xl font-semibold text-emerald-400 pt-2">Landspouts</h3>
+                    <p>Tornados no supercelulares que nacen cerca de la superficie a partir de la vorticidad existente en el terreno, la cual es estirada verticalmente por la corriente ascendente de una nube en crecimiento.</p>
+                </div>
+
+                <!-- RANURA LIBRE PARA IMAGEN DE LA SECCIÓN 2 -->
+                <div class="my-8 rounded-2xl overflow-hidden border border-gray-800 relative group">
+                    <img src="Ctornado3.png" 
+                         alt="Tornado Nocturno e Inusual" class="w-full h-100 object-cover group-hover:scale-105 transition-transform duration-500">
+                    <div class="absolute bottom-0 inset-x-0 bg-storm-950/80 p-3 text-xs text-gray-400 text-center">
+                        Espacio de Imagen 03: Un tornado de fuego no es considera un tornado realmente, si no una variante de estos.
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECCIÓN 4: MITOS FAMOSOS -->
+            <section id="mitos" class="glass-card p-8 sm:p-12 rounded-3xl space-y-6 border border-amber-500/30">
+                <span class="text-amber-400 font-bold uppercase tracking-widest text-xs">Capítulo 04 • MITO VS. REALIDAD</span>
+                <h2 class="font-heading text-3xl sm:text-4xl font-bold text-white border-b border-gray-800 pb-4">4. Los mitos más famosos sobre los tornados</h2>
+                
+                <div class="space-y-6 text-gray-300 leading-relaxed text-justified">
+                    <div>
+                        <h3 class="font-heading text-lg font-bold text-amber-400 uppercase">MITO: Abrir las ventanas evita que la casa explote</h3>
+                        <p class="text-sm mt-1"><strong>REALIDAD:</strong> Falso. La presión atmosférica se equilibra sola a través de las aberturas naturales de la construcción. Abrir las ventanas permite la entrada del viento torrencial, facilitando que el techo sea arrancado desde el interior.</p>
+                    </div>
+
+                    <div>
+                        <h3 class="font-heading text-lg font-bold text-amber-400 uppercase">MITO: Un puente o paso elevado es un buen refugio</h3>
+                        <p class="text-sm mt-1"><strong>REALIDAD:</strong> Falso. La NOAA advierte que los pasos elevados actúan como túneles de viento, acelerando las ráfagas e incrementando el riesgo de ser alcanzado por escombros voladores a gran velocidad.</p>
+                    </div>
+
+                    <div>
+                        <h3 class="font-heading text-lg font-bold text-amber-400 uppercase">MITO: Los tornados solo giran en sentido antihorario y ocurren en EE. UU.</h3>
+                        <p class="text-sm mt-1"><strong>REALIDAD:</strong> Falso. Aunque la gran mayoría en el hemisferio norte giran en sentido antihorario, un pequeño porcentaje gira en sentido horario. Además, se registran en todos los continentes habitados del planeta.</p>
+                    </div>
+
+                    <div>
+                        <h3 class="font-heading text-lg font-bold text-amber-400 uppercase">MITO: Las montañas o los rascacielos evitan los tornados</h3>
+                        <p class="text-sm mt-1"><strong>REALIDAD:</strong> Falso. Se han documentado tornados cruzando sistemas montañosos a gran altitud y atravesando zonas de alta densidad de rascacielos.</p>
+                    </div>
+
+                    <div>
+                        <h3 class="font-heading text-lg font-bold text-amber-400 uppercase">MITO: El cielo verde confirma un tornado inminente</h3>
+                        <p class="text-sm mt-1"><strong>REALIDAD:</strong> Falso. La coloración verdosa es el resultado de la luz solar filtrándose a través de espesas capas de agua y granizo en la tormenta. Indica una tormenta severa, pero no necesariamente un tornado.</p>
+                    </div>
+
+                    <div>
+                        <h3 class="font-heading text-lg font-bold text-amber-400 uppercase">MITO: Un tornado pequeño es necesariamente débil</h3>
+                        <p class="text-sm mt-1"><strong>REALIDAD:</strong> Falso. El tamaño del embudo no determina su velocidad de viento. Un tornado delgado en forma de cuerda puede registrar vientos de categoría EF4 o EF5.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECCIÓN 5: EL SONIDO DE LOS TORNADOS -->
+            <section id="sec-5" class="glass-card p-8 sm:p-12 rounded-3xl space-y-6">
+                <span class="text-rose-400 font-bold uppercase tracking-widest text-xs">Capítulo 05</span>
+                <h2 class="font-heading text-3xl sm:text-4xl font-bold text-white border-b border-gray-800 pb-4">5. El sonido de los tornados</h2>
+                
+                <div class="space-y-4 text-gray-300 leading-relaxed text-justified">
+                    <h3 class="font-heading text-xl font-semibold text-rose-400">El ruido del tren de carga</h3>
+                    <p>El testimonio recurrente de que un tornado suena como un tren de mercancías a alta velocidad se debe a la fricción masiva del viento contra el suelo y las estructuras.</p>
+
+                    <h3 class="font-heading text-xl font-semibold text-rose-400 pt-2">Acústica y escombros</h3>
+                    <p>El ruido es generado por la combinación de las bruscas fluctuaciones de presión dentro del vórtice, el choque continuo de escombros en el aire y la turbulencia acústica.</p>
+
+                    <h3 class="font-heading text-xl font-semibold text-rose-400 pt-2">Variaciones según la distancia</h3>
+                    <p>La topografía del lugar, la presencia de masas forestales, la densidad de los edificios y la cantidad de lluvia circundante modifican drásticamente la forma en que se propaga y percibe el sonido a la distancia.</p>
+                    
+                    <h3 class="font-heading text-xl font-semibold text-rose-400 pt-2">¿Cómo se escucha un tornado?</h3>
+                    <p>A continuación les presentaremos el audio de un tornado</p>
+                </div>
+                <audio id="audioTornado" controls class="w-full">
+                    <source src="tornaudio.wav" type="audio/mpeg">
+                </audio> 
+            </section>
+
+            <!-- SECCIÓN 6: LAS APARIENCIAS MÁS EXTRAÑAS -->
+            <section id="sec-6" class="glass-card p-8 sm:p-12 rounded-3xl space-y-6">
+                <span class="text-cyan-400 font-bold uppercase tracking-widest text-xs">Capítulo 06</span>
+                <h2 class="font-heading text-3xl sm:text-4xl font-bold text-white border-b border-gray-800 pb-4">6. Las apariencias más extrañas</h2>
+                
+                <div class="space-y-4 text-gray-300 leading-relaxed text-justified">
+                    <h3 class="font-heading text-xl font-semibold text-cyan-400">Paleta cromática atmosférica</h3>
+                    <p>Los tornados pueden exhibir tonos blancos brillantes (si reflejan la luz sobre nieve o agua), oscuros (cargados de tierra fértil), rojizos (cuando levantan arcilla) o transparentes en su etapa inicial.</p>
+
+                    <h3 class="font-heading text-xl font-semibold text-cyan-400 pt-2">Variaciones de forma</h3>
+                    <p>Dos tornados con la misma velocidad de viento pueden presentar apariencias radicalmente distintas: desde hilos retorcidos (rope) hasta gigantescas paredes amorfas de polvo y precipitación (wedge).</p>
+                </div>
+
+                <!-- RANURA LIBRE PARA IMAGEN DE LA SECCIÓN 2 -->
+                <div class="my-8 rounded-2xl overflow-hidden border border-gray-800 relative group">
+                    <img src="Ctornado6.png" 
+                         alt="Tornado Nocturno e Inusual" class="w-full h-100 object-cover group-hover:scale-105 transition-transform duration-500">
+                    <div class="absolute bottom-0 inset-x-0 bg-storm-950/80 p-3 text-xs text-gray-400 text-center">
+                        Espacio de Imagen 06: Hay ocaciones que los tornados se inclinan por culpa de viento.
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECCIÓN 7: TORNADOS NOCTURNOS -->
+            <section id="sec-7" class="glass-card p-8 sm:p-12 rounded-3xl space-y-6">
+                <span class="text-indigo-400 font-bold uppercase tracking-widest text-xs">Capítulo 07</span>
+                <h2 class="font-heading text-3xl sm:text-4xl font-bold text-white border-b border-gray-800 pb-4">7. Tornados durante la noche</h2>
+                
+                <div class="space-y-4 text-gray-300 leading-relaxed text-justified">
+                    <h3 class="font-heading text-xl font-semibold text-indigo-400">Visibilidad nula y riesgo</h3>
+                    <p>La oscuridad impide detectar la aproximación de un embudo a simple vista, lo que incrementa significativamente la tasa de peligrosidad sobre la población.</p>
+
+                    <h3 class="font-heading text-xl font-semibold text-indigo-400 pt-2">Importancia de las alertas</h3>
+                    <p>El seguimiento en tiempo real depende del radar Doppler y del envío de alertas directas a los dispositivos móviles y sistemas de sirenas de emergencia.</p>
+                </div>
+
+                <!-- RANURA LIBRE PARA IMAGEN DE LA SECCIÓN 2 -->
+                <div class="my-8 rounded-2xl overflow-hidden border border-gray-800 relative group">
+                    <img src="Ctornado7.png" 
+                         alt="Tornado Nocturno e Inusual" class="w-full h-100 object-cover group-hover:scale-105 transition-transform duration-500">
+                    <div class="absolute bottom-0 inset-x-0 bg-storm-950/80 p-3 text-xs text-gray-400 text-center">
+                        Espacio de Imagen 07: Suele ser bastante peligroso, porque no te das cuenta cuando se formo.
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECCIÓN 8: TORNADOS Y ANIMALES -->
+            <section id="sec-8" class="glass-card p-8 sm:p-12 rounded-3xl space-y-6">
+                <span class="text-teal-400 font-bold uppercase tracking-widest text-xs">Capítulo 08</span>
+                <h2 class="font-heading text-3xl sm:text-4xl font-bold text-white border-b border-gray-800 pb-4">8. Tornados y animales</h2>
+                
+                <div class="space-y-4 text-gray-300 leading-relaxed text-justified">
+                    <h3 class="font-heading text-xl font-semibold text-teal-400">Impacto en los ecosistemas</h3>
+                    <p>Los tornados destruyen hábitats completos, arrancan arboladas maduras y modifican temporalmente el equilibrio biológico de las reservas naturales.</p>
+
+                    <h3 class="font-heading text-xl font-semibold text-teal-400 pt-2">Comportamiento animal y presión</h3>
+                    <p>Aunque existe el mito de que los animales tienen un sentido predictivo infalible, lo cierto es que reaccionan de manera defensiva ante las caídas bruscas de presión barométrica y los sonidos infrasónicos de la tormenta.</p>
+                </div>
+
+                <!-- RANURA LIBRE PARA IMAGEN DE LA SECCIÓN 2 -->
+                <div class="my-8 rounded-2xl overflow-hidden border border-gray-800 relative group">
+                    <img src="Ctornado8.png" 
+                         alt="Tornado Nocturno e Inusual" class="w-full h-100 object-cover group-hover:scale-105 transition-transform duration-500">
+                    <div class="absolute bottom-0 inset-x-0 bg-storm-950/80 p-3 text-xs text-gray-400 text-center">
+                        Espacio de Imagen 8: Tanto gatos y perros se ponen nerviosos cuando sucesos de esta magnitud suceden.
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECCIÓN 9: TORNADOS EN OTROS PLANETAS -->
+            <section id="sec-9" class="glass-card p-8 sm:p-12 rounded-3xl space-y-6">
+                <span class="text-sky-400 font-bold uppercase tracking-widest text-xs">Capítulo 09</span>
+                <h2 class="font-heading text-3xl sm:text-4xl font-bold text-white border-b border-gray-800 pb-4">9. Tornados en otros planetas</h2>
+                
+                <div class="space-y-4 text-gray-300 leading-relaxed text-justified">
+                    <h3 class="font-heading text-xl font-semibold text-sky-400">Remolinos de polvo en Marte</h3>
+                    <p>En Marte existen gigantescos remolinos de polvo (dust devils) formados por el calentamiento solar sobre la tenue atmósfera marciana, captados habitualmente por los astromóviles y satélites.</p>
+
+                    <h3 class="font-heading text-xl font-semibold text-sky-400 pt-2">Vórtices en Júpiter y Saturno</h3>
+                    <p>La Gran Mancha Roja de Júpiter o los patrones polares detectados en Saturno son vórtices ciclónicos y anticiclónicos a escala planetaria, alimentados por corrientes de calor interno.</p>
+
+                    <h3 class="font-heading text-xl font-semibold text-sky-400 pt-2">Diferencia con los tornados terrestres</h3>
+                    <p>A diferencia de los tornados de la Tierra, los vórtices planetarios gigantes no están acoplados a nubes cumulonimbus basadas en condensación de agua líquida sobre una superficie sólida.</p>
+                </div>
+
+                <!-- ARTÍCULO ESPECIAL PLANETARIO -->
+                <div class="p-6 rounded-2xl bg-sky-500/10 border border-sky-500/30 text-sky-200">
+                    <span class="font-bold text-xs uppercase tracking-widest text-sky-400 block mb-1">Artículo Especial</span>
+                    <h4 class="font-heading text-xl font-bold text-white mb-2">Tornados y vórtices fuera de la Tierra: cuando la atmósfera se vuelve extraterrestre</h4>
+                    <p class="text-sm text-justified leading-relaxed">
+                        Un análisis de cómo las leyes de la física y la dinámica de fluidos crean vórtices extremos en escenarios planetarios con composiciones químicas y presiones radicalmente distintas a las de la Tierra.
+                    </p>
+                </div>
+
+                <!-- RANURA LIBRE PARA IMAGEN DE LA SECCIÓN 2 -->
+                <div class="my-8 rounded-2xl overflow-hidden border border-gray-800 relative group">
+                    <img src="Ctornado9.png" 
+                         alt="Tornado Nocturno e Inusual" class="w-full h-100 object-cover group-hover:scale-105 transition-transform duration-500">
+                    <div class="absolute bottom-0 inset-x-0 bg-storm-950/80 p-3 text-xs text-gray-400 text-center">
+                        Espacio de Imagen 09: Tornados captados en uno de los polos de Jupiter.
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECCIÓN 10: CULTURA POPULAR Y CINE -->
+            <section id="sec-10" class="glass-card p-8 sm:p-12 rounded-3xl space-y-6">
+                <span class="text-pink-400 font-bold uppercase tracking-widest text-xs">Capítulo 10</span>
+                <h2 class="font-heading text-3xl sm:text-4xl font-bold text-white border-b border-gray-800 pb-4">10. Tornados en películas, videojuegos y cultura popular</h2>
+                
+                <div class="space-y-4 text-gray-300 leading-relaxed text-justified">
+                    <h3 class="font-heading text-xl font-semibold text-pink-400">Representación cinematográfica</h3>
+                    <p>Películas como Twister (1996) o Twisters (2024) popularizaron la labor de la caza de tormentas. Aunque incluyen conceptos reales, suelen exagerar la física de succión y la supervivencia a corta distancia del vórtice.</p>
+
+                    <h3 class="font-heading text-xl font-semibold text-pink-400 pt-2">Evolución de los efectos especiales</h3>
+                    <p>La industria cinematográfica evolucionó desde el uso de maquetas de tela y viento simulado en El mago de Oz (1939) hasta complejas simulaciones digitales basadas en ecuaciones de fluidos en la actualidad.</p>
+                </div>
+
+                <!-- RANURA LIBRE PARA IMAGEN DE LA SECCIÓN 2 -->
+                <div class="my-8 rounded-2xl overflow-hidden border border-gray-800 relative group">
+                    <img src="Ctornado10.png" 
+                         alt="Tornado Nocturno e Inusual" class="w-full h-100 object-cover group-hover:scale-105 transition-transform duration-500">
+                    <div class="absolute bottom-0 inset-x-0 bg-storm-950/80 p-3 text-xs text-gray-400 text-center">
+                        Espacio de Imagen 10: La mayoria de tornados son igual o más catastroficos que los de un videojuego.
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECCIÓN 11: PREGUNTAS RÁPIDAS -->
+            <section id="sec-11" class="glass-card p-8 sm:p-12 rounded-3xl space-y-6">
+                <span class="text-amber-300 font-bold uppercase tracking-widest text-xs">Capítulo 11</span>
+                <h2 class="font-heading text-3xl sm:text-4xl font-bold text-white border-b border-gray-800 pb-4">11. Preguntas rápidas sobre tornados</h2>
+                
+                <div class="space-y-4 text-gray-300 leading-relaxed text-justified">
+                    <p><strong>¿Cuál es el tornado más peligroso?</strong> Aquel envuelto en lluvia o que ocurre durante la noche en zonas densamente pobladas.</p>
+                    <p><strong>¿Qué tan rápido se desplaza un tornado?</strong> Su velocidad de traslación suele ubicarse entre los 30 y 70 km/h.</p>
+                    <p><strong>¿Por qué cambian de color?</strong> Por el tipo de suelo que absorben (tierra, barro, nieve) y el ángulo de la luz solar.</p>
+                    <p><strong>¿Cómo confirman los meteorólogos un tornado?</strong> A través de marcas en imágenes de radar Doppler y peritajes de daños en terreno.</p>
+                </div>
+            </section>
+
+            <!-- SECCIÓN 12: FENÓMENOS QUE ACOMPAÑAN -->
+            <section id="sec-12" class="glass-card p-8 sm:p-12 rounded-3xl space-y-6">
+                <span class="text-orange-400 font-bold uppercase tracking-widest text-xs">Capítulo 12</span>
+                <h2 class="font-heading text-3xl sm:text-4xl font-bold text-white border-b border-gray-800 pb-4">12. Los fenómenos que acompañan a los tornados</h2>
+                
+                <div class="space-y-4 text-gray-300 leading-relaxed text-justified">
+                    <ul class="list-disc pl-6 space-y-2">
+                        <li>Granizo de gran tamaño.</li>
+                        <li>Actividad eléctrica intensa (rayos frecuentes).</li>
+                        <li>Lluvias torrenciales e inundaciones repentinas.</li>
+                        <li>Vientos en línea recta y microrráfagas.</li>
+                        <li>Presencia de nubes mammatus y nubes estantería (shelf clouds).</li>
+                    </ul>
+                </div>
+
+                <!-- RANURA LIBRE PARA IMAGEN DE LA SECCIÓN 2 -->
+                <div class="my-8 rounded-2xl overflow-hidden border border-gray-800 relative group">
+                    <img src="Ctornado12.png" 
+                         alt="Tornado Nocturno e Inusual" class="w-full h-100 object-cover group-hover:scale-105 transition-transform duration-500">
+                    <div class="absolute bottom-0 inset-x-0 bg-storm-950/80 p-3 text-xs text-gray-400 text-center">
+                        Espacio de Imagen 12: El granizo luego de un tornado puede llegar a ser tan grande como una pelota de tenis, si es que se llega a intensificar el tornado considerablemente.
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECCIÓN 13: PSICOLOGÍA DETRÁS DE LOS FENÓMENOS -->
+            <section id="sec-13" class="glass-card p-8 sm:p-12 rounded-3xl space-y-6">
+                <span class="text-red-400 font-bold uppercase tracking-widest text-xs">Capítulo 13</span>
+                <h2 class="font-heading text-3xl sm:text-4xl font-bold text-white border-b border-gray-800 pb-4">13. La psicología detrás de los fenómenos extremos</h2>
+                
+                <div class="space-y-4 text-gray-300 leading-relaxed text-justified">
+                    <h3 class="font-heading text-xl font-semibold text-red-400">Sesgo de normalidad</h3>
+                    <p>La tendencia psicológica a asumir que las situaciones de peligro no ocurrirán personalmente, lo que lleva a ignorar las primeras fases de una alerta.</p>
+
+                    <h3 class="font-heading text-xl font-semibold text-red-400 pt-2">Fatiga de alertas</h3>
+                    <p>La disminución en la respuesta de la población cuando se reciben avisos meteorológicos de forma continua sin que se concrete un peligro inmediato en su ubicación exacta.</p>
+
+                    <h3 class="font-heading text-xl font-semibold text-red-400 pt-2">Comunicación efectiva del riesgo</h3>
+                    <p>La importancia de emitir alertas claras y comprensibles, fomentando planes de evacuación preventivos en las comunidades.</p>
+                </div>
+
+                <!-- RANURA LIBRE PARA IMAGEN DE LA SECCIÓN 2 -->
+                <div class="my-8 rounded-2xl overflow-hidden border border-gray-800 relative group">
+                    <img src="Ctornado13.png" 
+                         alt="Tornado Nocturno e Inusual" class="w-full h-100 object-cover group-hover:scale-105 transition-transform duration-500">
+                    <div class="absolute bottom-0 inset-x-0 bg-storm-950/80 p-3 text-xs text-gray-400 text-center">
+                        Espacio de Imagen 13: No tomes las advertencias de juego.
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- CARRUSEL DE REFERENCIAS BIBLIOGRÁFICAS (DE 3 EN 3) -->
+<section id="explora-titulos" class="py-20 bg-storm-800 border-t border-b border-gray-800 relative">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        <!-- Cabecera -->
+        <div class="text-center max-w-3xl mx-auto mb-12">
+            <span class="text-storm-accent font-bold uppercase tracking-widest text-xs">FUENTES Y DOCUMENTACIÓN</span>
+            <h2 class="font-heading text-3xl sm:text-4xl font-bold text-white uppercase mt-2">
+                Referencias Bibliográficas e Institucionales
+            </h2>
+            <p class="text-gray-400 text-sm mt-2">Fuentes científicas y académicas consultadas en formato APA (Texto estático sin redirecciones).</p>
+            <div class="w-16 h-1 bg-storm-accent mx-auto mt-4 rounded-full"></div>
+        </div>
+
+        <!-- Contenedor de las 3 tarjetas del Carrusel -->
+        <div class="relative px-2 sm:px-12">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6" id="titleCardsContainer">
+                <!-- Inyectado dinámicamente de 3 en 3 por JavaScript -->
+            </div>
+
+            <!-- Botones de Navegación -->
+            <button id="prevCardsBtn" class="absolute left-0 top-1/2 -translate-y-1/2 p-3 rounded-full glass-card text-white hover:text-storm-accent transition-all focus:outline-none z-20">
+                <i class="fa-solid fa-chevron-left text-lg"></i>
+            </button>
+            <button id="nextCardsBtn" class="absolute right-0 top-1/2 -translate-y-1/2 p-3 rounded-full glass-card text-white hover:text-storm-accent transition-all focus:outline-none z-20">
+                <i class="fa-solid fa-chevron-right text-lg"></i>
+            </button>
+        </div>
+
+        <!-- Indicadores de Página -->
+        <div class="flex justify-center items-center space-x-2 mt-8" id="cardsIndicators">
+            <!-- Inyectado JS -->
+        </div>
+
+    </div>
+</section>
+
+    <!-- FOOTER PROFESIONAL CON REFERENCIAS BIBLIOGRÁFICAS -->
+    <footer class="bg-storm-950 border-t border-gray-800 pt-16 pb-12 text-gray-400 text-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+            
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 border-b border-gray-800 pb-12">
+                <!-- Columna 1: Marca -->
+                <div class="space-y-4">
+                    <div class="flex items-center gap-3">
+                        <div class="p-2 bg-storm-accent/10 rounded-lg">
+                            <i class="fa-solid fa-tornado text-storm-accent text-xl"></i>
+                        </div>
+                        <span class="font-heading text-2xl font-bold tracking-wider text-white">TORNADOS, <span class="text-storm-accent">CIENCIAS Y MAS</span></span>
+                    </div>
+                    <p class="text-xs text-gray-400 leading-relaxed text-justified">
+                        proyecto creado para la investigacion y la comprension acerca de los tornados y las diferentes ciencias que estos con llevan consigo.
+                    </p>
+                </div>
+
+                <!-- Columna 2: Enlaces Rápidos Secciones 1-6 -->
+                <div>
+                    <h4 class="font-heading text-white text-base font-bold uppercase mb-4 tracking-wider border-l-2 border-purple-500 pl-3">Capítulos 01 al 06</h4>
+                    <ul class="space-y-2 text-xs">
+                        <li><a href="#sec-1" class="hover:text-purple-400 transition-colors">1. Los Grandes Récords</a></li>
+                        <li><a href="#sec-2" class="hover:text-purple-400 transition-colors">2. ¿Cosas Imposibles?</a></li>
+                        <li><a href="#sec-3" class="hover:text-purple-400 transition-colors">3. Fenómenos Parecidos</a></li>
+                        <li><a href="#mitos" class="hover:text-purple-400 transition-colors">4. Mitos y Realidades</a></li>
+                        <li><a href="#sec-5" class="hover:text-purple-400 transition-colors">5. Sonido y Acústica</a></li>
+                        <li><a href="#sec-6" class="hover:text-purple-400 transition-colors">6. Apariencias Extrañas</a></li>
+                    </ul>
+                </div>
+
+                <!-- Columna 3: Enlaces Secciones 7-13 -->
+                <div>
+                    <h4 class="font-heading text-white text-base font-bold uppercase mb-4 tracking-wider border-l-2 border-storm-accent pl-3">Capítulos 07 al 13</h4>
+                    <ul class="space-y-2 text-xs">
+                        <li><a href="#sec-7" class="hover:text-storm-accent transition-colors">7. Tornados Nocturnos</a></li>
+                        <li><a href="#sec-8" class="hover:text-storm-accent transition-colors">8. Fauna y Ecosistemas</a></li>
+                        <li><a href="#sec-9" class="hover:text-storm-accent transition-colors">9. Tornados Planetarios</a></li>
+                        <li><a href="#sec-10" class="hover:text-storm-accent transition-colors">10. Cine y Cultura Pop</a></li>
+                        <li><a href="#sec-11" class="hover:text-storm-accent transition-colors">11. Preguntas Rápidas</a></li>
+                        <li><a href="#sec-12" class="hover:text-storm-accent transition-colors">12. Fenómenos Acompañantes</a></li>
+                        <li><a href="#sec-13" class="hover:text-storm-accent transition-colors">13. Psicología de Riesgo</a></li>
+                    </ul>
+                </div>
+
+                <!-- Columna 4: Ranura Abierta para Páginas Futuras -->
+                <div>
+                    <h4 class="font-heading text-white text-base font-bold uppercase mb-4 tracking-wider border-l-2 border-emerald-500 pl-3">Navegación Sitio</h4>
+                    <ul class="space-y-2 text-xs">
+                        <li><a href="#inicio" class="hover:text-emerald-400 transition-colors">Inicio / Subir</a></li>
+                        <li><a href="#explora-titulos" class="hover:text-emerald-400 transition-colors">Explorador de Tarjetas</a></li>
+                        <!-- Ranura abierta para incorporar enlaces externos o subpáginas -->
+                        <!-- <li><a href="contacto.html" class="hover:text-emerald-400 transition-colors">Contacto / Créditos</a></li> -->
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Footer Bottom -->
+            <div class="flex flex-col sm:flex-row justify-between items-center text-xs text-gray-500 gap-4">
+                <p>© 2026 Tornados, Ciencias y mas. Todos los derechos reservados.</p>
+            </div>
+
+        </div>
+    </footer>
+
+    <!-- JAVASCRIPT DE CONTROLADORES -->
+    <script>
+        // REPRODUCTOR DE AUDIO: TORNADOS
+
+        const audioTornado = document.querySelector("tornaudio.wav");
+
+        function reproducirTornado() {
+            audioTornado.play();
+        }
+
+        function pausarTornado() {
+            audioTornado.pause();
+        }
+
+        // 0. MODO CLARO Y OSCURO
+        const themeToggleBtn = document.getElementById('themeToggleBtn');
+        const themeIcon = document.getElementById('themeIcon');
+        const themeLabel = document.getElementById('themeLabel');
+        const htmlElement = document.documentElement;
+
+        function applyTheme(isDark) {
+            htmlElement.classList.toggle('dark', isDark);
+            const targetMode = isDark ? 'claro' : 'oscuro';
+            if (themeIcon) themeIcon.textContent = isDark ? '☀️' : '🌙';
+            if (themeLabel) themeLabel.textContent = isDark ? 'Modo claro' : 'Modo oscuro';
+            if (themeToggleBtn) {
+                themeToggleBtn.setAttribute('aria-label', 'Cambiar a modo ' + targetMode);
+                themeToggleBtn.setAttribute('title', 'Cambiar a modo ' + targetMode);
+            }
+        }
+
+        const savedTheme = localStorage.getItem('theme');
+        applyTheme(savedTheme === 'dark');
+        if (themeToggleBtn) {
+            themeToggleBtn.addEventListener('click', () => {
+                const newDarkState = !htmlElement.classList.contains('dark');
+                applyTheme(newDarkState);
+                localStorage.setItem('theme', newDarkState ? 'dark' : 'light');
+            });
+        }
+
+        // 1. CAROUSEL HERO INICIAL
+        const slides = document.querySelectorAll('.carousel-slide');
+        const prevBtn = document.getElementById('prevSlideBtn');
+        const nextBtn = document.getElementById('nextSlideBtn');
+        let currentSlide = 0;
+
+        function goToSlide(index) {
+            slides[currentSlide].classList.remove('opacity-100', 'pointer-events-auto');
+            slides[currentSlide].classList.add('opacity-0', 'pointer-events-none');
+            currentSlide = (index + slides.length) % slides.length;
+            slides[currentSlide].classList.remove('opacity-0', 'pointer-events-none');
+            slides[currentSlide].classList.add('opacity-100', 'pointer-events-auto');
+        }
+
+        if(nextBtn && prevBtn) {
+            nextBtn.addEventListener('click', () => goToSlide(currentSlide + 1));
+            prevBtn.addEventListener('click', () => goToSlide(currentSlide - 1));
+            setInterval(() => goToSlide(currentSlide + 1), 6000);
+        }
+
+        // 2. MOBILE MENU NAVBAR
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+        const mobileLinks = document.querySelectorAll('.mobile-link');
+
+        if(mobileMenuBtn) {
+            mobileMenuBtn.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+            mobileLinks.forEach(link => {
+                link.addEventListener('click', () => mobileMenu.classList.add('hidden'));
+            });
+        }
+
+        // 3. CARRUSEL DE REFERENCIAS APA (3 referencias por página, sin enlaces)
+        const allReferences = [
+    {
+        author: "National Oceanic and Atmospheric Administration (NOAA)",
+        title: "Severe Weather Primer: Tornadoes & Tornado Outbreaks",
+        source: "Registro oficial de datos climatológicos y récords meteorológicos.",
+        icon: "fa-book-bookmark",
+        color: "text-sky-500",
+        border: "border-sky-500/40"
+    },
+    {
+        author: "American Meteorological Society (AMS)",
+        title: "Glossary of Meteorology",
+        source: "Definiciones técnicas sobre dinámica de fluidos, mesociclones y supercélulas.",
+        icon: "fa-book-bookmark",
+        color: "text-purple-500",
+        border: "border-purple-500/40"
+    },
+    {
+        author: "International Centre for Waterspout Research (ICWR)",
+        title: "Comparative studies between Waterspouts, Dust Devils, and Tornadoes",
+        source: "Análisis comparativo de vórtices atmosféricos.",
+        icon: "fa-book-bookmark",
+        color: "text-emerald-500",
+        border: "border-emerald-500/40"
+    },
+    {
+        author: "BBC Science Focus Magazine & National Weather Service (NWS)",
+        title: "Tornado Myths and Realities",
+        source: "Publicación de divulgación sobre desmitificación de creencias y protocolos de seguridad.",
+        icon: "fa-book-bookmark",
+        color: "text-amber-500",
+        border: "border-amber-500/40"
+    },
+    {
+        author: "National Aeronautics and Space Administration (NASA) Science",
+        title: "Atmospheric Vortices across the Solar System: Mars and Planetary Weather",
+        source: "Estudios sobre los remolinos marcianos y dinámicas planetarias.",
+        icon: "fa-book-bookmark",
+        color: "text-rose-500",
+        border: "border-rose-500/40"
+    },
+    {
+        author: "Doswell, C. A. III",
+        title: "Severe Convective Storms and Tornado Dynamics",
+        source: "Monografía académica sobre la estructura física y acústica de las tormentas de mesoescala.",
+        icon: "fa-book-bookmark",
+        color: "text-indigo-500",
+        border: "border-indigo-500/40"
+    }
+];
+
+        let cardsPageIndex = 0;
+const totalCardsPages = Math.ceil(allReferences.length / 3);
+const container = document.getElementById('titleCardsContainer');
+const indicatorsContainer = document.getElementById('cardsIndicators');
+const prevCardsBtn = document.getElementById('prevCardsBtn');
+const nextCardsBtn = document.getElementById('nextCardsBtn');
+
+function renderCardsPage(page) {
+    if (!container) return;
+
+    container.innerHTML = '';
+
+    const startIndex = page * 3;
+    const selectedRefs = allReferences.slice(startIndex, startIndex + 3);
+
+    selectedRefs.forEach(ref => {
+        const card = document.createElement('div');
+
+        card.className = `glass-card p-6 rounded-2xl border ${ref.border} flex flex-col justify-between select-none shadow-xl`;
+
+        card.innerHTML = `
+            <div>
+                <div class="flex items-center justify-between mb-4">
+                    <span class="text-xs font-bold font-heading ${ref.color} tracking-widest uppercase">
+                        Formato APA
+                    </span>
+
+                    <div class="w-10 h-10 rounded-xl bg-gray-800/80 flex items-center justify-center text-lg ${ref.color}">
+                        <i class="fa-solid ${ref.icon}"></i>
+                    </div>
+                </div>
+
+                <p class="text-gray-300 text-xs sm:text-sm leading-relaxed text-justified">
+                    <strong>${ref.author}</strong> ${ref.year || ""}. 
+                    <em>${ref.title}</em>. ${ref.source}
+                </p>
+            </div>
+
+            <div class="mt-6 pt-3 border-t border-gray-800/60 flex items-center justify-between text-xs font-semibold text-gray-500">
+                <span>Referencia Oficial</span>
+
+                <i class="fa-solid fa-check ${ref.color}"></i>
+            </div>
+        `;
+
+        container.appendChild(card);
+    });
+
+    // Actualizar indicadores
+    if (indicatorsContainer) {
+        indicatorsContainer.innerHTML = '';
+
+        for (let i = 0; i < totalCardsPages; i++) {
+            const dot = document.createElement('button');
+
+            dot.className = `w-3 h-3 rounded-full transition-all ${
+                i === page ? 'bg-storm-accent w-6' : 'bg-gray-700'
+            }`;
+
+            dot.addEventListener('click', () => {
+                cardsPageIndex = i;
+                renderCardsPage(cardsPageIndex);
+            });
+
+            indicatorsContainer.appendChild(dot);
+        }
+    }
+}
+
+if(prevCardsBtn && nextCardsBtn) {
+    prevCardsBtn.addEventListener('click', () => {
+        cardsPageIndex = (cardsPageIndex - 1 + totalCardsPages) % totalCardsPages;
+        renderCardsPage(cardsPageIndex);
+    });
+    nextCardsBtn.addEventListener('click', () => {
+        cardsPageIndex = (cardsPageIndex + 1) % totalCardsPages;
+        renderCardsPage(cardsPageIndex);
+    });
+}
+
+// Inicializar renderizado en la página 0
+renderCardsPage(0);
+    </script>
+</body>
+</html>
